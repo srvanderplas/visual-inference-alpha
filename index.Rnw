@@ -206,16 +206,20 @@ theme_set(ggplot2::theme_bw())
 While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use prior predictive simulations to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention. \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
 <<prior-predictive, echo = F, fig.cap = "Prior predictive distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=20$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
+set.seed(5019230943)
 
-sim_lineup_model <- function(alpha, m = 20, k = 20, N = 50) {
+sim_lineup_model <- function(alpha, m = 20, k = 30, N = 50) {
   theta <- gtools::rdirichlet(1, rep(alpha, m))
   sels <- rmultinom(N, size = k, prob = theta)
   sels
 }
 
-alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
+# alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
+# alphas <- c(.001, .02, .05, 0.06, 0.07, 0.08, 0.09, .1, .5, 1, 2, 5, 20, 1000)
+alphas <- exp(seq(-6, 2, by = .01))# seq(0.001, 0.5, by = .001)
+
 prior_pred <- tibble(alpha = alphas,
-                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100)) %>%
+                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 200)) %>%
   mutate(
     sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
     sel_ordered_long = purrr::map(
@@ -225,9 +229,22 @@ prior_pred <- tibble(alpha = alphas,
               sels = as.vector(.x, mode = "numeric")))
   ) %>%
   select(-plot_sels, -sel_ordered) %>%
-  unnest() %>%
+  unnest(cols = c(sel_ordered_long)) %>%
   arrange(alpha) %>%
   mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
+
+# Calc mean # plots with >=1 selections
+# prior_pred_mean <- prior_pred %>%
+#    group_by(alpha, rep) %>%
+#    summarize(n_sel_plots = sum(sels > 1)) %>%
+#    group_by(alpha) %>%
+#    summarize(n_sel_plots = mean(n_sel_plots))
+# ggplot(prior_pred_mean) +
+#    geom_point(aes(x = alpha, y = n_sel_plots)) +
+#    geom_smooth(aes(x = alpha, y = n_sel_plots)) +
+#    # scale_x_log10() +
+#    coord_cartesian(xlim = c(.025, .075)) +
+#    scale_y_continuous(breaks = 1:10)
 
 ggplot(prior_pred) +
   geom_path(aes(x = idx, y = jitter(sels, amount = .4), group = interaction(rep, alpha)), alpha = .05) +
@@ -267,28 +284,36 @@ $\alpha$ plays a similar role in modulating the visual p-value calculated from \
 alphas <- exp(seq(-6, 6, by = .01))
 data_breaks <- c(1:5, 6, 8, 10, 15, 20)
 
+cuts <- c(-Inf, .02, .05, .1, .35, 1, 10, Inf)
+cuts <- c(-Inf, .025, .075, .25, 1, Inf)
+labels <- c("1-2 Interesting panels", "2-3 panels", "4-5 panels", "6-7 panels", "8+ Interesting panels")
 
 pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = 20) %>%
-  mutate(p = vis_p_value(C, K, alpha))
+  mutate(p = vis_p_value(C, K, alpha)) %>%
+   mutate(panel = cut(alpha, breaks = cuts,labels = labels))
 pv2 <- tidyr::crossing(C = data_breaks, K = 20) %>%
-  mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F))
+  mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F)) %>%
+   mutate(panel = cut(400, breaks = cuts, labels = labels))
 
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
+   # facet_wrap(~panel, scales = "free") + 
+   facet_grid(.~panel, scales = "free", space = "free") + 
   geom_line(size = 1) +
   geom_point(aes(x = exp(6.25), y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
   scale_y_continuous("Visual p-value") +
-  scale_x_continuous(expression(alpha), trans = "log10", breaks = c(0.001, 0.01, .1, 1, 10, 100),
-                     labels = c("0.001", "0.01", "0.1", "1", "10", "100")) +
+   scale_x_log10(expression(alpha)) + 
+  # scale_x_continuous(expression(alpha), trans = "log10", breaks = c(0.001, 0.005, 0.01, 0.05, .1, .5,  1, 5, 10, 100),
+  #                    labels = c("0.001", "0.005", "0.01", "0.05", "0.1","0.5", "1","5", "10", "100")) +
   scale_color_brewer("# Data\nPanel\nIdentifications\n(K = 20)", palette = "Paired") +
   scale_shape_discrete("") +
   geom_hline(yintercept = 0.05, color = "grey") +
   guides(color = guide_legend(override.aes = list(shape = NA))) +
-  annotate("segment", x = exp(6.25), xend = exp(6.25), y = -Inf, yend = .7, color = "grey", alpha = .5) +
-  annotate("text", x = exp(6.25), y = 0.75,
-           label = "Binomial\nmodel", vjust = 1, hjust = .75) +
-  annotate("segment", x = 1, xend = 1, y = -Inf, yend = .7, color = "grey", alpha = .5) +
-  annotate("text", x = 1, y = 0.75,
-           label = "vinference\npackage", vjust = 1, hjust = .5) +
+  # annotate("segment", x = exp(6.25), xend = exp(6.25), y = -Inf, yend = .7, color = "grey", alpha = .5) +
+  # annotate("text", x = exp(6.25), y = 0.75,
+  #          label = "Binomial\nmodel", vjust = 1, hjust = .75) +
+  # annotate("segment", x = 1, xend = 1, y = -Inf, yend = .7, color = "grey", alpha = .5) +
+  # annotate("text", x = 1, y = 0.75,
+  #          label = "vinference\npackage", vjust = 1, hjust = .5) +
   theme_bw()
 @
 
