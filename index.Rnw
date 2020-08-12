@@ -315,6 +315,30 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   # annotate("text", x = 1, y = 0.75,
   #          label = "vinference\npackage", vjust = 1, hjust = .5) +
   theme_bw()
+
+
+pv <- pv %>% mutate(
+ alpha_cut = cut(alpha, breaks=c(0, 0.05, 0.075, 0.125, 0.3, 5, 1000))  
+)
+ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
+  geom_line(size = 1) +
+#  geom_point(aes(x = exp(6.25), y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
+   facet_wrap(~alpha_cut, scales = "free") +
+  scale_y_continuous("Visual p-value") +
+   scale_x_continuous(expression(alpha), trans = "log10") +
+#  scale_x_continuous(expression(alpha), trans = "log10", breaks = c(0.001, 0.01, .1, 1, 10, 100),
+#                     labels = c("0.001", "0.01", "0.1", "1", "10", "100")) +
+  scale_color_brewer("# Data\nPanel\nIdentifications\n(K = 20)", palette = "Paired") +
+  scale_shape_discrete("") +
+  geom_hline(yintercept = 0.05, color = "grey") +
+  guides(color = guide_legend(override.aes = list(shape = NA))) +
+#  annotate("segment", x = exp(6.25), xend = exp(6.25), y = -Inf, yend = .7, color = "grey", alpha = .5) +
+#  annotate("text", x = exp(6.25), y = 0.75,
+#           label = "Binomial\nmodel", vjust = 1, hjust = .75) +
+#  annotate("segment", x = 1, xend = 1, y = -Inf, yend = .7, color = "grey", alpha = .5) +
+#  annotate("text", x = 1, y = 0.75,
+#           label = "vinference\npackage", vjust = 1, hjust = .5) +
+  ggplot2::theme_bw()
 @
 
 Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. In the next section, we present a method for estimating $\alpha$ from Rorshach or standard lineups and discuss possible uses for this method in assessing null plot generation and lineup difficulty.
