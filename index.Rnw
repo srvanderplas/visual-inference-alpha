@@ -1,11 +1,21 @@
 \documentclass[APA,LATO1COL]{WileyNJD-v2}
-
+% \usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{bm}
+\usepackage{multirow}
+\usepackage{hyperref}
+% \usepackage{endfloat} % Figures to the end of the document
 % --- Editing ------------------------------------------------------------------
 
 \newcommand{\hh}[1]{{\textcolor{orange}{#1}}}
 \newcommand{\svp}[1]{{\textcolor{magenta}{#1}}}
 
 % ------------------------------------------------------------------------------
+
+\graphicspath{{figure/}}
 
 \articletype{Article Type}%
 
@@ -55,803 +65,233 @@
 \footnotetext{\textbf{Abbreviations:} ANA, anti-nuclear antibodies; APC, antigen-presenting cells; IRF, interferon regulatory factor}
 
 
-\section{Sample for first level head}\label{sec1}
+% \tableofcontents
+<<setup, echo = F, include = F>>=
+library(tidyverse)
+knitr::opts_chunk$set(echo = F, message = F, warning = F)
+# theme_set(theme_bw())
+@
 
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit~\citet{Rothermel1997} Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae,
-felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a, magna. Donec
-vehicula augue eu neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-Mauris ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus
-sit amet tortor gravida placerat. Integer sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel
-leo ultrices bibendum. Aenean faucibus. Morbi dolor nulla, malesuada eu, pulvinar at, mollis ac, nulla. Curabitur
-auctor semper nulla. Donec varius orci eget risus. Duis nibh mi, congue eu, accumsan eleifend, sagittis quis, diam.
-Duis eget orci sit amet orci dignissim rutrum.
+<<code, include = F>>=
+source("code/functions.R")
+@
 
-\begin{eqnarray}
-s(nT_{s}) &= &s(t)\times \sum\limits_{n=0}^{N-1} \delta (t-nT_{s}) \xleftrightarrow{\mathrm{DFT}}  S \left(\frac{m}{NT_{s}}\right) \nonumber\\
-&= &\frac{1}{N} \sum\limits_{n=0}^{N-1} \sum\limits_{k=-N/2}^{N/2-1} s_{k} e^{\mathrm{j}2\pi k\Delta fnT_{s}} e^{-j\frac{2\pi}{N}mn}
-\end{eqnarray}
+\section{Introduction}
 
-\section{Sample for another first level head}\label{sec2}
+% Introduction to graphical testing: Rorschach vs. Visual Inference
 
-Nulla malesuada porttitor diam. Donec felis erat, congue non, volutpat at, tincidunt tristique, libero. Vivamus viverra
-fermentum felis. Donec nonummy pellentesque ante. Phasellus adipiscing semper elit. Proin fermentum massa ac
-quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo~\cite{Rothermel1998} Maecenas lacinia. Nam ipsum ligula, eleifend
-at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem. Sed lacinia
-nulla vitae enim. Pellentesque tincidunt purus vel magna. Integer non enim. Praesent euismod nunc eu purus. Donec
-bibendum quam in tellus. Nullam cursus pulvinar lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
-pellentesque felis eu massa.
+% Graphical Testing vs. Statistical Testing - power improvements w/ additional people
 
-Example for bibliography citations cite~\citep{Elbaum2002}, cites~\cite{Allen2011,Yoo2007}
+% Something about the power of the human visual system? Don't want to get too off topic...
 
-Quisque ullamcorper placerat ipsum. Cras nibh~\cite{Yoo2007,Schulz2012} Morbi vel justo vitae lacus tincidunt ultrices. Lorem ipsum dolor sit
-amet, consectetuer adipiscing elit. In hac habitasse platea dictumst. Integer tempus convallis augue. Etiam facilisis.
-Nunc elementum fermentum wisi. Aenean placerat. Ut imperdiet, enim sed gravida sollicitudin, felis odio placerat
-quam, ac pulvinar elit purus eget enim. Nunc vitae tortor. Proin tempus nibh sit amet nisl. Vivamus quis tortor
-vitae risus porta vehicula.
+Graphics provide the opportunity to understand statistical data at an intuitive level: we can gain more information about the relationship between two variables by considering a simple scatter plot than we might obtain from an entire day of generating numerical summaries. Graphics leverage the bandwidth of the visual system for implicit data analysis, and because this analysis is implicit, we often assume graphics are not decisive in the same way that an hypothesis test is decisive: generally, graphics do not come with a significance threshold, and in many cases, we do not explicitly construct the hypothesis we might be testing before viewing the chart.
 
-Fusce mauris. Vestibulum luctus nibh at lectus. Sed bibendum, nulla a faucibus semper, leo velit ultricies tellus, ac
-venenatis arcu wisi vel nisl. Vestibulum diam. Aliquam pellentesque, augue quis sagittis posuere, turpis lacus congue
-quam, in hendrerit risus eros eget felis. Maecenas eget erat in sapien mattis porttitor. Vestibulum porttitor. Nulla facilisi. Sed a turpis eu lacus commodo facilisis. Morbi fringilla, wisi in dignissim interdum, justo lectus sagittis dui, et
-vehicula libero dui cursus dui. Mauris tempor ligula sed lacus. Duis cursus enim ut augue. Cras ac magna. Cras nulla.
-Nulla egestas. Curabitur a leo. Quisque egestas wisi eget nunc. Nam feugiat lacus vel est. Curabitur consectetuer.
+Visual inference allows for us to test graphics as visual statistics: charts are, after all, a quantity computed from values in a sample of data. In order to test whether a chart shows a visually significant result, we can use the same philosophy used by randomization tests: construct a sampling method consistent with the null hypothesis, generate many copies of the test statistic (in this case, the plot), and see where the real statistic falls in the distribution of artificially generated quantites \citep{buja:2009}. An assembly of several null plots with a target (or data) plot is called a \emph{lineup}, after the criminal procedure of the same name. Typically, lineups are composed of 19 ``null" plots (generated under the null hypothesis) and one data plot containing the real data.
 
+Of course, with numerical statistics, there is a natural ordering to computed numerical quantities; with plots, we must run each statistic through another process (evaluation by the visual system, or a facsimile thereof\footnote{Cite Giora's Deep Learning work, \url{http://giorasimchoni.com/deep_visual_inference.html}}) in order to evaluate significance. During this evaluation process, the user selects one or more plots from the lineup which are ``different" in some way (though some experiments may specify the particular feature under examination).
 
-\begin{figure}[t]
-\centerline{\includegraphics[width=342pt,height=9pc,draft]{empty}}
-\caption{This is the sample figure caption.\label{fig1}}
-\end{figure}
+% TODO: explain different lineup scenarios here? Not sure if this is the best place for it, or if it's necessary at all.
 
-Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet vitae, arcu. Aenean faucibus pede eu
-ante. Praesent enim elit, rutrum at, molestie non, nonummy vel, nisl. Ut lectus eros, malesuada sit amet, fermentum
-eu, sodales cursus, magna. Donec eu purus. Quisque vehicula, urna sed ultricies auctor, pede lorem egestas dui, et
-convallis elit erat sed nulla. Donec luctus. Curabitur et nunc. Aliquam dolor odio, commodo pretium, ultricies non,
-pharetra in, velit. Integer arcu est, nonummy in, fermentum faucibus, egestas vel, odio.
+Typically, graphical tests utilize a service like Amazon Mechanical Turk to acquire multiple evaluations of the same lineup; informally, if multiple individuals select the plot generated from the data rather than the null plots, the visual statistic is likely to be significant \citep{majumder2013validation}.
 
-Sed commodo posuere pede. Mauris ut est. Ut quis purus. Sed ac odio. Sed vehicula hendrerit sem. Duis non
-odio. Morbi ut dui. Sed accumsan risus eget odio. In hac habitasse platea dictumst. Pellentesque non elit. Fusce
-sed justo eu urna porta tincidunt. Mauris felis odio, sollicitudin sed, volutpat a, ornare ac, erat. Morbi quis dolor.
-Donec pellentesque, erat ac sagittis semper, nunc dui lobortis purus, quis congue purus metus ultricies tellus. Proin
-et quam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent sapien
-turpis, fermentum vel, eleifend faucibus, vehicula eu, lacus.
+% TODO: add lineup here
 
-\begin{figure*}
-\centerline{\includegraphics[width=342pt,height=9pc,draft]{empty}}
-\caption{This is the sample figure caption.\label{fig2}}
-\end{figure*}
+While visual inference was initially developed to mimic frequentist hypothesis tests, using lineups of 20 plots with one data plot, so that the probability of selecting the data plot randomly is $p=0.05$, visual inference itself does not demand use of frequentist techniques. In this paper, we develop one possible framework for visual inference, using a Bayesian framework with a Dirichlet-multinomial distribution to model the probabilities of selecting each panel and a Multinomial distribution to model the observed participant selections. This framework for analysis of visual inference data has been in use as part of the \texttt{vinference} package~\citep{vinference} for several years \citep{loyAreYouNormal2015,loy2016variations,vanderplas:2017}, but has not been formally described in any publication. Here, we provide the mathematical foundation for the multinomial-dirichlet model used in the analysis of visual inference experiments, exploring the implications of the model and proposing a modification which better describes the perceptual process of lineup evaluation.
 
-\subsection{Example for second level head}
+\subsection{Lineup Evaluations}\label{sec:scenarios}
+% Types of lineups
+\citet{buja:2009} introduced two types of lineups: Rorshach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data. \citet{vanderplas:2017} introduced another type of lineup: the two-target lineup. This lineup contains target plots generated from two competing data generating models, with null plots that are generated from a mixture of the two target plot distributions. Two-target lineups can be used to test whether two competing effects have different visual salience. All of the lineup experiments the authors are aware of at this time are one or two-target lineup experiments.
 
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec odio elit, dictum
-in, hendrerit sit amet, egestas sed, leo. Praesent feugiat sapien aliquet odio. Integer vitae justo. Aliquam vestibulum
-fringilla lorem. Sed neque lectus, consectetuer at, consectetuer sed, eleifend ac, lectus. Nulla facilisi. Pellentesque
-eget lectus. Proin eu metus. Sed porttitor. In hac habitasse platea dictumst. Suspendisse eu lectus. Ut mi mi, lacinia
-sit amet, placerat et, mollis vitae, dui. Sed ante tellus, tristique ut, iaculis eu, malesuada ac, dui. Mauris nibh leo,
-facilisis non, adipiscing quis, ultrices a, dui.
-
-Morbi luctus, wisi viverra faucibus pretium, nibh est placerat odio, nec commodo wisi enim eget quam. Quisque
-libero justo, consectetuer a, feugiat vitae, porttitor eu, libero. Suspendisse sed mauris vitae elit sollicitudin malesuada.
-
-Maecenas ultricies eros sit amet ante. Ut venenatis velit. Maecenas sed mi eget dui varius euismod. Phasellus aliquet
-volutpat odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque sit
-amet pede ac sem eleifend consectetuer. Nullam elementum, urna vel imperdiet sodales, elit ipsum pharetra ligula,
-ac pretium ante justo a nulla. Curabitur tristique arcu eu metus. Vestibulum lectus. Proin mauris. Proin eu nunc eu
-urna hendrerit faucibus. Aliquam auctor, pede consequat laoreet varius, eros tellus scelerisque quam, pellentesque
-hendrerit ipsum dolor sed augue. Nulla nec lacus.
-
-\begin{quote}
-This is an example~\citep{Elbaum2002,Blanchard2015} for quote text. This is an example for quote text. This is an example for quote text. This is an example for quote text~\cite{Blanchard2015}. This is an example for quote text. This is an example for quote text. This is an example for quote text. This is an example for quote text. This is an example for quote text. This is an example for quote text~\cite{Blanchard2015}. This is an example for quote text. This is an example for quote text. This is an example for quote text. 
-\end{quote}
-
-\section{Sample for next first level head}\label{sec3}
-
-\subsection{Example for another second level head}
-
-Suspendisse vitae elit. Aliquam arcu neque, ornare in, ullamcorper quis, commodo eu, libero. Fusce sagittis erat at
-erat tristique mollis. Maecenas sapien libero, molestie et, lobortis in, sodales eget, dui. Morbi ultrices rutrum lorem.
-Nam elementum ullamcorper leo. Morbi dui. Aliquam sagittis. Nunc placerat. Pellentesque tristique sodales est.
-Maecenas imperdiet lacinia velit. Cras non urna. Morbi eros pede, suscipit ac, varius vel, egestas non, eros. Praesent
-malesuada, diam id pretium elementum, eros sem dictum tortor, vel consectetuer odio sem sed wisi.
-
-Sed feugiat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut pellentesque
-augue sed urna. Vestibulum diam eros, fringilla et, consectetuer eu, nonummy id, sapien. Nullam at lectus. In sagittis
-ultrices mauris. Curabitur malesuada erat sit amet massa. Fusce blandit. Aliquam erat volutpat. Aliquam euismod.
-Aenean vel lectus. Nunc imperdiet justo nec dolor.
-
-\subsection{Second level head text}
-
-Etiam euismod. Fusce facilisis lacinia dui. Suspendisse potenti. In mi erat, cursus id, nonummy sed, ullamcorper
-eget, sapien. Praesent pretium, magna in eleifend egestas, pede pede pretium lorem, quis consectetuer tortor sapien
-facilisis magna. Mauris quis magna varius nulla scelerisque imperdiet. Aliquam non quam. Aliquam porttitor quam
-a lacus. Praesent vel arcu ut tortor cursus volutpat. In vitae pede quis diam bibendum placerat. Fusce elementum
-convallis neque. Sed dolor orci, scelerisque ac, dapibus nec, ultricies ut, mi. Duis nec dui quis leo sagittis commodo.
-
-
-\subsubsection{Third level head text}
-
-Aliquam lectus. Vivamus leo. Quisque ornare tellus ullamcorper nulla. Mauris porttitor pharetra tortor. Sed fringilla
-justo sed mauris. Mauris tellus. Sed non leo. Nullam elementum, magna in cursus sodales, augue est scelerisque
-sapien, venenatis congue nulla arcu et pede. Ut suscipit enim vel sapien. Donec congue. Maecenas urna mi, suscipit
-in, placerat ut, vestibulum ut, massa. Fusce ultrices nulla et nisl.
-
-Etiam ac leo a risus tristique nonummy. Donec dignissim tincidunt nulla. Vestibulum rhoncus molestie odio. Sed
-lobortis, justo et pretium lobortis, mauris turpis condimentum augue, nec ultricies nibh arcu pretium enim. Nunc
-purus neque, placerat id, imperdiet sed, pellentesque nec, nisl. Vestibulum imperdiet neque non sem accumsan laoreet.
-In hac habitasse platea dictumst. Etiam condimentum facilisis libero. Suspendisse in elit quis nisl aliquam dapibus.
-Pellentesque auctor sapien. Sed egestas sapien nec lectus. Pellentesque vel dui vel neque bibendum viverra. Aliquam
-porttitor nisl nec pede. Proin mattis libero vel turpis. Donec rutrum mauris et libero. Proin euismod porta felis.
-Nam lobortis, metus quis elementum commodo, nunc lectus elementum mauris, eget vulputate ligula tellus eu neque.
-Vivamus eu dolor.
-
-Nulla in ipsum. Praesent eros nulla, congue vitae, euismod ut, commodo a, wisi. Pellentesque habitant morbi
-tristique senectus et netus et malesuada fames ac turpis egestas. Aenean nonummy magna non leo. Sed felis erat,
-ullamcorper in, dictum non, ultricies ut, lectus. Proin vel arcu a odio lobortis euismod. Vestibulum ante ipsum primis
-in faucibus orci luctus et ultrices posuere cubilia Curae; Proin ut est. Aliquam odio. Pellentesque massa turpis, cursus
-eu, euismod nec, tempor congue, nulla. Duis viverra gravida mauris. Cras tincidunt. Curabitur eros ligula, varius ut,
-pulvinar in, cursus faucibus, augue.
-
-
-
-\begin{boxtext}
-\section*{Example of Boxtext}%
-This is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext this is sample for boxtext.
-\end{boxtext}
-
-
-\paragraph{Fourth level head text}
-
-Sed feugiat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut pellentesque
-augue sed urna. Vestibulum diam eros, fringilla et, consectetuer eu, nonummy id, sapien. Nullam at lectus. In sagittis
-ultrices mauris. Curabitur malesuada erat sit amet massa. Fusce blandit. Aliquam erat volutpat. Aliquam euismod.
-Aenean vel lectus. Nunc imperdiet justo nec dolor.
-
-Etiam euismod. Fusce facilisis lacinia dui. Suspendisse potenti. In mi erat, cursus id, nonummy sed, ullamcorper
-eget, sapien. Praesent pretium, magna in eleifend egestas, pede pede pretium lorem, quis consectetuer tortor sapien
-facilisis magna. Mauris quis magna varius nulla scelerisque imperdiet. Aliquam non quam. Aliquam porttitor quam
-a lacus. Praesent vel arcu ut tortor cursus volutpat. In vitae pede quis diam bibendum placerat. Fusce elementum
-convallis neque. Sed dolor orci, scelerisque ac, dapibus nec, ultricies ut, mi. Duis nec dui quis leo sagittis commodo.
-
-\subparagraph{Fifth level head text}
-
-Aliquam lectus. Vivamus leo. Quisque ornare tellus ullamcorper nulla. Mauris porttitor pharetra
-tortor. Sed fringilla justo sed mauris. Mauris tellus. Sed non leo. Nullam elementum, magna in cursus sodales, augue
-est scelerisque sapien, venenatis congue nulla arcu et pede. Ut suscipit enim vel sapien. Donec congue. Maecenas
-urna mi, suscipit in, placerat ut, vestibulum ut, massa. Fusce ultrices nulla et nisl.
-
-Etiam ac leo a risus tristique nonummy. Donec dignissim tincidunt nulla. Vestibulum rhoncus molestie odio. Sed
-lobortis, justo et pretium lobortis, mauris turpis condimentum augue, nec ultricies nibh arcu pretium enim. Nunc
-purus neque, placerat id, imperdiet sed, pellentesque nec, nisl. Vestibulum imperdiet neque non sem accumsan laoreet.
-In hac habitasse platea dictumst. Etiam condimentum facilisis libero. Suspendisse in elit quis nisl aliquam dapibus.
-Pellentesque auctor sapien. Sed egestas sapien nec lectus. Pellentesque vel dui vel neque bibendum viverra. Aliquam
-porttitor nisl nec pede. Proin mattis libero vel turpis. Donec rutrum mauris et libero. Proin euismod porta felis.
-Nam lobortis, metus quis elementum commodo, nunc lectus elementum mauris, eget vulputate ligula tellus eu neque.
-Vivamus eu dolor.
-
-in faucibus orci luctus et ultrices posuere cubilia Curae; Proin ut est. Aliquam odio. Pellentesque massa turpis, cursus
-eu, euismod nec, tempor congue, nulla. Duis viverra gravida mauris. Cras tincidunt. Curabitur eros ligula, varius ut,
-pulvinar in, cursus faucibus, augue.
-
-Curabitur tellus magna, porttitor a, commodo a, commodo in, tortor. Donec interdum. Praesent scelerisque. Mae-
-cenas posuere sodales odio. Vivamus metus lacus, varius quis, imperdiet quis, rhoncus a, turpis. Etiam ligula arcu,
-elementum a, venenatis quis, sollicitudin sed, metus. Donec nunc pede, tincidunt in, venenatis vitae, faucibus vel,
-nibh. Pellentesque wisi. Nullam malesuada. Morbi ut tellus ut pede tincidunt porta. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Etiam congue neque id dolor.
-
-Donec et nisl at wisi luctus bibendum. Nam interdum tellus ac libero. Sed sem justo, laoreet vitae, fringilla at,
-adipiscing ut, nibh. Maecenas non sem quis tortor eleifend fermentum. Etiam id tortor ac mauris porta vulputate.
-Integer porta neque vitae massa. Maecenas tempus libero a libero posuere dictum. Vestibulum ante ipsum primis in
-faucibus orci luctus et ultrices posuere cubilia Curae; Aenean quis mauris sed elit commodo placerat. Class aptent
-taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Vivamus rhoncus tincidunt libero.
-Etiam elementum pretium justo. Vivamus est. Morbi a tellus eget pede tristique commodo. Nulla nisl. Vestibulum
-sed nisl eu sapien cursus rutrum.
-
-Nulla non mauris vitae wisi posuere convallis. Sed eu nulla nec eros scelerisque pharetra. Nullam varius. Etiam
-dignissim elementum metus. Vestibulum faucibus, metus sit amet mattis rhoncus, sapien dui laoreet odio, nec ultricies
-nibh augue a enim. Fusce in ligula. Quisque at magna et nulla commodo consequat. Proin accumsan imperdiet sem.
-Nunc porta. Donec feugiat mi at justo. Phasellus facilisis ipsum quis ante. In ac elit eget ipsum pharetra faucibus.
-Maecenas viverra nulla in massa.
-
-Nulla in ipsum. Praesent eros nulla, congue vitae, euismod ut, commodo a, wisi. Pellentesque habitant morbi
-tristique senectus et netus et malesuada fames ac turpis egestas. Aenean nonummy magna non leo. Sed felis erat,
-ullamcorper in, dictum non, ultricies ut, lectus. Proin vel arcu a odio lobortis euismod. Vestibulum ante ipsum primis
-
-
-\begin{center}
-\begin{table*}[t]%
-\caption{This is sample table caption.\label{tab1}}
-\centering
-\begin{tabular*}{500pt}{@{\extracolsep\fill}lccD{.}{.}{3}c@{\extracolsep\fill}}
-\toprule
-&\multicolumn{2}{@{}c@{}}{\textbf{Spanned heading\tnote{1}}} & \multicolumn{2}{@{}c@{}}{\textbf{Spanned heading\tnote{2}}} \\\cmidrule{2-3}\cmidrule{4-5}
-\textbf{col1 head} & \textbf{col2 head}  & \textbf{col3 head}  & \multicolumn{1}{@{}l@{}}{\textbf{col4 head}}  & \textbf{col5 head}   \\
-\midrule
-col1 text & col2 text  & col3 text  & 12.34  & col5 text\tnote{1}   \\
-col1 text & col2 text  & col3 text  & 1.62  & col5 text\tnote{2}   \\
-col1 text & col2 text  & col3 text  & 51.809  & col5 text   \\
-\bottomrule
-\end{tabular*}
-\begin{tablenotes}%%[341pt]
-\item Source: Example for table source text.
-\item[1] Example for a first table footnote.
-\item[2] Example for a second table footnote.
-\end{tablenotes}
-\end{table*}
-\end{center}
-
-Fusce mauris. Vestibulum luctus nibh at lectus. Sed bibendum, nulla a faucibus semper, leo velit ultricies tellus, ac
-venenatis arcu wisi vel nisl. Vestibulum diam. Aliquam pellentesque, augue quis sagittis posuere, turpis lacus congue
-quam, in hendrerit risus eros eget felis. Maecenas eget erat in sapien mattis porttitor. Vestibulum porttitor. Nulla
-facilisi. Sed a turpis eu lacus commodo facilisis. Morbi fringilla, wisi in dignissim interdum, justo lectus sagittis dui, et
-vehicula libero dui cursus dui. Mauris tempor ligula sed lacus. Duis cursus enim ut augue. Cras ac magna. Cras nulla.
-Nulla egestas. Curabitur a leo. Quisque egestas wisi eget nunc. Nam feugiat lacus vel est. Curabitur consectetuer.
-
-
-
-\begin{center}
-\begin{table}[t]%
-\centering
-\caption{This is sample table caption.\label{tab2}}%
-\begin{tabular*}{500pt}{@{\extracolsep\fill}lcccc@{\extracolsep\fill}}
-\toprule
-\textbf{col1 head} & \textbf{col2 head}  & \textbf{col3 head}  & \textbf{col4 head}  & \textbf{col5 head} \\
-\midrule
-col1 text & col2 text  & col3 text  & col4 text  & col5 text\tnote{$\dagger$}   \\
-col1 text & col2 text  & col3 text  & col4 text  & col5 text   \\
-col1 text & col2 text  & col3 text  & col4 text  & col5 text\tnote{$\ddagger$}   \\
-\bottomrule
-\end{tabular*}
-\begin{tablenotes}
-\item Source: Example for table source text.
-\item[$\dagger$] Example for a first table footnote.
-\item[$\ddagger$] Example for a second table footnote.
-\end{tablenotes}
-\end{table}
-\end{center}
-
-
-
-Below is the example~\cite{Rothermel1998,Yoo2007,Schulz2012} for bulleted list. Below is the example for bulleted list. Below is the example for bulleted list. Below is the example for bulleted list. Below is the example for bulleted list. Below is the example for bulleted list\footnote{This is an example for footnote.}:
-\begin{itemize}
-\item bulleted list entry sample bulleted list entry~\cite{Allen2011} sample list entry text. 
-\item bulleted list entry sample bulleted list entry. bulleted list entry sample bulleted list entry. bulleted list entry sample bulleted list entry.
-\item bulleted list entry sample bulleted list entry~\cite{Ballen2011} bulleted list entry sample bulleted list entry~\citet{Allen2011} sample list entry text.  bulleted list entry sample bulleted list entry.
-\item sample list entry text. sample list entry text.  
-\end{itemize}
-
-Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet vitae, arcu. Aenean faucibus pede eu
-ante. Praesent enim elit, rutrum at, molestie non, nonummy vel, nisl. Ut lectus eros, malesuada sit amet, fermentum
-eu, sodales cursus, magna. Donec eu purus. Quisque vehicula, urna sed ultricies auctor, pede lorem egestas dui, et
-convallis elit erat sed nulla. Donec luctus. Curabitur et nunc. Aliquam dolor odio, commodo pretium, ultricies non,
-pharetra in, velit. Integer arcu est, nonummy in, fermentum faucibus, egestas vel, odio.
-
-Sed commodo posuere pede. Mauris ut est. Ut quis purus. Sed ac odio. Sed vehicula hendrerit sem. Duis non
-odio. Morbi ut dui. Sed accumsan risus eget odio. In hac habitasse platea dictumst. Pellentesque non elit. Fusce
-sed justo eu urna porta tincidunt. Mauris felis odio, sollicitudin sed, volutpat a, ornare ac, erat. Morbi quis dolor. Donec pellentesque, erat ac sagittis semper, nunc dui lobortis purus, quis congue purus metus ultricies tellus. Proin
-et quam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent sapien
-turpis, fermentum vel, eleifend faucibus, vehicula eu, lacus.
-
-
-Below is the sample for description list. Below is the example for description list. Below is the example for description list. Below is the example for description list. Below is the example for description list. Below is the example for description list:\\[12pt]
-
-
-\noindent\textbf{Description sample:}
+% Types of lineup evaluations
+In addition to different types of lineups, there are different types of lineup experiments.
 
 \begin{description}
-\item[first entry] description text. description text. description text. description text. description text. description text. description text. 
-\item[second long entry] description text. description text. description text. description text. description text. description text. description text. 
-\item[third entry] description text. description text. description text. description text. description text. 
-\item[fourth entry] description text. description text. 
+\item [Scenario 1] $K$ different lineups are shown to $K$ independent individuals. In this scenario, both the data and the null plots in each generated lineup are distinct from those in every other lineup. This scenario is only practical when using purely simulated data (for both the data and null plots) or data large enough to allow for subsampling to generate $K$ different data plots. Under this scenario, we can consider the number of target plot selections $t$ out of $K$ total evaluations, where each lineup evaluation is a bernoulli trial; the total number of data plot evaluations can then be modeled as a Binomial distribution with selection probability $1/m$ (for a single target lineup) \citep{majumder2013validation}.
+
+\item [Scenario 2] $K$ different sets of null plots are shown to $K$ independent individuals; the same data plot is used in each lineup. Alternately, $L$ sets of lineups are shown to $K > L$ individuals. In Scenario 2, there are dependencies introduced by reuse of the data or the lineups, providing an intermediate case between the two extremes of Scenario 1 and Scenario 3.
+
+\item [Scenario 3] The same lineup is shown to $K$ independent individuals. This scenario is the most common scenario in the lineup experiments which have been completed to date \citep{hofmann2012graphical,roychowdhury:2012,majumder2013validation,loyAreYouNormal2015,vanderplas:2017}. In this scenario, lineup evaluations by independent viewers are not independent because the viewers are evaluating the same combination of 19 null plots and one data plot. Any peculiar features which arise in a null plot may cause participants to select that null plot over the data plot; it is likely that where one individual makes this choice, others might as well. Thus, in Scenario 3, which is the most common lineup experiment scenario, it is not reasonable to assume that all panels are equally likely to be selected under the null hypothesis.
 \end{description}
 
-
-\noindent\textbf{Numbered list items sample:}
-
-\begin{enumerate}[1.]
-\item First level numbered list entry. sample numbered list entry. 
-
-\item First numbered list entry. sample numbered list entry. Numbered list entry. sample numbered list entry. Numbered list entry. sample numbered list entry. 
-
-\begin{enumerate}[a.]
-\item Second level alpabetical list entry. Second level alpabetical list entry. Second level alpabetical list entry~\citet{Allen2011} Second level alpabetical list entry. 
-
-\item Second level alpabetical list entry. Second level alpabetical list entry~\citet{Schulz2012,Allen2011,Ballen2011}.
-
-\begin{enumerate}[ii.]
-\item Third level lowercase roman numeral list entry. Third level lowercase roman numeral list entry. Third level lowercase roman numeral list entry. 
-
-\item Third level lowercase roman numeral list entry. Third level lowercase roman numeral list entry~\cite{Yoo2007}.
-\end{enumerate}
-
-\item Second level alpabetical list entry. Second level alpabetical list entry~\cite{Elbaum2002}.
-\end{enumerate}
-
-\item First level numbered list entry. sample numbered list entry. Numbered list entry. sample numbered list entry. Numbered list entry. 
-
-\item Another first level numbered list entry. sample numbered list entry. Numbered list entry. sample numbered list entry. Numbered list entry. 
-\end{enumerate}
-
-\noindent\textbf{un-numbered list items sample:}
-
-\begin{enumerate}[]
-\item Sample unnumberd list text..
-\item Sample unnumberd list text.
-\item sample unnumberd list text. 
-\item Sample unnumberd list text.
-\end{enumerate}
-
-\section{Examples for enunciations}\label{sec4}
-
-\begin{theorem}[Theorem subhead]\label{thm1}
-Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. 
-\end{theorem}
-
-Quisque ullamcorper placerat ipsum. Cras nibh. Morbi vel justo vitae lacus tincidunt ultrices. Lorem ipsum dolor sit
-amet, consectetuer adipiscing elit. In hac habitasse platea dictumst. Integer tempus convallis augue. Etiam facilisis.
-Nunc elementum fermentum wisi. Aenean placerat. Ut imperdiet, enim sed gravida sollicitudin, felis odio placerat
-quam, ac pulvinar elit purus eget enim. Nunc vitae tortor. Proin tempus nibh sit amet nisl. Vivamus quis tortor
-vitae risus porta vehicula.
-
-Fusce mauris. Vestibulum luctus nibh at lectus. Sed bibendum, nulla a faucibus semper, leo velit ultricies tellus, ac
-venenatis arcu wisi vel nisl. Vestibulum diam. Aliquam pellentesque, augue quis sagittis posuere, turpis lacus congue
-quam, in hendrerit risus eros eget felis. Maecenas eget erat in sapien mattis porttitor. Vestibulum porttitor. Nulla
-facilisi. Sed a turpis eu lacus commodo facilisis. Morbi fringilla, wisi in dignissim interdum, justo lectus sagittis dui, et
-vehicula libero dui cursus dui. Mauris tempor ligula sed lacus. Duis cursus enim ut augue. Cras ac magna. Cras nulla.
-Nulla egestas. Curabitur a leo. Quisque egestas wisi eget nunc. Nam feugiat lacus vel est. Curabitur consectetuer.
-
-\begin{proposition}
-Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. 
-\end{proposition}
-
-Nulla malesuada porttitor diam. Donec felis erat, congue non, volutpat at, tincidunt tristique, libero. Vivamus
-viverra fermentum felis. Donec nonummy pellentesque ante. Phasellus adipiscing semper elit. Proin fermentum massa
-ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
-at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem. Sed lacinia
-nulla vitae enim. Pellentesque tincidunt purus vel magna. Integer non enim. Praesent euismod nunc eu purus. Donec
-bibendum quam in tellus. Nullam cursus pulvinar lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
-pellentesque felis eu massa.
-
-Quisque ullamcorper placerat ipsum. Cras nibh. Morbi vel justo vitae lacus tincidunt ultrices. Lorem ipsum dolor sit
-amet, consectetuer adipiscing elit. In hac habitasse platea dictumst. Integer tempus convallis augue. Etiam facilisis.
-Nunc elementum fermentum wisi. Aenean placerat. Ut imperdiet, enim sed gravida sollicitudin, felis odio placerat
-quam, ac pulvinar elit purus eget enim. Nunc vitae tortor. Proin tempus nibh sit amet nisl. Vivamus quis tortor
-vitae risus porta vehicula.
-
-\begin{definition}[Definition sub head]
-Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text.
-\end{definition}
-
-Sed commodo posuere pede. Mauris ut est. Ut quis purus. Sed ac odio. Sed vehicula hendrerit sem. Duis non
-odio. Morbi ut dui. Sed accumsan risus eget odio. In hac habitasse platea dictumst. Pellentesque non elit. Fusce
-sed justo eu urna porta tincidunt. Mauris felis odio, sollicitudin sed, volutpat a, ornare ac, erat. Morbi quis dolor.
-Donec pellentesque, erat ac sagittis semper, nunc dui lobortis purus, quis congue purus metus ultricies tellus. Proin
-et quam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent sapien
-turpis, fermentum vel, eleifend faucibus, vehicula eu, lacus.
-
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec odio elit,
-dictum in, hendrerit sit amet, egestas sed, leo. Praesent feugiat sapien aliquet odio. Integer vitae justo. Aliquam
-vestibulum fringilla lorem. Sed neque lectus, consectetuer at, consectetuer sed, eleifend ac, lectus. Nulla facilisi.
-Pellentesque eget lectus. Proin eu metus. Sed porttitor. In hac habitasse platea dictumst. Suspendisse eu lectus. Ut
-mi mi, lacinia sit amet, placerat et, mollis vitae, dui. Sed ante tellus, tristique ut, iaculis eu, malesuada ac, dui.
-Mauris nibh leo, facilisis non, adipiscing quis, ultrices a, dui.
-
-\begin{proof}
-Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. 
-\end{proof}
-
-Nam dui ligula, fringilla a, euismod sodales, sollicitudin vel, wisi. Morbi auctor lorem non justo. Nam lacus libero,
-pretium at, lobortis vitae, ultricies et, tellus. Donec aliquet, tortor sed accumsan bibendum, erat ligula aliquet magna,
-vitae ornare odio metus a mi. Morbi ac orci et nisl hendrerit mollis. Suspendisse ut massa. Cras nec ante. Pellentesque
-a nulla. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam tincidunt
-urna. Nulla ullamcorper vestibulum turpis. Pellentesque cursus luctus mauris.
-
-Nulla malesuada porttitor diam. Donec felis erat, congue non, volutpat at, tincidunt tristique, libero. Vivamus
-viverra fermentum felis. Donec nonummy pellentesque ante. Phasellus adipiscing semper elit. Proin fermentum massa
-ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
-at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem. Sed lacinia
-nulla vitae enim. Pellentesque tincidunt purus vel magna. Integer non enim. Praesent euismod nunc eu purus. Donec
-bibendum quam in tellus. Nullam cursus pulvinar lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
-pellentesque felis eu massa.
-
-\begin{proof}[Proof of Theorem~\ref{thm1}]
-Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. 
-\end{proof}
-
-Etiam euismod. Fusce facilisis lacinia dui. Suspendisse potenti. In mi erat, cursus id, nonummy sed, ullamcorper
-eget, sapien. Praesent pretium, magna in eleifend egestas, pede pede pretium lorem, quis consectetuer tortor sapien
-facilisis magna. Mauris quis magna varius nulla scelerisque imperdiet. Aliquam non quam. Aliquam porttitor quam
-a lacus. Praesent vel arcu ut tortor cursus volutpat. In vitae pede quis diam bibendum placerat. Fusce elementum
-convallis neque. Sed dolor orci, scelerisque ac, dapibus nec, ultricies ut, mi. Duis nec dui quis leo sagittis commodo.
-Aliquam lectus. Vivamus leo. Quisque ornare tellus ullamcorper nulla. Mauris porttitor pharetra tortor. Sed fringilla
-justo sed mauris. Mauris tellus. Sed non leo. Nullam elementum, magna in cursus sodales, augue est scelerisque
-sapien, venenatis congue nulla arcu et pede. Ut suscipit enim vel sapien. Donec congue. Maecenas urna mi, suscipit
-in, placerat ut, vestibulum ut, massa. Fusce ultrices nulla et nisl.
-
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec odio elit,
-dictum in, hendrerit sit amet, egestas sed, leo. Praesent feugiat sapien aliquet odio. Integer vitae justo. Aliquam
-vestibulum fringilla lorem. Sed neque lectus, consectetuer at, consectetuer sed, eleifend ac, lectus. Nulla facilisi.
-Pellentesque eget lectus. Proin eu metus. Sed porttitor. In hac habitasse platea dictumst. Suspendisse eu lectus. Ut Curabitur tellus magna, porttitor a, commodo a, commodo in, tortor. Donec interdum. Praesent scelerisque. Mae-
-cenas posuere sodales odio. Vivamus metus lacus, varius quis, imperdiet quis, rhoncus a, turpis. Etiam ligula arcu,
-elementum a, venenatis quis, sollicitudin sed, metus. Donec nunc pede, tincidunt in, venenatis vitae, faucibus vel,
-
-
-\begin{sidewaystable}%[h]
-\caption{Sideways table caption. For decimal alignment refer column 4 to 9 in tabular* preamble.\label{tab3}}%
-\begin{tabular*}{\textheight}{@{\extracolsep\fill}lccD{.}{.}{4}D{.}{.}{4}D{.}{.}{4}D{.}{.}{4}D{.}{.}{4}D{.}{.}{4}@{\extracolsep\fill}}%
-\toprule
-  & \textbf{col2 head} & \textbf{col3 head} & \multicolumn{1}{c}{\textbf{10}} &\multicolumn{1}{c}{\textbf{20}} &\multicolumn{1}{c}{\textbf{30}} &\multicolumn{1}{c}{\textbf{10}} &\multicolumn{1}{c}{\textbf{20}} &\multicolumn{1}{c}{\textbf{30}} \\
-\midrule
-  &col2 text &col3 text &0.7568&1.0530&1.2642&0.9919&1.3541&1.6108 \\
-  & &col2 text &12.5701 &19.6603&25.6809&18.0689&28.4865&37.3011 \\
-3 &col2 text  & col3 text &0.7426&1.0393&1.2507&0.9095&1.2524&1.4958 \\
-  & &col3 text &12.8008&19.9620&26.0324&16.6347&26.0843&34.0765 \\
-  & col2 text & col3 text &0.7285&1.0257&1.2374&0.8195&1.1407&1.3691\tnote{*} \\
-  & & col3 text &13.0360&20.2690&26.3895&15.0812&23.4932&30.6060\tnote{\dagger} \\
-\bottomrule
-\end{tabular*}
-\begin{tablenotes}%%[\textheight]
-\item[*] First sideways table footnote. Sideways table footnote. Sideways table footnote. Sideways table footnote.
-\item[$\dagger$] Second sideways table footnote. Sideways table footnote. Sideways table footnote. Sideways table footnote.
-\end{tablenotes}
-\end{sidewaystable}
-
-\begin{sidewaysfigure}
-\centerline{\includegraphics[width=542pt,height=9pc,draft]{empty}}
-\caption{Sideways figure caption. Sideways figure caption. Sideways figure caption. Sideways figure caption. Sideways figure caption. Sideways figure caption.\label{fig3}}
-\end{sidewaysfigure}
-
-nibh. Pellentesque wisi. Nullam malesuada. Morbi ut tellus ut pede tincidunt porta. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Etiam congue neque id dolor.
-
-\begin{algorithm}
-\caption{Pseudocode for our algorithm}\label{alg1}
-\begin{algorithmic}
-  \For each frame
-  \For water particles $f_{i}$
-  \State compute fluid flow~\cite{Rothermel1997}
-  \State compute fluid--solid interaction~\cite{Allen2011}
-  \State apply adhesion and surface tension~\cite{Ballen2011}
-  \EndFor
-   \For solid particles $s_{i}$
-   \For neighboring water particles $f_{j}$
-   \State compute virtual water film \\(see Section~\ref{sec3})
-   \EndFor
-   \EndFor
-   \For solid particles $s_{i}$
-   \For neighboring water particles $f_{j}$
-   \State compute growth direction vector \\(see Section~\ref{sec2})
-   \EndFor
-   \EndFor
-   \For solid particles $s_{i}$
-   \For neighboring water particles $f_{j}$
-   \State compute $F_{\theta}$ (see Section~\ref{sec1})
-   \State compute $CE(s_{i},f_{j})$ \\(see Section~\ref{sec3})
-   \If $CE(b_{i}, f_{j})$ $>$ glaze threshold
-   \State $j$th water particle's phase $\Leftarrow$ ICE
-   \EndIf
-   \If $CE(c_{i}, f_{j})$ $>$ icicle threshold
-   \State $j$th water particle's phase $\Leftarrow$ ICE
-   \EndIf
-   \EndFor
-   \EndFor
-  \EndFor
-\end{algorithmic}
-\end{algorithm}
-
-Donec et nisl at wisi luctus bibendum. Nam interdum tellus ac libero. Sed sem justo, laoreet vitae, fringilla at,
-adipiscing ut, nibh. Maecenas non sem quis tortor eleifend fermentum. Etiam id tortor ac mauris porta vulputate.
-Integer porta neque vitae massa~\cite{Rothermel1997,Elbaum2002}. Maecenas tempus libero a libero posuere dictum. Vestibulum ante ipsum primis in
-faucibus orci luctus et ultrices posuere cubilia Curae; Aenean quis mauris sed elit commodo placerat. Class aptent
-taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Vivamus rhoncus tincidunt libero.
-Etiam elementum pretium justo. Vivamus est. Morbi a tellus eget pede tristique commodo~\cite{Elbaum2002} Nulla nisl. Vestibulum
-sed nisl eu sapien cursus rutrum.
-
-Pellentesque wisi. Nullam malesuada. Morbi ut tellus ut pede tincidunt porta. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit. Etiam congue neque id dolor.
-
-Donec et nisl at wisi luctus bibendum. Nam interdum tellus ac libero. Sed sem justo, laoreet vitae, fringilla at,
-adipiscing ut, nibh. Maecenas non sem quis tortor eleifend fermentum. Etiam id tortor ac mauris porta vulputate.
-Integer porta neque vitae massa. Maecenas tempus libero a libero posuere dictum. Vestibulum ante ipsum primis in
-faucibus orci luctus et ultrices posuere cubilia Curae; Aenean quis mauris sed elit commodo placerat. Class aptent
-taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Vivamus rhoncus tincidunt libero.
-Etiam elementum pretium justo. Vivamus est. Morbi a tellus eget pede tristique commodo. Nulla nisl. Vestibulum
-sed nisl eu sapien cursus rutrum.
-
-\begin{equation}\label{eq23}
- \|\tilde{X}(k)\|^2
- =\frac{\left\|\sum\limits_{i=1}^{p}\tilde{Y}_i(k)+\sum\limits_{j=1}^{q}\tilde{Z}_j(k) \right\|^2}{(p+q)^2}
- \leq\frac{\sum\limits_{i=1}^{p}\left\|\tilde{Y}_i(k)\right\|^2+\sum\limits_{j=1}^{q}\left\|\tilde{Z}_j(k)\right\|^2 }{p+q}.
-\end{equation}
-
-Sed feugiat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut pellentesque
-augue sed urna. Vestibulum diam eros, fringilla et, consectetuer eu, nonummy id, sapien. Nullam at lectus. In sagittis
-ultrices mauris. Curabitur malesuada erat sit amet massa. Fusce blandit. Aliquam erat volutpat. Aliquam euismod.
-Aenean vel lectus. Nunc imperdiet justo nec dolor.
-
-Etiam euismod. Fusce facilisis lacinia dui. Suspendisse potenti. In mi erat, cursus id, nonummy sed, ullamcorper
-eget, sapien. Praesent pretium, magna in eleifend egestas, pede pede pretium lorem, quis consectetuer tortor sapien
-facilisis magna. Mauris quis magna varius nulla scelerisque imperdiet. Aliquam non quam. Aliquam porttitor quam
-a lacus. Praesent vel arcu ut tortor cursus volutpat. In vitae pede quis diam bibendum placerat. Fusce elementum
-convallis neque. Sed dolor orci, scelerisque ac, dapibus nec, ultricies ut, mi. Duis nec dui quis leo sagittis commodo.
-
-\begin{equation}\label{eq24}
- \|\tilde{X}(k)\|^2
- =\frac{\left\|\sum\limits_{i=1}^{p}\tilde{Y}_i(k)+\sum\limits_{j=1}^{q}\tilde{Z}_j(k) \right\|^2}{(p+q)^2}
- \leq\frac{\sum\limits_{i=1}^{p}\left\|\tilde{Y}_i(k)\right\|^2+\sum\limits_{j=1}^{q}\left\|\tilde{Z}_j(k)\right\|^2 }{p+q}.
-\end{equation}
-
-Aliquam lectus. Vivamus leo. Quisque ornare tellus ullamcorper nulla. Mauris porttitor pharetra
-tortor. Sed fringilla justo sed mauris. Mauris tellus. Sed non leo. Nullam elementum, magna in cursus sodales, augue
-est scelerisque sapien, venenatis congue nulla arcu et pede. Ut suscipit enim vel sapien. Donec congue. Maecenas
-urna mi, suscipit in, placerat ut, vestibulum ut, massa. Fusce ultrices nulla et nisl.
-
-Etiam ac leo a risus tristique nonummy. Donec dignissim tincidunt nulla. Vestibulum rhoncus molestie odio. Sed
-lobortis, justo et pretium lobortis, mauris turpis condimentum augue, nec ultricies nibh arcu pretium enim. Nunc
-purus neque, placerat id, imperdiet sed, pellentesque nec, nisl. Vestibulum imperdiet neque non sem accumsan laoreet.
-In hac habitasse platea dictumst. Etiam condimentum facilisis libero. Suspendisse in elit quis nisl aliquam dapibus.
-Pellentesque auctor sapien. Sed egestas sapien nec lectus. Pellentesque vel dui vel neque bibendum viverra. Aliquam
-porttitor nisl nec pede. Proin mattis libero vel turpis. Donec rutrum mauris et libero. Proin euismod porta felis.
-Nam lobortis, metus quis elementum commodo, nunc lectus elementum mauris, eget vulputate ligula tellus eu neque.
-Vivamus eu dolor.
-
-
-
-
-\section{Conclusions}\label{sec5}
-
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae,
-felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a, magna. Donec
-vehicula augue eu neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-Mauris ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus
-sit amet tortor gravida placerat. Integer sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel
-leo ultrices bibendum. Aenean faucibus. Morbi dolor nulla, malesuada eu, pulvinar at, mollis ac, nulla. Curabitur
-auctor semper nulla. Donec varius orci eget risus. Duis nibh mi, congue eu, accumsan eleifend, sagittis quis, diam.
-Duis eget orci sit amet orci dignissim rutrum.
-
-Nam dui ligula, fringilla a, euismod sodales, sollicitudin vel, wisi. Morbi auctor lorem non justo. Nam lacus libero,
-pretium at, lobortis vitae, ultricies et, tellus. Donec aliquet, tortor sed accumsan bibendum, erat ligula aliquet magna,
-vitae ornare odio metus a mi. Morbi ac orci et nisl hendrerit mollis. Suspendisse ut massa. Cras nec ante. Pellentesque
-a nulla. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam tincidunt
-urna. Nulla ullamcorper vestibulum turpis. Pellentesque cursus luctus mauris.
-
-%\backmatter
-
-\section*{Acknowledgments}
-This is acknowledgment text~\cite{Elbaum2002}. Provide text here. This is acknowledgment text. Provide text here. This is acknowledgment text. Provide text here. This is acknowledgment text. Provide text here. This is acknowledgment text. Provide text here. This is acknowledgment text. Provide text here. This is acknowledgment text. Provide text here. This is acknowledgment text. Provide text here. This is acknowledgment text. Provide text here. 
-
-\subsection*{Author contributions}
-
-This is an author contribution text. This is an author contribution text. This is an author contribution text. This is an author contribution text. This is an author contribution text. 
-
-\subsection*{Financial disclosure}
-
-None reported.
-
-\subsection*{Conflict of interest}
-
-The authors declare no potential conflict of interests.
-
-
-\section*{Supporting information}
-
-The following supporting information is available as part of the online article:
-
-\noindent
-\textbf{Figure S1.}
-{500{\uns}hPa geopotential anomalies for GC2C calculated against the ERA Interim reanalysis. The period is 1989--2008.}
-
-\noindent
-\textbf{Figure S2.}
-{The SST anomalies for GC2C calculated against the observations (OIsst).}
-
-
-\appendix
-
-\section{Section title of first appendix\label{app1}}
-
-Use \verb+\begin{verbatim}...\end{verbatim}+ for program codes without math. Use \verb+\begin{alltt}...\end{alltt}+ for program codes with math. Based on the text provided inside the optional argument of \verb+\begin{code}[Psecode|Listing|Box|Code|+\hfill\break \verb+Specification|Procedure|Sourcecode|Program]...+ \verb+\end{code}+ tag corresponding boxed like floats are generated. Also note that \verb+\begin{code}[Code|Listing]...+ \verb+\end{code}+ tag with either Code or Listing text as optional argument text are set with computer modern typewriter font.  All other code environments are set with normal text font. Refer below example:
-
-\begin{lstlisting}[caption={Descriptive Caption Text},label=DescriptiveLabel]
-for i:=maxint to 0 do
-begin
-{ do nothing }
-end;
-Write('Case insensitive ');
-WritE('Pascal keywords.');
-\end{lstlisting}
-
-
-
-\subsection{Subsection title of first appendix\label{app1.1a}}
-
-Nam dui ligula, fringilla a, euismod sodales, sollicitudin vel, wisi. Morbi auctor lorem non justo. Nam lacus libero,
-pretium at, lobortis vitae, ultricies et, tellus. Donec aliquet, tortor sed accumsan bibendum, erat ligula aliquet magna,
-vitae ornare odio metus a mi. Morbi ac orci et nisl hendrerit mollis. Suspendisse ut massa. Cras nec ante. Pellentesque
-a nulla. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam tincidunt
-urna. Nulla ullamcorper vestibulum turpis. Pellentesque cursus luctus mauris.
-
-Nulla malesuada porttitor diam. Donec felis erat, congue non, volutpat at, tincidunt tristique, libero. Vivamus
-viverra fermentum felis. Donec nonummy pellentesque ante. Phasellus adipiscing semper elit. Proin fermentum massa
-ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
-at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem. Sed lacinia
-nulla vitae enim. Pellentesque tincidunt purus vel magna. Integer non enim. Praesent euismod nunc eu purus. Donec
-bibendum quam in tellus. Nullam cursus pulvinar lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
-pellentesque felis eu massa.
-
-\subsubsection{Subsection title of first appendix\label{app1.1.1a}}
-
-\noindent\textbf{Unnumbered figure}
-
-
-\begin{center}
-\includegraphics[width=7pc,height=8pc,draft]{empty}
-\end{center}
-
-
-Fusce mauris. Vestibulum luctus nibh at lectus. Sed bibendum, nulla a faucibus semper, leo velit ultricies tellus, ac
-venenatis arcu wisi vel nisl. Vestibulum diam. Aliquam pellentesque, augue quis sagittis posuere, turpis lacus congue
-quam, in hendrerit risus eros eget felis. Maecenas eget erat in sapien mattis porttitor. Vestibulum porttitor. Nulla
-facilisi. Sed a turpis eu lacus commodo facilisis. Morbi fringilla, wisi in dignissim interdum, justo lectus sagittis dui, et
-vehicula libero dui cursus dui. Mauris tempor ligula sed lacus. Duis cursus enim ut augue. Cras ac magna. Cras nulla.
-
-Nulla egestas. Curabitur a leo. Quisque egestas wisi eget nunc. Nam feugiat lacus vel est. Curabitur consectetuer.
-Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet vitae, arcu. Aenean faucibus pede eu
-ante. Praesent enim elit, rutrum at, molestie non, nonummy vel, nisl. Ut lectus eros, malesuada sit amet, fermentum
-eu, sodales cursus, magna. Donec eu purus. Quisque vehicula, urna sed ultricies auctor, pede lorem egestas dui, et
-convallis elit erat sed nulla. Donec luctus. Curabitur et nunc. Aliquam dolor odio, commodo pretium, ultricies non,
-pharetra in, velit. Integer arcu est, nonummy in, fermentum faucibus, egestas vel, odio.
-
-\section{Section title of second appendix\label{app2}}%
-
-Fusce mauris. Vestibulum luctus nibh at lectus. Sed bibendum, nulla a faucibus semper, leo velit ultricies tellus, ac
-venenatis arcu wisi vel nisl. Vestibulum diam. Aliquam pellentesque, augue quis sagittis posuere, turpis lacus congue
-quam, in hendrerit risus eros eget felis. Maecenas eget erat in sapien mattis porttitor. Vestibulum porttitor. Nulla
-facilisi. Sed a turpis eu lacus commodo facilisis. Morbi fringilla, wisi in dignissim interdum, justo lectus sagittis dui, et
-vehicula libero dui cursus dui. Mauris tempor ligula sed lacus. Duis cursus enim ut augue. Cras ac magna. Cras nulla.
-
-Nulla egestas. Curabitur a leo. Quisque egestas wisi eget nunc. Nam feugiat lacus vel est. Curabitur consectetuer.
-Suspendisse vel felis. Ut lorem lorem, interdum eu, tincidunt sit amet, laoreet vitae, arcu. Aenean faucibus pede eu
-ante. Praesent enim elit, rutrum at, molestie non, nonummy vel, nisl. Ut lectus eros, malesuada sit amet, fermentum
-eu, sodales cursus, magna. Donec eu purus. Quisque vehicula, urna sed ultricies auctor, pede lorem egestas dui, et
-convallis elit erat sed nulla. Donec luctus. Curabitur et nunc. Aliquam dolor odio, commodo pretium, ultricies non,
-pharetra in, velit. Integer arcu est, nonummy in, fermentum faucibus, egestas vel, odio.
-
-%== Figure 4 ==
-%% Example for figure inside appendix
-\begin{figure}[t]
-\centerline{\includegraphics[height=10pc,width=78mm,draft]{empty}}
-\caption{This is an example for appendix figure.\label{fig5}}
-\end{figure}
-
-\subsection{Subsection title of second appendix\label{app2.1a}}
-
-Sed commodo posuere pede. Mauris ut est. Ut quis purus. Sed ac odio. Sed vehicula hendrerit sem. Duis non odio.
-Morbi ut dui. Sed accumsan risus eget odio. In hac habitasse platea dictumst. Pellentesque non elit. Fusce sed justo
-eu urna porta tincidunt. Mauris felis odio, sollicitudin sed, volutpat a, ornare ac, erat. Morbi quis dolor. Donec
-pellentesque, erat ac sagittis semper, nunc dui lobortis purus, quis congue purus metus ultricies tellus. Proin et quam.
-Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Praesent sapien turpis,
-fermentum vel, eleifend faucibus, vehicula eu, lacus.
-
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec odio elit,
-dictum in, hendrerit sit amet, egestas sed, leo. Praesent feugiat sapien aliquet odio. Integer vitae justo. Aliquam
-vestibulum fringilla lorem. Sed neque lectus, consectetuer at, consectetuer sed, eleifend ac, lectus. Nulla facilisi.
-Pellentesque eget lectus. Proin eu metus. Sed porttitor. In hac habitasse platea dictumst. Suspendisse eu lectus. Ut
-mi mi, lacinia sit amet, placerat et, mollis vitae, dui. Sed ante tellus, tristique ut, iaculis eu, malesuada ac, dui.
-Mauris nibh leo, facilisis non, adipiscing quis, ultrices a, dui.
-
-\subsubsection{Subsection title of second appendix\label{app2.1.1a}}
-
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit, vestibulum ut, placerat ac, adipiscing vitae,
-felis. Curabitur dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a, magna. Donec
-vehicula augue eu neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-Mauris ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus
-sit amet tortor gravida placerat. Integer sapien est, iaculis in, pretium quis, viverra ac, nunc. Praesent eget sem vel
-leo ultrices bibendum. Aenean faucibus. Morbi dolor nulla, malesuada eu, pulvinar at, mollis ac, nulla. Curabitur
-auctor semper nulla. Donec varius orci eget risus. Duis nibh mi, congue eu, accumsan eleifend, sagittis quis, diam.
-Duis eget orci sit amet orci dignissim rutrum.
-
-Nam dui ligula, fringilla a, euismod sodales, sollicitudin vel, wisi. Morbi auctor lorem non justo. Nam lacus libero,
-pretium at, lobortis vitae, ultricies et, tellus. Donec aliquet, tortor sed accumsan bibendum, erat ligula aliquet magna,
-vitae ornare odio metus a mi. Morbi ac orci et nisl hendrerit mollis. Suspendisse ut massa. Cras nec ante. Pellentesque
-a nulla. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam tincidunt
-urna. Nulla ullamcorper vestibulum turpis. Pellentesque cursus luctus mauris.
-
-\begin{center}
-\begin{table}[b]%
-\centering
-\caption{This is an example of Appendix table showing food requirements of army, navy and airforce.\label{tab4}}%
-\begin{tabular*}{300pt}{@{\extracolsep\fill}lcc@{\extracolsep\fill}}%
-\toprule
-\textbf{col1 head} & \textbf{col2 head} & \textbf{col3 head} \\
-\midrule
-col1 text & col2 text & col3 text \\
-col1 text & col2 text & col3 text \\
-col1 text & col2 text & col3 text\\
-\bottomrule
-\end{tabular*}
-\end{table}
-\end{center}
-
-
-Example for an equation inside appendix
-\begin{equation}
-\mathcal{L}\quad \mathbf{\mathcal{L}} = i \bar{\psi} \gamma^\mu D_\mu \psi - \frac{1}{4} F_{\mu\nu}^a F^{a\mu\nu} - m \bar{\psi} \psi\label{eq25}
-\end{equation}
-
-\section{Example of another appendix section\label{app3}}%
-
-This is sample for paragraph text this is sample for paragraph text  this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text this is sample for paragraph text
-
-
-
-Nam dui ligula, fringilla a, euismod sodales, sollicitudin vel, wisi. Morbi auctor lorem non justo. Nam lacus libero,
-pretium at, lobortis vitae, ultricies et, tellus. Donec aliquet, tortor sed accumsan bibendum, erat ligula aliquet magna,
-vitae ornare odio metus a mi. Morbi ac orci et nisl hendrerit mollis. Suspendisse ut massa. Cras nec ante. Pellentesque
-a nulla. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam tincidunt
-urna. Nulla ullamcorper vestibulum turpis. Pellentesque cursus luctus mauris.
-
-Nulla malesuada porttitor diam. Donec felis erat, congue non, volutpat at, tincidunt tristique, libero. Vivamus
-viverra fermentum felis. Donec nonummy pellentesque ante. Phasellus adipiscing semper elit. Proin fermentum massa
-ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
-at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem. Sed lacinia
-nulla vitae enim. Pellentesque tincidunt purus vel magna. Integer non enim. Praesent euismod nunc eu purus. Donec
-bibendum quam in tellus. Nullam cursus pulvinar lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
-pellentesque felis eu massa.
-
-
-\begin{equation}
-\mathcal{L} = i \bar{\psi} \gamma^\mu D_\mu \psi
-    - \frac{1}{4} F_{\mu\nu}^a F^{a\mu\nu} - m \bar{\psi} \psi
-\label{eq26}
-\end{equation}
-
-Nulla malesuada porttitor diam. Donec felis erat, congue non, volutpat at, tincidunt tristique, libero. Vivamus
-viverra fermentum felis. Donec nonummy pellentesque ante. Phasellus adipiscing semper elit. Proin fermentum massa
-ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
-at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem. Sed lacinia
-nulla vitae enim. Pellentesque tincidunt purus vel magna. Integer non enim. Praesent euismod nunc eu purus. Donec
-bibendum quam in tellus. Nullam cursus pulvinar lectus. Donec et mi. Nam vulputate metus eu enim. Vestibulum
-pellentesque felis eu massa.
-
-Quisque ullamcorper placerat ipsum. Cras nibh. Morbi vel justo vitae lacus tincidunt ultrices. Lorem ipsum dolor sit
-amet, consectetuer adipiscing elit. In hac habitasse platea dictumst. Integer tempus convallis augue. Etiam facilisis.
-Nunc elementum fermentum wisi. Aenean placerat. Ut imperdiet, enim sed gravida sollicitudin, felis odio placerat
-quam, ac pulvinar elit purus eget enim. Nunc vitae tortor. Proin tempus nibh sit amet nisl. Vivamus quis tortor
-vitae risus porta vehicula.
-
-
-\begin{center}
-\begin{tabular*}{300pt}{@{\extracolsep\fill}lcc@{\extracolsep\fill}}%
-\toprule
-\textbf{col1 head} & \textbf{col2 head} & \textbf{col3 head} \\
-\midrule
-col1 text & col2 text & col3 text \\
-col1 text & col2 text & col3 text \\
-col1 text & col2 text & col3 text \\
-\bottomrule
-\end{tabular*}
-\end{center}
-
-
-Quisque ullamcorper placerat ipsum. Cras nibh. Morbi vel justo vitae lacus tincidunt ultrices. Lorem ipsum dolor sit
-amet, consectetuer adipiscing elit. In hac habitasse platea dictumst. Integer tempus convallis augue. Etiam facilisis.
-Nunc elementum fermentum wisi. Aenean placerat. Ut imperdiet, enim sed gravida sollicitudin, felis odio placerat
-quam, ac pulvinar elit purus eget enim. Nunc vitae tortor. Proin tempus nibh sit amet nisl. Vivamus quis tortor
-vitae risus porta vehicula.
-
-Fusce mauris. Vestibulum luctus nibh at lectus. Sed bibendum, nulla a faucibus semper, leo velit ultricies tellus, ac
-venenatis arcu wisi vel nisl. Vestibulum diam. Aliquam pellentesque, augue quis sagittis posuere, turpis lacus congue
-quam, in hendrerit risus eros eget felis. Maecenas eget erat in sapien mattis porttitor. Vestibulum porttitor. Nulla
-facilisi. Sed a turpis eu lacus commodo facilisis. Morbi fringilla, wisi in dignissim interdum, justo lectus sagittis dui, evehicula libero dui cursus dui. Mauris tempor ligula sed lacus. Duis cursus enim ut augue. Cras ac magna. Cras nulla.
-Nulla egestas. Curabitur a leo. Quisque egestas wisi eget nunc. Nam feugiat lacus vel est. Curabitur consectetuer.
-
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec odio elit,
-dictum in, hendrerit sit amet, egestas sed, leo. Praesent feugiat sapien aliquet odio. Integer vitae justo. Aliquam
-vestibulum fringilla lorem. Sed neque lectus, consectetuer at, consectetuer sed, eleifend ac, lectus. Nulla facilisi.
-Pellentesque eget lectus. Proin eu metus. Sed porttitor. In hac habitasse platea dictumst. Suspendisse eu lectus. Ut
-mi mi, lacinia sit amet, placerat et, mollis vitae, dui. Sed ante tellus, tristique ut, iaculis eu, malesuada ac, dui.
-Mauris nibh leo, facilisis non, adipiscing quis, ultrices a, dui.
-
-\nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
-\bibliography{wileyNJD-APA}%
+Scenario 3 is the primary motivation for the model which we will develop in the next section: while we cannot consider the panels in each lineup as equally likely to be selected, we can model the individual selection probabilities using a hierarchical model.
+
+\section{Lineup Model Specification}
+
+We will begin with a generic $m$-panel lineup, with selection probabilities $\theta_i, i = 1, ..., m$ where $\sum_{i=1}^m \theta_i = 1$, that is, the participant will select one (and only one) panel from the lineup as the most different. Our lineup has been evaluated by $K$ individuals, with $c_i, i = 1, ..., m$ the selection count for each panel, and $K = \sum_{i=1}^m c_i$.
+
+A natural data model for this data is the Multinomial distribution, which has parameters $K, \bm{\theta}$, where $K$ describes the number of distinct outcomes and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilities of each outcome. We will fix $K$, as that is controlled by the experimental design, and model $\bm{\theta}$.
+
+\begin{align}\label{eqn:multinomial-pmf}
+f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
+\end{align}
+
+We model panel selection probabilities $\theta_i$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha}$, which happens to be conjugate to the multinomial distribution. As the position of the panels within the lineup are random, we use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. This allows us to vary the lineup difficulty through the hyperparameter $\alpha$ without having to specify which plot $i$ is the target plot.
+
+The pdf of the symmetric Dirichlet distribution is
+\begin{align}\label{eqn:dirichlet-pdf}
+f(\bm{\theta}|\alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1}
+\end{align}
+
+Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution as the Dirichlet$(\bm{c + \alpha})$ distribution.
+
+\begin{align}\begin{split}\label{eqn:full-model-specification}
+(\alpha_1, ..., \alpha_m) = \bm{\alpha} &= \text{concentration hyperparameter}\\
+(c_1, ..., c_m) = \bm{c} &= \text{observed plot selections}, \sum_{i=1}^m c_i = K\\
+p(\bm{\theta}) &\sim Dirichlet(\bm\alpha) \\
+f(\bm{c} | \bm{\theta}) & \sim Multinomial(\bm\theta, K)\\
+p(\bm\theta | \bm{c}, \bm{\alpha}) & \sim Dirichlet(\bm{c} + \bm{\alpha})
+\end{split}\end{align}
+
+where $Multinomial(\bm\theta, K)$ is defined as in \autoref{eqn:multinomial-pmf} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}.
+
+Typically, when evaluating lineups, we compare the number of target plot identifications with the aggregate number of null plot identifications (see \citet{majumder2013validation}). This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m$ is the index of the target panel in the lineup; that is, in \citet{majumder2013validation}, a binomial distribution, and in this formulation, a beta-binomial distribution.
+
+\begin{align}\begin{split}\label{eqn:marginal-model-specification}
+\alpha &= \text{concentration hyperparameter}\\
+c_t &= \text{target plot selections},\\
+K &= \text{total evaluations}\\
+p(\theta_t) &\sim Beta(\alpha, (m-1)\alpha) \\
+f(c_t | \theta_t) & \sim Binomial(\theta_t, K)\\
+p(\theta_t | \bm{c_t}, \alpha) & \sim Beta(c_t + \alpha, K - c_t + (m-1)\alpha)
+\end{split}\end{align}
+
+While this model was originally developed under a Bayesian framework, it is philosophically agnostic: it would be equally reasonable to think of this as an overdispersed multinomial model.
+
+Examining the parameters of either the full or marginal model specifications in \autoref{eqn:full-model-specification} and \autoref{eqn:marginal-model-specification}, it is evident that $\alpha$ provides the equivalent of pseudo-observations for each plot; that is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup. When $\alpha$ is small, these pseudo-observations have relatively little influence, but when $\alpha$ is large, the pseudo-observations can quickly dwarf any information provided by the data. This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added. In most lineup studies, a plot might be evaluated between 10 and 30 times; with a $m=20$ lineup, even $\alpha = 1$ can easily dominate the participant selection data.
+
+In addition to the pseudo-observation interpretation, $\alpha$ provides information about the number of panels in a lineup which are likely to attract participant interest. It is useful to detour slightly from the discussion of visual inference to explore the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
+
+\subsection{Dirichlet Hyperparameter}\label{sec:alpha}
+% Stolen from heike/lineup-scenarios
+When $\alpha = 1$, the symmetric Dirichlet distribution is uniform on the $m-1$ dimensional simplex. When $\alpha < 1$, the mass of the distribution is along the edges of the simplex, where most values of $\theta_i$ will be close to 0. When $\alpha>1$, the mass of the distribution is in the center of the simplex, with most of the $\theta_i$ having similar values. \autoref{fig:simplex} shows ternary plots~\citep{ggtern} of values simulated from a 3-dimensional Dirichlet distribution which illustrate the effect of $\alpha$ on the sampled $\bm\theta$.
+
+<<simplex, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Dirichlet distributed samples on the 2-dimensional simplex.">>=
+simplex <- purrr::map_df(.x = c(1/3, 1, 3), ~data.frame(
+  gtools::rdirichlet(5000, alpha = rep(.x, 3))
+), .id = "alpha") %>%
+  rename(p1 = X1, p2 = X2, p3 = X3) %>%
+  mutate(alphalabel = factor(alpha, levels = 1:3, labels = c("alpha: 1/3", "alpha: 1", "alpha: 3")))
+
+ggtern::ggtern(aes(x = p1, y = p2, z = p3), data = simplex) +
+  geom_point(alpha = .075, shape = 16) +
+  facet_wrap(~alphalabel, labeller = "label_parsed") +
+  theme(panel.background = element_rect(colour = "black"))
+@
+
+%Marginal Beta($\alpha, 2\alpha$) densities corresponding to \\autoref{fig:simplex}.
+<<betas, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap="Marginal Beta($\\alpha, 2\\alpha$) densities corresponding to the above Dirichlet densities.">>=
+p <- seq(0,1, by=0.005)
+alpha <- c(1/3,1,3)
+betas <- data.frame(expand.grid(p=p, alpha=alpha))
+betas$density <- with(betas, dbeta(p, alpha, 2*alpha))
+betas$density[is.infinite(betas$density)] <- 0
+betas <- rbind(betas, data.frame(p=0,alpha=1,density=0))
+betas$alphalabel <- factor(betas$alpha)
+levels(betas$alphalabel) <- expression("alpha: 1/3", "alpha: 1", "alpha: 3")
+qplot(data=betas, p, y=density, geom="polygon", fill=I("grey50"), alpha=I(.8), colour=I("grey20")) +
+  ylab("density") + facet_wrap(~alphalabel, labeller="label_parsed") + ggplot2::theme_bw()
+@
+
+% End stolen from heike/lineup-scenarios
+
+<<set-theme-bw, include = F>>=
+theme_set(theme_bw())
+@
+
+While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use prior predictive simulations to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention. \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
+
+<<prior-predictive, echo = F, fig.cap = "Prior predictive distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=20$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
+
+sim_lineup_model <- function(alpha, m = 20, k = 20, N = 50) {
+  theta <- gtools::rdirichlet(1, rep(alpha, m))
+  sels <- rmultinom(N, size = k, prob = theta)
+  sels
+}
+
+alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
+prior_pred <- tibble(alpha = alphas,
+                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100)) %>%
+  mutate(
+    sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
+    sel_ordered_long = purrr::map(
+      sel_ordered,
+      ~tibble(idx = rep(1:nrow(.x), times = ncol(.x)),
+              rep = rep(1:ncol(.x), each = nrow(.x)),
+              sels = as.vector(.x, mode = "numeric")))
+  ) %>%
+  select(-plot_sels, -sel_ordered) %>%
+  unnest() %>%
+  arrange(alpha) %>%
+  mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
+
+ggplot(prior_pred) +
+  geom_path(aes(x = idx, y = jitter(sels, amount = .4), group = interaction(rep, alpha)), alpha = .05) +
+  facet_wrap(~label, labeller = label_parsed, nrow = 2) +
+  scale_x_continuous("Ordered panel number") +
+  scale_y_continuous("# Simulated Panel Selections (of 20 evaluations)")
+
+@
+
+% A modification of the frequentist paradigm developed in \citet{majumder2013validation} and released as a technical report \todo{get citation!} simulates p-values from a Dirichlet-Multinomial distribution with $\alpha=1$; based on the prior predictive distributions alone, $\alpha=1$ does not appear to fit the observed data or theoretical process (e.g. the tendency to identify even small differences from among similar things) well.
+
+The data model used in \citet{majumder2013validation} assumes $\theta_t = 1/m$, that is, $\theta_t$ is fixed and equal to the selection probability of every other panel in the lineup. This assumption, which would correspond to infinite $\alpha$, does not match our experience when evaluating a lineup, nor the accumulated experimental evidence (assembled under Scenario 3, as discussed in \autoref{sec:scenarios}) which shows that even null plots do not show equal selection probabilities for each panel. When examining a lineup, we are generally drawn immediately to 1-4 panels, and the remaining evaluation is to decide between those panels; we also know that typically the same panels are selected across multiple individuals. To account for this issue, recent analyses of lineups calculate visual p-values using the mass function
+\begin{align}\label{eqn:beta-binomial}
+P(C\geq x) = \sum_{x = C}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
+\end{align}
+where $C$ is the number of data panel detections and $K$ is the number of independent evaluations of the lineup~\citep{vinference,vanderplas:2017,loyAreYouNormal2015}. A derivation of this mass function is provided in the appendix. A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex}) but the more general solution is useful to consider, as we may not actually believe $\theta$ is uniformly distributed over the $(m - 1)$ simplex.
+
+\subsection{Hyperparameter Selection}
+% As a result, it's important to understand the effect of $\alpha$ on the posterior distribution.
+
+We know from experience as well as cognitive principles that it is unreasonable to assume that the selection probability of every null plot is precisely equal: null plots are randomly generated, and occasionally, the randomly generated plot will have an interesting feature (that may or may not be present in the target plot).
+When that occurs, the interesting null plot will be selected more frequently than the other nulls, despite being generated by the same distribution.
+The ability to identify stimuli as being different from one another is a fundamental part of cognition; the abstractions that allow us to use the terms `same' and `different' are fundamental to human intelligence~\citep{mingWhenThingsAre2017}.
+As a result, when presented with a lineup, we will typically gravitate towards one or two panels which are different from our mental representation of a generalized panel on some measure, though not always the measure that's under investigation.
+Note that even though the interesting null plot effect is found in all scenarios proposed in \autoref{sec:scenarios}, it is not a systematic issue in Scenario 1; in Scenario 3, the null plots are not re-generated with each lineup evaluation, so an interesting null plot selected by one individual may also effect the evaluation of by other individuals.
+That is, in Scenario 3, the interesting null plots affect all evaluations, and this effect can significantly affect the experiment results.
+However, in Scenario 3, we can also estimate the size of this effect: by examining repeated evaluations of a lineup, we can leverage that replication to estimate the distinctiveness of the set of null plots in the lineup.
+While this effect may exist in Scenario 1, we cannot estimate the effect because there are not repeated evaluations of the same set of lineups. Thus, in Scenario 1, the best estimate we can make for the generic $\theta$ is $1/m$, which is equivalent to the Multinomial model without the Dirichlet hyperparameter and with $\theta = 1/m$.
+
+In the theoretical Multinomial-Dirichlet model proposed in this paper, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification}.
+In practice, we would create a null plot generating model first, and set $\alpha$ according to the perceived difficulty of lineup evaluation using the null generating model in question.
+A difficult lineup, with many potentially interesting panels, would have a higher $\alpha$ value than an easy lineup with no null panels which were visually salient relative to the data panel.
+
+$\alpha$ plays a similar role in modulating the visual p-value calculated from \autoref{eqn:beta-binomial}: lower $\alpha$ values produce a higher visual p-value estimate, and higher $\alpha$ values produce a lower visual p-value estimate.
+
+<<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
+alphas <- exp(seq(-6, 6, by = .01))
+data_breaks <- c(1:5, 6, 8, 10, 15, 20)
+
+
+pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = 20) %>%
+  mutate(p = vis_p_value(C, K, alpha))
+pv2 <- tidyr::crossing(C = data_breaks, K = 20) %>%
+  mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F))
+
+ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
+  geom_line(size = 1) +
+  geom_point(aes(x = exp(6.25), y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
+  scale_y_continuous("Visual p-value") +
+  scale_x_continuous(expression(alpha), trans = "log10", breaks = c(0.001, 0.01, .1, 1, 10, 100),
+                     labels = c("0.001", "0.01", "0.1", "1", "10", "100")) +
+  scale_color_brewer("# Data\nPanel\nIdentifications\n(K = 20)", palette = "Paired") +
+  scale_shape_discrete("") +
+  geom_hline(yintercept = 0.05, color = "grey") +
+  guides(color = guide_legend(override.aes = list(shape = NA))) +
+  annotate("segment", x = exp(6.25), xend = exp(6.25), y = -Inf, yend = .7, color = "grey", alpha = .5) +
+  annotate("text", x = exp(6.25), y = 0.75,
+           label = "Binomial\nmodel", vjust = 1, hjust = .75) +
+  annotate("segment", x = 1, xend = 1, y = -Inf, yend = .7, color = "grey", alpha = .5) +
+  annotate("text", x = 1, y = 0.75,
+           label = "vinference\npackage", vjust = 1, hjust = .5) +
+  theme_bw()
+@
+
+Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. In the next section, we present a method for estimating $\alpha$ from Rorshach or standard lineups and discuss possible uses for this method in assessing null plot generation and lineup difficulty.
+
+
+% \nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
+\bibliography{references}%
 
 
 \section*{Author Biography}
