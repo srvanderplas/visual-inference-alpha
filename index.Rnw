@@ -165,7 +165,7 @@ In addition to the pseudo-observation interpretation, $\alpha$ provides informat
 % Stolen from heike/lineup-scenarios
 When $\alpha = 1$, the symmetric Dirichlet distribution is uniform on the $m-1$ dimensional simplex. When $\alpha < 1$, the mass of the distribution is along the edges of the simplex, where most values of $\theta_i$ will be close to 0. When $\alpha>1$, the mass of the distribution is in the center of the simplex, with most of the $\theta_i$ having similar values. \autoref{fig:simplex} shows ternary plots~\citep{ggtern} of values simulated from a 3-dimensional Dirichlet distribution which illustrate the effect of $\alpha$ on the sampled $\bm\theta$.
 
-<<simplex, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Dirichlet distributed samples on the 2-dimensional simplex.">>=
+<<simplex, eval = F,echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Dirichlet distributed samples on the 2-dimensional simplex.">>=
 simplex <- purrr::map_df(.x = c(1/3, 1, 3), ~data.frame(
   gtools::rdirichlet(5000, alpha = rep(.x, 3))
 ), .id = "alpha") %>%
@@ -177,6 +177,11 @@ ggtern::ggtern(aes(x = p1, y = p2, z = p3), data = simplex) +
   facet_wrap(~alphalabel, labeller = "label_parsed") +
   theme(panel.background = element_rect(colour = "black"))
 @
+
+\begin{figure}\label{fig:simplex}
+\includegraphics[width=\textwidth]{figure/simplex-1.pdf}
+\caption{Dirichlet distributed samples on the 2-dimensional simplex.}
+\end{figure}
 
 %Marginal Beta($\alpha, 2\alpha$) densities corresponding to \\autoref{fig:simplex}.
 <<betas, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap="Marginal Beta($\\alpha, 2\\alpha$) densities corresponding to the above Dirichlet densities.">>=
@@ -195,7 +200,7 @@ qplot(data=betas, p, y=density, geom="polygon", fill=I("grey50"), alpha=I(.8), c
 % End stolen from heike/lineup-scenarios
 
 <<set-theme-bw, include = F>>=
-theme_set(theme_bw())
+theme_set(ggplot2::theme_bw())
 @
 
 While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use prior predictive simulations to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention. \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
