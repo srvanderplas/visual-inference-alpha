@@ -295,8 +295,8 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   scale_shape_discrete("") +
   geom_hline(yintercept = 0.05, color = "grey") +
   guides(color = guide_legend(override.aes = list(shape = NA))) +
-  annotate("segment", x = exp(6.25), xend = exp(6.25), y = -Inf, yend = .7, color = "grey", alpha = .5) +
-  annotate("text", x = exp(6.25), y = 0.75,
+  annotate("segment", x =115, xend = 115, y = -Inf, yend = .7, color = "grey", alpha = .5) +
+  annotate("text", x = 115, y = 0.75,
            label = "Binomial\nmodel", vjust = 1, hjust = .75) +
   annotate("segment", x = 1, xend = 1, y = -Inf, yend = .7, color = "grey", alpha = .5) +
   annotate("text", x = 1, y = 0.75,
