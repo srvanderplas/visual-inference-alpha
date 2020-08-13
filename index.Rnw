@@ -313,7 +313,7 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
 
 Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of null plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
 
-\svp{There are methods for maximum likelihood estimation of $\alpha$ \cite{XXX}. 
+\svp{There are methods for maximum likelihood estimation of $\alpha$ \cite{sirt}. 
 For each lineup experiment, we could include one or two Rorshach lineups which would allow us to estimate $\alpha$ for the null plot generation method. 
 The $\hat\alpha$ estimated from the null lineups would then be used to calculate more accurate p-values for the single or two-target lineups. 
 Unfortunately, even in the best designed experiments, there are usually many panels with 0 selections, because people tend to find some feature to hone in on. 
