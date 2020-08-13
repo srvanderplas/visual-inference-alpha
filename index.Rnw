@@ -216,10 +216,12 @@ sim_lineup_model <- function(alpha, m = 20, k = 30, N = 50) {
 
 # alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
 # alphas <- c(.001, .02, .05, 0.06, 0.07, 0.08, 0.09, .1, .5, 1, 2, 5, 20, 1000)
-alphas <- exp(seq(-6, 2, by = .01))# seq(0.001, 0.5, by = .001)
+alphas <- exp(seq(-7, 7, by = .01)) # seq(0.001, 0.5, by = .001)
+plot_alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
+alphas <- c(alphas, plot_alphas) %>% sort() %>% unique()
 
 prior_pred <- tibble(alpha = alphas,
-                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 200)) %>%
+                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100)) %>%
   mutate(
     sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
     sel_ordered_long = purrr::map(
@@ -246,7 +248,9 @@ prior_pred <- tibble(alpha = alphas,
 #    coord_cartesian(xlim = c(.025, .075)) +
 #    scale_y_continuous(breaks = 1:10)
 
-ggplot(prior_pred) +
+prior_pred %>%
+   dplyr::filter(alpha %in% plot_alphas) %>%
+ggplot() +
   geom_path(aes(x = idx, y = jitter(sels, amount = .4), group = interaction(rep, alpha)), alpha = .05) +
   facet_wrap(~label, labeller = label_parsed, nrow = 2) +
   scale_x_continuous("Ordered panel number") +
@@ -281,7 +285,7 @@ A difficult lineup, with many potentially interesting panels, would have a highe
 $\alpha$ plays a similar role in modulating the visual p-value calculated from \autoref{eqn:beta-binomial}: lower $\alpha$ values produce a higher visual p-value estimate, and higher $\alpha$ values produce a lower visual p-value estimate.
 
 <<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
-alphas <- exp(seq(-6, 6, by = .01))
+alphas <- 10^(seq(-3, 2, by = .01))
 data_breaks <- c(1:5, 6, 8, 10, 15, 20)
 
 cuts <- c(-Inf, .02, .05, .1, .35, 1, 10, Inf)
@@ -293,13 +297,13 @@ pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = 20) %>%
    mutate(panel = cut(alpha, breaks = cuts,labels = labels))
 pv2 <- tidyr::crossing(C = data_breaks, K = 20) %>%
   mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F)) %>%
-   mutate(panel = cut(400, breaks = cuts, labels = labels))
+   mutate(panel = cut(100, breaks = cuts, labels = labels))
 
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
    # facet_wrap(~panel, scales = "free") + 
    facet_grid(.~panel, scales = "free", space = "free") + 
   geom_line(size = 1) +
-  geom_point(aes(x = exp(6.25), y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
+  geom_point(aes(x = 115, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
   scale_y_continuous("Visual p-value") +
    scale_x_log10(expression(alpha)) + 
   # scale_x_continuous(expression(alpha), trans = "log10", breaks = c(0.001, 0.005, 0.01, 0.05, .1, .5,  1, 5, 10, 100),
