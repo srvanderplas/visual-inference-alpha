@@ -355,7 +355,10 @@ This issue is more likely to arise when $\alpha$ is small, because it is more li
 
 \subsection{Visual Selection of $\alpha$}
 
-Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $k=30$ participants. We can simulate, for each potential value of $\alpha$, the number of panels which are selected by more than one participant. As we are primarily interested in the average number of panels which are ``interesting" as indicated by selection by multiple people, we will average the results of 10 simulations so that the underlying trend is more visible. 
+Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $k=30$ participants. 
+We can simulate, for each potential value of $\alpha$, the number of panels which are selected by more than one participant. 
+As we are primarily interested in the average number of panels which are ``interesting" as indicated by selection by multiple people, we will average the results of 10 simulations so that the underlying trend is clear.
+
 <<alpha-sim-logisticish-curve, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $k=40$ evaluations." >>=
 alphas <- exp(seq(-8, 10, by = .01)) # seq(0.001, 0.5, by = .001)
 
