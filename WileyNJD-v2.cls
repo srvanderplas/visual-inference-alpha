@@ -269,7 +269,7 @@
 %%
 %\if@hyperrefon%
 %  \if@xml%
-     \RequirePackage{hyperref}%
+     \RequirePackage[hidelinks]{hyperref}%
 %  \else%
 %     \RequirePackage{hyperref}%
 %  \fi%
