@@ -314,7 +314,7 @@ This issue is more likely to arise when $\alpha$ is small, because it is more li
 \svp{In order to sidestep the issues with ML-based estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.}
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
-\subsection{Visual Selection of \texorpdfstring{$\alpha$}{alpha}}
+\section{Visual Selection of \texorpdfstring{$\alpha$}{alpha}}
 \svp{
 Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $K=30$ participants. 
 The heuristic we propose for estimating $\alpha$ is as follows:
@@ -326,8 +326,6 @@ The heuristic we propose for estimating $\alpha$ is as follows:
 \item Determine which band is most representative of the lineups in the experiment: Over many generated lineups, how many visually interesting null panels are there?
 \item Select an $\alpha$ value corresponding to the selected band. If lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
 \end{enumerate}
-
-\hh{If the null plots generally produce just one very interesting plot (out of $m_o$ nulls) we should not use this null generator for a lineup.  discussion point?}
 
 <<alpha-sim-curve, cache = T, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 alphas <- 10^(seq(-3.6, 3, by = .01)) # seq(0.001, 0.5, by = .001)
@@ -411,6 +409,9 @@ ggplot() +
 
 @
 
+
+\svp{XXX advantages of this approach - sufficiently flexible and adaptable, but without the numeric instability.}
+\svp{XXX Another advantage is that we avoid the numerical instability inherent in estimating alpha with many 0-count panels. We'll discuss the extremely small $\alpha$ case corresponding to 0-1 interesting null plots at the end of the section}
 <<vis-p-val-sensitivity-initial2, fig.cap = "\\hh{XXX needs to be adjusted too} Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
 data_breaks <- 1:20
@@ -432,8 +433,8 @@ pv <- tidyr::crossing(alpha = alphas, C = data_breaks,
           ifelse(all(p < 0.05), "indicates significance",
           "is inconclusive")
          )
-   ) %>%
-  filter(panel != "O-1 Interesting panels")
+   ) #%>%
+  # filter(panel != "O-1 Interesting panels")
 
 labels_data <- pv %>%
    group_by(panel) %>%
@@ -452,15 +453,28 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
          min.segment.length= 0, label.padding = 0.1, direction = "y") +
    theme_bw() +
    geom_label(label = "# data picks (out of K = 30)", 
-              aes(x = .010, y = 0.25), size = 3,
+              aes(x = .0010, y = .058), size = 3,
          data = labels_data[1,], hjust = 0, vjust = 1) +
    scale_colour_manual("Number of data picks ...",
                        values = c("grey70", "grey40", "red")) +
-   theme(legend.position = c(.99, 0.99), legend.justification = c(1, 1))
+   theme(legend.position = c(.99, 0.45), legend.justification = c(1, 1))
 
 @
 
-% \hh{XXX we should include the S curve plot of alpha dependency on number of interesting plots on average. The discretization of alpha should also be included in that plot. The discussion doesn't necessarily fit here, but it's not the worst place.}
+
+\hh{If the null plots generally produce just one very interesting plot (out of $m_o$ nulls) we should not use this null generator for a lineup.  discussion point?}
+
+\section{Example}
+
+\section{Discussion}
+
+\svp{Multinomial-Dirichlet model produces more plausible p-values}
+
+\svp{Visual estimation of $\alpha$ via simulation allows us to use the multinomial-dirichlet model to obtain p-values which are reasonable and which account for the difficulty of the lineup and null plot generation method}
+
+\svp{Visual estimation of $\alpha$ also allows us to screen out lineup generation methods which are problematic: if a null plot generation method produces 1 interesting plot out of a 20-plot rorshach lineup, it is functionally impossible to distinguish a data plot which has a large signal from a null plot which also has a large signal. Extremely small $\alpha$ values, then, serve as a signal that the null plot generation method is not visually appropriate because it sporadically (not consistently) generates visual features that are likely to catch the attention of participants (possibly for the wrong reasons).}
+
+
 
 % \nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
 \bibliography{references}%
