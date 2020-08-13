@@ -39,20 +39,18 @@
 
 \author[4]{Heike Hofmann}
 
-\authormark{VanderPlas et al \textsc{et al}}
+\authormark{VanderPlas \textsc{et al}}
 
 
 \address[1]{\orgdiv{Department of Statistics}, \orgname{University of Nebraska-Lincoln}, \orgaddress{\state{Nebraska}, \country{United States}}}
 
 \address[2]{\orgdiv{Department of Mathematics}, \orgname{Iowa State University}, \orgaddress{\state{Iowa}, \country{United States}}}
 
-
-
-\address[3]{\orgdiv{Department of Econ xxx}, \orgname{Monash University}, \orgaddress{\state{Victoria}, \country{Australia}}}
+\address[3]{\orgdiv{Department of Econometrics and Business Statistics}, \orgname{Monash University}, \orgaddress{\state{Victoria}, \country{Australia}}}
 
 \address[4]{\orgdiv{Department of Statistics}, \orgname{Iowa State University}, \orgaddress{\state{Iowa}, \country{United States}}}
 
-\corres{*Corresponding author name, This is sample corresponding address. \email{authorone@gmail.com}}
+\corres{*Susan VanderPlas, This is sample corresponding address. \email{authorone@gmail.com}}
 
 \presentaddress{This is sample for present address text this is sample for present address text}
 
@@ -345,21 +343,22 @@ Clearly, the choice of $\alpha$ is critical. From a practical perspective, the n
 
 \svp{There are methods for maximum likelihood estimation of $\alpha$ \citep{sirt, minka} from observed proportions (in this case, the number of selections of a panel divided by the number of total selections). 
 Using these methods, we could design our experiment to include one or two Rorshach lineups which would allow us to estimate $\alpha$ for the null plot generation method. 
-The $\hat\alpha$ estimated from the null lineups would then be used to calculate more accurate p-values for the single or two-target lineups. 
-Unfortunately, even in the best designed experiments with extremely difficult lineups, there are usually many panels with 0 selections.
-As with many estimation methods, the ML estimates of $\alpha$ are unstable when there are too many 0 values in the observed data. 
-This issue is more likely to arise when $\alpha$ is small, because it is more likely that most panels will have 0 selections under those conditions.}
+The $\hat\alpha$ estimated from the null lineups would then be used to calculate more accurate $p$-values for the single or two-target lineups. 
+Unfortunately, even in the best designed experiments with extremely difficult lineups, there are usually many panels with no selections.
+As with many estimation methods, the ML estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. 
+This issue is more likely to arise when $\alpha$ is small, because it is more likely that most panels will have zero selections under those conditions.}
 
 \svp{In order to sidestep the issues with ML-based estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.}
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
 \subsection{Visual Selection of $\alpha$}
 
-Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $k=30$ participants. 
+Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $K=30$ participants. 
 We can simulate, for each potential value of $\alpha$, the number of panels which are selected by more than one participant. 
-As we are primarily interested in the average number of panels which are ``interesting" as indicated by selection by multiple people, we will average the results of 10 simulations so that the underlying trend is clear.
+As we are primarily interested in the average number of panels which are ``interesting" as indicated by selection by multiple people, we will average the results of 10 simulations so that the underlying trend is more visible. 
 
-<<alpha-sim-logisticish-curve, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $k=40$ evaluations." >>=
+<<alpha-sim-logisticish-curve, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations." >>=
+
 alphas <- exp(seq(-8, 10, by = .01)) # seq(0.001, 0.5, by = .001)
 
 prior_pred <- tibble(alpha = alphas,
