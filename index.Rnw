@@ -73,6 +73,7 @@
 
 <<setup, echo = F, include = F>>=
 library(tidyverse)
+library(mgcv)
 knitr::opts_chunk$set(echo = F, message = F, warning = F)
 # theme_set(theme_bw())
 @
@@ -353,11 +354,17 @@ This issue is more likely to arise when $\alpha$ is small, because it is more li
 \subsection{Visual Selection of \texorpdfstring{$\alpha$}{alpha}}
 \svp{
 Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $K=30$ participants. 
-We can simulate, for each potential value of $\alpha$, the number of panels which are selected by more than one participant. 
-As we are primarily interested in the average number of panels which are ``interesting" as indicated by selection by multiple people, we will average the results of 10 simulations so that the underlying trend is more visible. 
+The heuristic we propose for estimating $\alpha$ is as follows:
 }
+\begin{enumerate}
+\item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $t$ (in \autoref{fig:alpha-sim-curve}, $t = 1$)
+\item Averate the results of ~10 simulations together to make the underlying trend more visible.
+\item Determine cutoffs for ~5 bands indicating different levels of interest. In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; this ensures that 
+\item Determine which band is most representative of the lineups in the experiment: Over many generated lineups, how many visually interesting null panels are there?
+\item Select an $\alpha$ value corresponding to the selected band. If the lineup contained 4-5 interesting null panels, we might use $\alpha = 0.075$. 
+\end{enumerate}
 
-<<alpha-sim-logisticish-curve, cache = T, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations." >>=
+<<alpha-sim-curve, cache = T, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 alphas <- exp(seq(-8, 10, by = .01)) # seq(0.001, 0.5, by = .001)
 
 prior_pred <- tibble(alpha = alphas,
@@ -375,37 +382,71 @@ prior_pred <- tibble(alpha = alphas,
   arrange(alpha) %>%
   mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
 
-# # Calc mean # plots with >=1 selections
-# prior_pred_mean <- prior_pred %>%
-#    group_by(alpha, rep) %>%
-#    summarize(n_sel_plots = sum(sels > 1)) #%>%
-#    # group_by(alpha) %>%
-#    # summarize(n_sel_plots = mean(n_sel_plots))
-# 
-# ggplot(prior_pred_mean) +
-#    geom_point(aes(x = alpha, y = n_sel_plots)) +
-#    geom_smooth(aes(x = alpha, y = n_sel_plots)) +
-#    scale_x_log10() +
-#    # coord_cartesian(xlim = c(.025, .075)) +
-#    scale_y_continuous(breaks = 1:100)
-
 # Calc mean # plots with >=1 selections
 prior_pred_mean <- prior_pred %>%
   mutate(rep2 = rep %% 10) %>%
    group_by(alpha, rep2, rep) %>%
-   summarize(n_sel_plots = sum(sels > 1)) %>%
+   summarize(n_sel_plots = sum(sels >= 1)) %>%
    group_by(alpha, rep2) %>%
    summarize(n_sel_plots = mean(n_sel_plots))
 
-ggplot(prior_pred_mean) +
-   geom_point(aes(x = alpha, y = n_sel_plots), alpha = .05) +
-   geom_smooth(aes(x = alpha, y = n_sel_plots)) +
-   scale_x_log10(name = expression(alpha)) +
-   scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100) 
+model <- gam(n_sel_plots ~ s(log(alpha, 10)), bs = "cs", method = "REML", data = prior_pred_mean)
+model_df <- tibble(alpha = alphas, n_sel_plots = predict(model, newdata = tibble(alpha = alphas), type = "response"))
+
+possible_breakpoints <- model_df %>% 
+  filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
+  mutate(tmp = floor(n_sel_plots*2)/2, dist = abs(n_sel_plots - tmp)) %>%
+  group_by(tmp) %>%
+  filter(dist==min(dist)) %>%
+  filter(tmp %in% c(2, 3.5, 5.5, 7.5)) %>%
+  ungroup() %>%
+  mutate(band = floor(.5 + row_number()/2))
+
+lag_polys <- function(data) {
+  x = data$x
+  y = data$y
+  minval = 10e-8
+  bind_rows(
+  tibble(
+    x = c(minval, x[1], x[2], minval, minval),
+    y = c(y[1], y[1], y[2], y[2], y[1]), 
+    type = "h"
+  ),
+  tibble(
+    x = c(x[1], x[2], x[2], x[1], x[1]),
+    y = c(-Inf, -Inf, y[2], y[1], -Inf), 
+    type = "v"
+  ))
+}
+
+bands <- possible_breakpoints %>%
+  rename(x = alpha, y = n_sel_plots) %>%
+  nest(data = -band) %>%
+  mutate(polys = purrr::map(data, lag_polys)) %>%
+  unnest(polys)
+
+mb <- crossing(x = c(2.5, 5, 7.5), y = 10^(seq(-4, 5))) %>% mutate(z = x*y) %>% `[`("z") %>% unlist() %>% as.numeric
+
+band_labels <- tibble(
+  y = c(1.5, 2.75, 4.5, 6.5, 8.5),
+  x = min(alphas),
+  label = c("1-2", "2-3", "4-5", "6-7", "8+ Interesting panels")
+)
+
+ggplot() +
+  geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
+  geom_point(aes(x = alpha, y = n_sel_plots),data = prior_pred_mean, alpha = .05) +
+  geom_line(aes(x = alpha, y = n_sel_plots), data = model_df, color = "blue", size = 1) +
+  scale_x_log10(name = expression(alpha), breaks = c(0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000), 
+                minor_breaks = mb, 
+                labels = 10^(seq(-3, 4))) +
+  geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
+  coord_cartesian(xlim = range(alphas)) + 
+  scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100) 
 
 @
 
-\hh{XXX we should include the S curve plot of alpha dependency on number of interesting plots on average. The discretization of alpha should also be included in that plot. The discussion doesn't necessarily fit here, but it's not the worst place.}
+% \hh{XXX we should include the S curve plot of alpha dependency on number of interesting plots on average. The discretization of alpha should also be included in that plot. The discussion doesn't necessarily fit here, but it's not the worst place.}
 
 % \nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
 \bibliography{references}%
