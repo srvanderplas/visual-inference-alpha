@@ -375,6 +375,8 @@ The heuristic we propose for estimating $\alpha$ is as follows:
 \item Select an $\alpha$ value corresponding to the selected band. If lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
 \end{enumerate}
 
+\hh{If the null plots generally produce just one very interesting plot (out of $m_o$ nulls) we should not use this null generator for a lineup.  discussion point?}
+
 <<alpha-sim-curve, cache = T, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 alphas <- 10^(seq(-3.6, 3, by = .01)) # seq(0.001, 0.5, by = .001)
 
