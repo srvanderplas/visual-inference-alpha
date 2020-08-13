@@ -48,7 +48,7 @@
 
 
 
-\address[3]{\orgdiv{Department of Econ xxx}, \orgname{Monash University}, \orgaddress{\state{Victoria}, \country{Australia}}}
+\address[3]{\orgdiv{Department of Econometrics and Business Statistics}, \orgname{Monash University}, \orgaddress{\state{Victoria}, \country{Australia}}}
 
 \address[4]{\orgdiv{Department of Statistics}, \orgname{Iowa State University}, \orgaddress{\state{Iowa}, \country{United States}}}
 
