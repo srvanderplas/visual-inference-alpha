@@ -321,7 +321,7 @@ As with many estimation methods, the MLE estimates of $\alpha$ are unstable when
 This issue is more likely to arise when $\alpha$ is small, because it is more likely that most panels will have 0 selections under those conditions.}
 
 \svp{Instead of numerical estimation, in this paper, we propose a method for visual estimation of alpha which is not hampered by the prevalence of 0-count values.
-This method is based on the assumption that during the creation of a null plot generating model (and viewing of subsequent lineups), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.}
+This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.}
 
 \subsection{Visual Selection of $\alpha$}
 
