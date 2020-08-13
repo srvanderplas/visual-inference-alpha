@@ -311,7 +311,20 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   theme_bw()
 @
 
-Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of null plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. \svp{We do, however, generally have a good idea of how many null plots are ``interesting" in a given lineup. In the next section, we describe a process for selecting an appropriate $\alpha$ value using visual heuristics.}
+Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of null plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
+
+\svp{There are methods for maximum likelihood estimation of $\alpha$ \cite{XXX}. 
+For each lineup experiment, we could include one or two Rorshach lineups which would allow us to estimate $\alpha$ for the null plot generation method. 
+The $\hat\alpha$ estimated from the null lineups would then be used to calculate more accurate p-values for the single or two-target lineups. 
+Unfortunately, even in the best designed experiments, there are usually many panels with 0 selections, because people tend to find some feature to hone in on. 
+As with many estimation methods, the MLE estimates of $\alpha$ are unstable when there are too many 0 values in the observed data. 
+This issue is more likely to arise when $\alpha$ is small, because it is more likely that most panels will have 0 selections under those conditions.}
+
+\svp{Instead of numerical estimation, in this paper, we propose a method for visual estimation of alpha which is not hampered by the prevalence of 0-count values.
+This method is based on the assumption that during the creation of a null plot generating model (and viewing of subsequent lineups), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.}
+
+\subsection{Visual Selection of $\alpha$}
+
 
 
 <<alpha-sim-logisticish-curve, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $k=40$ evaluations." >>=
