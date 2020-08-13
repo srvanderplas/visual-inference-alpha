@@ -213,7 +213,7 @@ While graphical illustrations of the 20-dimensional dirichlet distribution are m
 
 <<prior-predictive, echo = F, fig.cap = "Prior predictive distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=20$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
 # set.seed(5019230943) # HH: too large for my machine 
-set.seed(501923094)
+set.seed(519223094)
 
 sim_lineup_model <- function(alpha, m = 20, k = 30, N = 50) {
   theta <- gtools::rdirichlet(1, rep(alpha, m))
@@ -221,11 +221,7 @@ sim_lineup_model <- function(alpha, m = 20, k = 30, N = 50) {
   sels
 }
 
-# alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
-# alphas <- c(.001, .02, .05, 0.06, 0.07, 0.08, 0.09, .1, .5, 1, 2, 5, 20, 1000)
-alphas <- exp(seq(-7, 7, by = .01)) # seq(0.001, 0.5, by = .001)
-plot_alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
-alphas <- c(alphas, plot_alphas) %>% sort() %>% unique()
+alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
 
 prior_pred <- tibble(alpha = alphas,
                      plot_sels = purrr::map(alpha, sim_lineup_model, N = 100)) %>%
@@ -242,26 +238,12 @@ prior_pred <- tibble(alpha = alphas,
   arrange(alpha) %>%
   mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
 
-# Calc mean # plots with >=1 selections
-# prior_pred_mean <- prior_pred %>%
-#    group_by(alpha, rep) %>%
-#    summarize(n_sel_plots = sum(sels > 1)) %>%
-#    group_by(alpha) %>%
-#    summarize(n_sel_plots = mean(n_sel_plots))
-# ggplot(prior_pred_mean) +
-#    geom_point(aes(x = alpha, y = n_sel_plots)) +
-#    geom_smooth(aes(x = alpha, y = n_sel_plots)) +
-#    # scale_x_log10() +
-#    coord_cartesian(xlim = c(.025, .075)) +
-#    scale_y_continuous(breaks = 1:10)
-
 prior_pred %>%
-   dplyr::filter(alpha %in% plot_alphas) %>%
 ggplot() +
   geom_path(aes(x = idx, y = jitter(sels, amount = .4), group = interaction(rep, alpha)), alpha = .05) +
   facet_wrap(~label, labeller = label_parsed, nrow = 2) +
   scale_x_continuous("Ordered panel number") +
-  scale_y_continuous("# Simulated Panel Selections (of 20 evaluations)")
+  scale_y_continuous("# Simulated Panel Selections (of 30 evaluations)")
 
 @
 
@@ -333,8 +315,42 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   theme_bw()
 @
 
-Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. In the next section, we present a method for estimating $\alpha$ from Rorshach or standard lineups and discuss possible uses for this method in assessing null plot generation and lineup difficulty.
+Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. \svp{We do, however, generally have a good idea of how many null plots are ``interesting" in a given lineup. In the next section, we describe a process for selecting an appropriate $\alpha$ value using visual heuristics.}
 
+
+<<alpha-sim-logisticish-curve, fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
+alphas <- exp(seq(-8, 10, by = .01)) # seq(0.001, 0.5, by = .001)
+
+prior_pred <- tibble(alpha = alphas,
+                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, k = 50)) %>%
+  mutate(
+    sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
+    sel_ordered_long = purrr::map(
+      sel_ordered,
+      ~tibble(idx = rep(1:nrow(.x), times = ncol(.x)),
+              rep = rep(1:ncol(.x), each = nrow(.x)),
+              sels = as.vector(.x, mode = "numeric")))
+  ) %>%
+  select(-plot_sels, -sel_ordered) %>%
+  unnest(cols = c(sel_ordered_long)) %>%
+  arrange(alpha) %>%
+  mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
+
+# Calc mean # plots with >=1 selections
+prior_pred_mean <- prior_pred %>%
+   group_by(alpha, rep) %>%
+   summarize(n_sel_plots = sum(sels > 1)) %>%
+   group_by(alpha) %>%
+   summarize(n_sel_plots = mean(n_sel_plots))
+
+ggplot(prior_pred_mean) +
+   geom_point(aes(x = alpha, y = n_sel_plots)) +
+   geom_smooth(aes(x = alpha, y = n_sel_plots)) +
+   scale_x_log10() +
+   # coord_cartesian(xlim = c(.025, .075)) +
+   scale_y_continuous(breaks = 1:100)
+
+@
 
 % \nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
 \bibliography{references}%
