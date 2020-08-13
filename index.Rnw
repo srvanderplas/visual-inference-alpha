@@ -58,20 +58,19 @@
 
 \keywords{keyword1, keyword2, keyword3, keyword4}
 
-\jnlcitation{\cname{%
-\author{Williams K.}, 
-\author{B. Hoskins}, 
-\author{R. Lee}, 
-\author{G. Masato}, and 
-\author{T. Woollings}} (\cyear{2016}), 
-\ctitle{A regime analysis of Atlantic winter jet variability applied to evaluate HadGEM3-GC2}, \cjournal{Q.J.R. Meteorol. Soc.}, \cvol{2017;00:1--6}.}
+% \jnlcitation{\cname{%
+% \author{Williams K.}, 
+% \author{B. Hoskins}, 
+% \author{R. Lee}, 
+% \author{G. Masato}, and 
+% \author{T. Woollings}} (\cyear{2016}), 
+% \ctitle{A regime analysis of Atlantic winter jet variability applied to evaluate HadGEM3-GC2}, \cjournal{Q.J.R. Meteorol. Soc.}, \cvol{2017;00:1--6}.}
 
 \maketitle
 
-\footnotetext{\textbf{Abbreviations:} ANA, anti-nuclear antibodies; APC, antigen-presenting cells; IRF, interferon regulatory factor}
+\footnotetext{\textbf{Abbreviations:} ML, maximum likelihood;}
 
 
-% \tableofcontents
 <<setup, echo = F, include = F>>=
 library(tidyverse)
 knitr::opts_chunk$set(echo = F, message = F, warning = F)
@@ -351,14 +350,14 @@ This issue is more likely to arise when $\alpha$ is small, because it is more li
 \svp{In order to sidestep the issues with ML-based estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.}
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
-\subsection{Visual Selection of $\alpha$}
-
+\subsection{Visual Selection of \texorpdfstring{$\alpha$}{alpha}}
+\svp{
 Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $K=30$ participants. 
 We can simulate, for each potential value of $\alpha$, the number of panels which are selected by more than one participant. 
 As we are primarily interested in the average number of panels which are ``interesting" as indicated by selection by multiple people, we will average the results of 10 simulations so that the underlying trend is more visible. 
+}
 
-<<alpha-sim-logisticish-curve, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations." >>=
-
+<<alpha-sim-logisticish-curve, cache = T, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations." >>=
 alphas <- exp(seq(-8, 10, by = .01)) # seq(0.001, 0.5, by = .001)
 
 prior_pred <- tibble(alpha = alphas,
