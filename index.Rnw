@@ -357,15 +357,15 @@ Let us start with a simulation using the Dirichlet-multinomial model in \autoref
 The heuristic we propose for estimating $\alpha$ is as follows:
 }
 \begin{enumerate}
-\item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $t$ (in \autoref{fig:alpha-sim-curve}, $t = 1$)
-\item Averate the results of ~10 simulations together to make the underlying trend more visible.
-\item Determine cutoffs for ~5 bands indicating different levels of interest. In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; this ensures that 
+\item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $t$ (in \autoref{fig:alpha-sim-curve}, $t = 1$). It may be helpful to average the results of ~10 simulations together to reduce the visual noise and make the underlying trend more visible.
+\item Fit a smooth function to the simulated data. Here, we have used a generalized additive model, $y = f(log(\alpha))$ where $f$ is a smooth function. 
+\item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the fitted function. In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; for $K=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
 \item Determine which band is most representative of the lineups in the experiment: Over many generated lineups, how many visually interesting null panels are there?
-\item Select an $\alpha$ value corresponding to the selected band. If the lineup contained 4-5 interesting null panels, we might use $\alpha = 0.075$. 
+\item Select an $\alpha$ value corresponding to the selected band. If lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
 \end{enumerate}
 
 <<alpha-sim-curve, cache = T, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
-alphas <- exp(seq(-8, 10, by = .01)) # seq(0.001, 0.5, by = .001)
+alphas <- 10^(seq(-3.6, 3, by = .01)) # seq(0.001, 0.5, by = .001)
 
 prior_pred <- tibble(alpha = alphas,
                      plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, k = 30)) %>%
@@ -386,7 +386,7 @@ prior_pred <- tibble(alpha = alphas,
 prior_pred_mean <- prior_pred %>%
   mutate(rep2 = rep %% 10) %>%
    group_by(alpha, rep2, rep) %>%
-   summarize(n_sel_plots = sum(sels >= 1)) %>%
+   summarize(n_sel_plots = sum(sels > 1)) %>%
    group_by(alpha, rep2) %>%
    summarize(n_sel_plots = mean(n_sel_plots))
 
@@ -398,7 +398,7 @@ possible_breakpoints <- model_df %>%
   mutate(tmp = floor(n_sel_plots*2)/2, dist = abs(n_sel_plots - tmp)) %>%
   group_by(tmp) %>%
   filter(dist==min(dist)) %>%
-  filter(tmp %in% c(2, 3.5, 5.5, 7.5)) %>%
+  filter(tmp %in% c(1.5, 3.5, 5.5, 7.5)) %>%
   ungroup() %>%
   mutate(band = floor(.5 + row_number()/2))
 
@@ -428,9 +428,9 @@ bands <- possible_breakpoints %>%
 mb <- crossing(x = c(2.5, 5, 7.5), y = 10^(seq(-4, 5))) %>% mutate(z = x*y) %>% `[`("z") %>% unlist() %>% as.numeric
 
 band_labels <- tibble(
-  y = c(1.5, 2.75, 4.5, 6.5, 8.5),
+  y = c(2.5, 4.5, 6.5, 8.5),
   x = min(alphas),
-  label = c("1-2", "2-3", "4-5", "6-7", "8+ Interesting panels")
+  label = c("2-3", "4-5", "6-7", "8+ Interesting panels")
 )
 
 ggplot() +
