@@ -302,41 +302,52 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   theme_bw()
 @
 
-<<vis-p-val-sensitivity-initial2, fig.cap = "\\hh{XXX needs to be adjusted} Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
+<<vis-p-val-sensitivity-initial2, fig.cap = "\\hh{XXX needs to be adjusted too} Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
-data_breaks <- c(1:5, 6, 8, 10, 15, 20)
+data_breaks <- 1:20
 
 cuts <- c(-Inf, .02, .05, .1, .35, 1, 10, Inf)
 cuts <- c(-Inf, .025, .075, .25, 1, Inf)
 labels <- c("1-2 Interesting panels", "2-3 panels", "4-5 panels", "6-7 panels", "8+ Interesting panels")
 
-pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = 20) %>%
+pv <- tidyr::crossing(alpha = alphas, C = data_breaks, 
+                      K = 30) %>%
   mutate(p = vis_p_value(C, K, alpha)) %>%
-   mutate(panel = cut(alpha, breaks = cuts,labels = labels))
-pv2 <- tidyr::crossing(C = data_breaks, K = 20) %>%
-  mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F)) %>%
-   mutate(panel = cut(100, breaks = cuts, labels = labels))
+  mutate(
+     panel = cut(alpha, breaks = cuts, labels = labels)
+     ) %>%
+   group_by(C, K, panel) %>%
+   mutate(
+        type = ifelse(
+          all(p > 0.05), "indicates no significance",
+          ifelse(all(p < 0.05), "indicates significance",
+          "is inconclusive")
+         )
+   )
 
-ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
-   # facet_wrap(~panel, scales = "free") + 
-   facet_wrap(~panel, scales = "free") + 
-  geom_line(size = 1) +
-  geom_point(aes(x = 115, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
+labels_data <- pv %>%
+   group_by(panel) %>%
+   filter(
+     alpha == max(alpha)
+   ) 
+
+ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
+  facet_wrap(~panel, scales = "free") + 
+  geom_line(size = .8, aes(colour = type)) +
   scale_y_continuous("Visual p-value") +
-   scale_x_log10(expression(alpha)) + 
-  # scale_x_continuous(expression(alpha), trans = "log10", breaks = c(0.001, 0.005, 0.01, 0.05, .1, .5,  1, 5, 10, 100),
-  #                    labels = c("0.001", "0.005", "0.01", "0.05", "0.1","0.5", "1","5", "10", "100")) +
-  scale_color_brewer("# Data\nPanel\nIdentifications\n(K = 20)", palette = "Paired") +
-  scale_shape_discrete("") +
-  geom_hline(yintercept = 0.05, color = "grey") +
-  guides(color = guide_legend(override.aes = list(shape = NA))) +
-  # annotate("segment", x = exp(6.25), xend = exp(6.25), y = -Inf, yend = .7, color = "grey", alpha = .5) +
-  # annotate("text", x = exp(6.25), y = 0.75,
-  #          label = "Binomial\nmodel", vjust = 1, hjust = .75) +
-  # annotate("segment", x = 1, xend = 1, y = -Inf, yend = .7, color = "grey", alpha = .5) +
-  # annotate("text", x = 1, y = 0.75,
-  #          label = "vinference\npackage", vjust = 1, hjust = .5) +
-  theme_bw()
+   scale_x_log10(expression(alpha), 
+                 expand = expansion(mult= c(0.05,0.25))) + 
+  geom_hline(yintercept = 0.05, color = "black") +
+  ggrepel::geom_label_repel(data = labels_data %>% filter(type=="is inconclusive"), aes(label = C, colour = type), hjust = 0, nudge_x = 0.05, size = 3, alpha = 0.8,
+         min.segment.length= 0, label.padding = 0.1, direction = "y") +
+   theme_bw() +
+   geom_label(label = "# data picks (out of K = 30)", 
+              aes(x = 0.001, y = 0.125), size = 3,
+         data = labels_data[1,], hjust = 0, vjust = 1) +
+   scale_colour_manual("Number of data picks ...",
+                       values = c("grey70", "grey40", "red")) +
+   theme(legend.position = c(0.85, 0.1))
+
 @
 
 Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of null plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
