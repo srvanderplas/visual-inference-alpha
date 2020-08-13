@@ -211,7 +211,7 @@ theme_set(ggplot2::theme_bw())
 
 While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use prior predictive simulations to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention. \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
-<<prior-predictive, echo = F, fig.cap = "Prior predictive distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=20$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
+<<prior-predictive, echo = F, fig.cap = "Prior predictive distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=30$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
 # set.seed(5019230943) # HH: too large for my machine 
 set.seed(519223094)
 
@@ -269,14 +269,10 @@ While this effect may exist in Scenario 1, we cannot estimate the effect because
 
 In the theoretical Multinomial-Dirichlet model proposed in this paper, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification}.
 
-\hh{XXX we should include the S curve plot of alpha dependency on number of interesting plots on average. The discretization of alpha should also be included in that plot. The discussion doesn't necessarily fit here, but it's not the worst place.}
-
 In practice, we would create a null plot generating model first, and set $\alpha$ according to the perceived difficulty of lineup evaluation using the null generating model in question.
 A difficult lineup, with many potentially interesting panels, would have a higher $\alpha$ value than an easy lineup with no null panels which were visually salient relative to the data panel.
 
 $\alpha$ plays a similar role in modulating the visual p-value calculated from \autoref{eqn:beta-binomial}: lower $\alpha$ values produce a higher visual p-value estimate, and higher $\alpha$ values produce a lower visual p-value estimate.
-
-
 
 <<vis-p-val-sensitivity-initial, fig.cap = "\\hh{XXX needs to be adjusted} Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
@@ -315,14 +311,14 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   theme_bw()
 @
 
-Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. \svp{We do, however, generally have a good idea of how many null plots are ``interesting" in a given lineup. In the next section, we describe a process for selecting an appropriate $\alpha$ value using visual heuristics.}
+Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of null plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. \svp{We do, however, generally have a good idea of how many null plots are ``interesting" in a given lineup. In the next section, we describe a process for selecting an appropriate $\alpha$ value using visual heuristics.}
 
 
-<<alpha-sim-logisticish-curve, fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
+<<alpha-sim-logisticish-curve, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $k=40$ evaluations." >>=
 alphas <- exp(seq(-8, 10, by = .01)) # seq(0.001, 0.5, by = .001)
 
 prior_pred <- tibble(alpha = alphas,
-                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, k = 50)) %>%
+                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, k = 40)) %>%
   mutate(
     sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
     sel_ordered_long = purrr::map(
@@ -336,21 +332,37 @@ prior_pred <- tibble(alpha = alphas,
   arrange(alpha) %>%
   mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
 
+# # Calc mean # plots with >=1 selections
+# prior_pred_mean <- prior_pred %>%
+#    group_by(alpha, rep) %>%
+#    summarize(n_sel_plots = sum(sels > 1)) #%>%
+#    # group_by(alpha) %>%
+#    # summarize(n_sel_plots = mean(n_sel_plots))
+# 
+# ggplot(prior_pred_mean) +
+#    geom_point(aes(x = alpha, y = n_sel_plots)) +
+#    geom_smooth(aes(x = alpha, y = n_sel_plots)) +
+#    scale_x_log10() +
+#    # coord_cartesian(xlim = c(.025, .075)) +
+#    scale_y_continuous(breaks = 1:100)
+
 # Calc mean # plots with >=1 selections
 prior_pred_mean <- prior_pred %>%
-   group_by(alpha, rep) %>%
+  mutate(rep2 = rep %% 10) %>%
+   group_by(alpha, rep2, rep) %>%
    summarize(n_sel_plots = sum(sels > 1)) %>%
-   group_by(alpha) %>%
+   group_by(alpha, rep2) %>%
    summarize(n_sel_plots = mean(n_sel_plots))
 
 ggplot(prior_pred_mean) +
-   geom_point(aes(x = alpha, y = n_sel_plots)) +
+   geom_point(aes(x = alpha, y = n_sel_plots), alpha = .05) +
    geom_smooth(aes(x = alpha, y = n_sel_plots)) +
-   scale_x_log10() +
-   # coord_cartesian(xlim = c(.025, .075)) +
-   scale_y_continuous(breaks = 1:100)
+   scale_x_log10(name = expression(alpha)) +
+   scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100) 
 
 @
+
+\hh{XXX we should include the S curve plot of alpha dependency on number of interesting plots on average. The discretization of alpha should also be included in that plot. The discussion doesn't necessarily fit here, but it's not the worst place.}
 
 % \nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
 \bibliography{references}%
