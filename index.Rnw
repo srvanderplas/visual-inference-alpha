@@ -29,20 +29,26 @@
 
 \title{This is the sample article title\protect\thanks{This is an example for title footnote.}}
 
-\author[1]{Author One*}
+\author[1]{Susan VanderPlas*}
 
-\author[2,3]{Author Two}
+\author[2]{Christian R\"ottger}
 
-\author[3]{Author Three}
+\author[3]{Dianne Cook}
 
-\authormark{AUTHOR ONE \textsc{et al}}
+\author[4]{Heike Hofmann}
+
+\authormark{VanderPlas et al \textsc{et al}}
 
 
-\address[1]{\orgdiv{Org Division}, \orgname{Org Name}, \orgaddress{\state{State name}, \country{Country name}}}
+\address[1]{\orgdiv{Org Division}, \orgname{Universty of Nebraska-Lincoln}, \orgaddress{\state{State name}, \country{Country name}}}
 
-\address[2]{\orgdiv{Org Division}, \orgname{Org Name}, \orgaddress{\state{State name}, \country{Country name}}}
+\address[2]{\orgdiv{Department of Mathematics}, \orgname{Iowa State University}, \orgaddress{\state{Iowa}, \country{United States}}}
 
-\address[3]{\orgdiv{Org Division}, \orgname{Org Name}, \orgaddress{\state{State name}, \country{Country name}}}
+
+
+\address[3]{\orgdiv{Org Division}, \orgname{Monash University}, \orgaddress{\state{State name}, \country{Australia}}}
+
+\address[4]{\orgdiv{Department of Statistics}, \orgname{Iowa State University}, \orgaddress{\state{Iowa}, \country{United States}}}
 
 \corres{*Corresponding author name, This is sample corresponding address. \email{authorone@gmail.com}}
 
@@ -206,7 +212,8 @@ theme_set(ggplot2::theme_bw())
 While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use prior predictive simulations to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention. \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
 <<prior-predictive, echo = F, fig.cap = "Prior predictive distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=20$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
-set.seed(5019230943)
+# set.seed(5019230943) # HH: too large for my machine 
+set.seed(501923094)
 
 sim_lineup_model <- function(alpha, m = 20, k = 30, N = 50) {
   theta <- gtools::rdirichlet(1, rep(alpha, m))
@@ -279,12 +286,17 @@ However, in Scenario 3, we can also estimate the size of this effect: by examini
 While this effect may exist in Scenario 1, we cannot estimate the effect because there are not repeated evaluations of the same set of lineups. Thus, in Scenario 1, the best estimate we can make for the generic $\theta$ is $1/m$, which is equivalent to the Multinomial model without the Dirichlet hyperparameter and with $\theta = 1/m$.
 
 In the theoretical Multinomial-Dirichlet model proposed in this paper, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification}.
+
+\hh{XXX we should include the S curve plot of alpha dependency on number of interesting plots on average. The discretization of alpha should also be included in that plot. The discussion doesn't necessarily fit here, but it's not the worst place.}
+
 In practice, we would create a null plot generating model first, and set $\alpha$ according to the perceived difficulty of lineup evaluation using the null generating model in question.
 A difficult lineup, with many potentially interesting panels, would have a higher $\alpha$ value than an easy lineup with no null panels which were visually salient relative to the data panel.
 
 $\alpha$ plays a similar role in modulating the visual p-value calculated from \autoref{eqn:beta-binomial}: lower $\alpha$ values produce a higher visual p-value estimate, and higher $\alpha$ values produce a lower visual p-value estimate.
 
-<<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
+
+
+<<vis-p-val-sensitivity-initial, fig.cap = "\\hh{XXX needs to be adjusted} Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
 data_breaks <- c(1:5, 6, 8, 10, 15, 20)
 
@@ -301,7 +313,7 @@ pv2 <- tidyr::crossing(C = data_breaks, K = 20) %>%
 
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
    # facet_wrap(~panel, scales = "free") + 
-   facet_grid(.~panel, scales = "free", space = "free") + 
+   facet_wrap(~panel, scales = "free") + 
   geom_line(size = 1) +
   geom_point(aes(x = 115, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
   scale_y_continuous("Visual p-value") +
@@ -319,30 +331,6 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   # annotate("text", x = 1, y = 0.75,
   #          label = "vinference\npackage", vjust = 1, hjust = .5) +
   theme_bw()
-
-
-pv <- pv %>% mutate(
- alpha_cut = cut(alpha, breaks=c(0, 0.05, 0.075, 0.125, 0.3, 5, 1000))  
-)
-ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
-  geom_line(size = 1) +
-#  geom_point(aes(x = exp(6.25), y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
-   facet_wrap(~alpha_cut, scales = "free") +
-  scale_y_continuous("Visual p-value") +
-   scale_x_continuous(expression(alpha), trans = "log10") +
-#  scale_x_continuous(expression(alpha), trans = "log10", breaks = c(0.001, 0.01, .1, 1, 10, 100),
-#                     labels = c("0.001", "0.01", "0.1", "1", "10", "100")) +
-  scale_color_brewer("# Data\nPanel\nIdentifications\n(K = 20)", palette = "Paired") +
-  scale_shape_discrete("") +
-  geom_hline(yintercept = 0.05, color = "grey") +
-  guides(color = guide_legend(override.aes = list(shape = NA))) +
-#  annotate("segment", x = exp(6.25), xend = exp(6.25), y = -Inf, yend = .7, color = "grey", alpha = .5) +
-#  annotate("text", x = exp(6.25), y = 0.75,
-#           label = "Binomial\nmodel", vjust = 1, hjust = .75) +
-#  annotate("segment", x = 1, xend = 1, y = -Inf, yend = .7, color = "grey", alpha = .5) +
-#  annotate("text", x = 1, y = 0.75,
-#           label = "vinference\npackage", vjust = 1, hjust = .5) +
-  ggplot2::theme_bw()
 @
 
 Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and possibly the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. In the next section, we present a method for estimating $\alpha$ from Rorshach or standard lineups and discuss possible uses for this method in assessing null plot generation and lineup difficulty.
