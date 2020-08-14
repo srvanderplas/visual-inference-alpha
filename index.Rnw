@@ -253,7 +253,11 @@ The data model used in \citet{majumder2013validation} assumes $\theta_t = 1/m$, 
 \begin{align}\label{eqn:beta-binomial}
 P(C\geq x) = \sum_{x = C}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
 \end{align}
-where $C$ is the number of data panel detections and $K$ is the number of independent evaluations of the lineup~\citep{vinference,vanderplas:2017,loyAreYouNormal2015}. A derivation of this mass function is provided in the appendix. A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex}) but the more general solution is useful to consider, as we may not actually believe $\theta$ is uniformly distributed over the $(m - 1)$ simplex.
+where $C$ is the number of data panel detections,  $K$ is the number of independent evaluations of the lineup~\citep{vinference,vanderplas:2017,loyAreYouNormal2015} and \hh{$B(., .)$ is the Beta function defined as:
+\[
+B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b > 0. 
+\] }
+A derivation of this mass function is provided in Appendix~ \ref{app:pvalue}. A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex}) but the more general solution is useful to consider, as we may not actually believe $\theta$ is uniformly distributed over the $(m - 1)$ simplex.
 
 \subsection{Hyperparameter Selection}
 % As a result, it's important to understand the effect of $\alpha$ on the posterior distribution.
@@ -449,11 +453,15 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
    scale_x_log10(expression(alpha), 
                  expand = expansion(mult= c(0.05,0.25))) + 
   geom_hline(yintercept = 0.05, color = "black") +
-  ggrepel::geom_label_repel(data = labels_data %>% filter(type=="is inconclusive"), aes(label = C, colour = type), hjust = 0, nudge_x = 0.05, size = 3, alpha = 0.8,
+  ggrepel::geom_label_repel(
+#     data = labels_data %>% filter(type=="is inconclusive"), 
+     data = labels_data %>% group_by(panel, type) %>%
+        filter(((type == "indicates no significance") & (C == max(C))) | ((type == "indicates significance") & (C == min(C)))),
+     aes(label = C, colour = type), hjust = 0, nudge_x = 0.05, size = 3, alpha = 0.8,
          min.segment.length= 0, label.padding = 0.1, direction = "y") +
    theme_bw() +
-   geom_label(label = "# data picks (out of K = 30)", 
-              aes(x = .0010, y = .058), size = 3,
+   geom_label(label = "# data picks\n (out of K = 30)", 
+              aes(x = .0010, y = .09), size = 3,
          data = labels_data[1,], hjust = 0, vjust = 1) +
    scale_colour_manual("Number of data picks ...",
                        values = c("grey70", "grey40", "red")) +
@@ -463,6 +471,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 
 
 \hh{If the null plots generally produce just one very interesting plot (out of $m_o$ nulls) we should not use this null generator for a lineup.  discussion point?}
+\hh{But in the example the 0-1 panel is actually the one that does not come up with any inconclusive numbers. ... Just go with a high number of data picks and call it good?}
 
 \section{Example}
 
@@ -485,4 +494,40 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 \begin{biography}{\includegraphics[width=60pt,height=70pt,draft]{empty}}{\textbf{Author Name.} This is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text.}
 \end{biography}
 
+\begin{appendix}
+\section{Visual $p$-value distribution}\label{app:pvalue}
+In the marginal case, where we have $K$ evaluations resulting in $C$ target plot evaluations of a lineup with $m$ panels, we start with the following:
+\begin{align*}
+f(\theta | \alpha) & = \text{Beta}(\alpha, (m-1)\alpha)\\
+& = \frac{\Gamma(m\alpha)}{\Gamma(\alpha)\Gamma((m-1)\alpha)} \cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
+& = B\left(\alpha, (m-1)\alpha\right)\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
+\\
+P(C |K, \theta) & = \text{Binomial}(C, K, \theta)\\
+& = \binom{K}{C}\theta^C(1-\theta)^{K-C}
+\end{align*}
+By Bayes Theorem, if $A_1 = C + \alpha$ and $A_2 = K - C + (m-1)\alpha$,
+\begin{align*}
+f(\theta|C, K, \alpha) &= \frac{f(\theta|\alpha) P(C | \theta)}{P(C = c)}\\
+&= \frac{B\left(\alpha, (m-1)\alpha\right)}{P(C=c)} \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\cdot \binom{K}{C}\theta^C(1-\theta)^{K-C}\\
+&= \frac{1}{P(C=c)} B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \theta^{A_1 - 1}(1-\theta)^{A_2 - 1}\\
+\end{align*}
+
+As $f(\theta|C, K, \alpha)$ is a probability distribution, it integrates to 1. So we can infer that
+\begin{align*}
+P(C=c) &= \int B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
+& = B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \int \theta^{A_1 - 1}(1-\theta)^{X_2 - 1} d\theta\\
+& = B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \frac{B(A_1, A_2)}{B(A_1, A_2)} \int \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
+& =   \frac{B\left(\alpha, (m-1)\alpha\right) \binom{K}{C}}{B(A_1, A_2)\alpha)} \int B(A_1, A_2) \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
+& =  \frac{B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} }{B\left(C+\alpha, K-C+(m-1)\alpha\right)} \\
+\end{align*}
+
+Thus, the visual p-value for a lineup with $C$ target selections out of $K$ evaluations is
+\begin{align}
+P(x \geq C) & = \sum_{x=C}^K \frac{\binom{K}{x} B(\alpha, (m-1)\alpha) }{B(x+\alpha, K-x+(m-1)\alpha)}
+\end{align}
+
+A similar derivation holds in the full Dirichlet-Multinomial model.
+
+
+\end{appendix}
 \end{document}
