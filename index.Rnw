@@ -106,7 +106,7 @@ While visual inference was initially developed to mimic frequentist hypothesis t
 
 \subsection{Lineup Evaluations}\label{sec:scenarios}
 % Types of lineups
-\citet{buja:2009} introduced two types of lineups: Rorshach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data. \citet{vanderplas:2017} introduced another type of lineup: the two-target lineup. This lineup contains target plots generated from two competing data generating models, with null plots that are generated from a mixture of the two target plot distributions. Two-target lineups can be used to test whether two competing effects have different visual salience. All of the lineup experiments the authors are aware of at this time are one or two-target lineup experiments.
+\citet{buja:2009} introduced two types of lineups: Rorschach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data. \citet{vanderplas:2017} introduced another type of lineup: the two-target lineup. This lineup contains target plots generated from two competing data generating models, with null plots that are generated from a mixture of the two target plot distributions. Two-target lineups can be used to test whether two competing effects have different visual salience. All of the lineup experiments the authors are aware of at this time are one or two-target lineup experiments.
 
 % Types of lineup evaluations
 In addition to different types of lineups, there are different types of lineup experiments.
@@ -305,7 +305,7 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
 Clearly, the choice of $\alpha$ is critical. From a practical perspective, the number of null plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and the form of the plot (aesthetics, geometric representations, scales). While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
 
 \svp{There are methods for maximum likelihood estimation of $\alpha$ \citep{sirt, minka} from observed proportions (in this case, the number of selections of a panel divided by the number of total selections). 
-Using these methods, we could design our experiment to include one or two Rorshach lineups which would allow us to estimate $\alpha$ for the null plot generation method. 
+Using these methods, we could design our experiment to include one or two Rorschach lineups which would allow us to estimate $\alpha$ for the null plot generation method. 
 The $\hat\alpha$ estimated from the null lineups would then be used to calculate more accurate $p$-values for the single or two-target lineups. 
 Unfortunately, even in the best designed experiments with extremely difficult lineups, there are usually many panels with no selections.
 As with many estimation methods, the ML estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. 
@@ -323,7 +323,7 @@ The heuristic we propose for estimating $\alpha$ is as follows:
 \item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $t$ (in \autoref{fig:alpha-sim-curve}, $t = 1$). It may be helpful to average the results of ~10 simulations together to reduce the visual noise and make the underlying trend more visible.
 \item Fit a smooth function to the simulated data. Here, we have used a generalized additive model, $y = f(log(\alpha))$ where $f$ is a smooth function. 
 \item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the fitted function. In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; for $K=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
-\item Determine which band is most representative of the lineups in the experiment: Over many generated lineups, how many visually interesting null panels are there?
+\item \hh{Use Rorschach of null generative model for your own experiment to create null lineups of size $m$.} Determine which band is most representative of the lineups in the experiment: Over several generated lineups, how many visually interesting null panels are there on average? \hh{The number of visually interesting null panels could be assessed more formally using a pilot study of Rorschach lineups with $K$ evaluations each.}
 \item Select an $\alpha$ value corresponding to the selected band. If lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
 \end{enumerate}
 
@@ -472,7 +472,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 
 \svp{Visual estimation of $\alpha$ via simulation allows us to use the multinomial-dirichlet model to obtain p-values which are reasonable and which account for the difficulty of the lineup and null plot generation method}
 
-\svp{Visual estimation of $\alpha$ also allows us to screen out lineup generation methods which are problematic: if a null plot generation method produces 1 interesting plot out of a 20-plot rorshach lineup, it is functionally impossible to distinguish a data plot which has a large signal from a null plot which also has a large signal. Extremely small $\alpha$ values, then, serve as a signal that the null plot generation method is not visually appropriate because it sporadically (not consistently) generates visual features that are likely to catch the attention of participants (possibly for the wrong reasons).}
+\svp{Visual estimation of $\alpha$ also allows us to screen out lineup generation methods which are problematic: if a null plot generation method produces 1 interesting plot out of a 20-plot Rorschach lineup, it is functionally impossible to distinguish a data plot which has a large signal from a null plot which also has a large signal. Extremely small $\alpha$ values, then, serve as a signal that the null plot generation method is not visually appropriate because it sporadically (not consistently) generates visual features that are likely to catch the attention of participants (possibly for the wrong reasons).}
 
 
 
