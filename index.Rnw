@@ -528,6 +528,25 @@ P(X \geq C) & = \sum_{x=C}^K \frac{\binom{K}{x} B(\alpha, (m-1)\alpha) }{B(x+\al
 where $X$ denotes the number of picks of the data panel.
 A similar derivation holds in the full Dirichlet-Multinomial model.
 
+\section{Expected number of panels picked}
+Define $X = (X_1, ..., X_m) \sim \text{Mult}_{\theta, K}$ to be a (simulated) lineup that is evaluated $K$ times, and $\theta = (\theta_1, ..., \theta_m) \sim \text{Dir}_\alpha = (\alpha, ..., \alpha)$ with $\sum_i \theta_i = 1$. 
+
+With indicator function $I$, defined as 1 for true statements and 0 for false statements, we define:
+
+\[
+Z_c(\alpha) = \sum_{i=1}^{m} I(X_i > c),
+\]
+where $Z_c$ is the number of panels in a lineup that were picked more than $c$ times. We express this random variable as a function in $\alpha$ - the dependency becomes clear, once we look at the expected value of $Z_c$:
+
+\[
+E[Z_c(\alpha)] = \sum_{i=1}^m E\left[ I(X_i > c) \right] = 
+\sum_{i=1}^m P(X_i > c).
+\]
+
+The probabilities $P(X_i > c)$ are derived in the previous section as marginal Dirichlet-Multinomials (???):
+\[
+E[Z_c(\alpha)] = m \cdot \sum_{x=c+1}^K \frac{\binom{K}{x} B(\alpha, (m-1)\alpha) }{B(x+\alpha, K-x+(m-1)\alpha)}.
+\]
 
 \end{appendix}
 \end{document}
