@@ -326,12 +326,13 @@ The heuristic we propose for estimating $\alpha$ is as follows:
 \begin{enumerate}
 \item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $t$ (in \autoref{fig:alpha-sim-curve}, $t = 1$). It may be helpful to average the results of ~10 simulations together to reduce the visual noise and make the underlying trend more visible.
 \item Fit a smooth function to the simulated data. Here, we have used a generalized additive model, $y = f(log(\alpha))$ where $f$ is a smooth function. 
-\item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the fitted function. In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; for $K=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
-\item \hh{Use Rorschach of null generative model for your own experiment to create null lineups of size $m$.} Determine which band is most representative of the lineups in the experiment: Over several generated lineups, how many visually interesting null panels are there on average? \hh{The number of visually interesting null panels could be assessed more formally using a pilot study of Rorschach lineups with $K$ evaluations each.}
+\item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the fitted function. In \autoref{fig:alpha-sim-curvea}, the bands are approximately 2 panels in width; for $K=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
+\item Generate several Rorschach lineups using the null generative model for the experiment, creating null lineups of size $m$. Determine which band is most representative of the lineups in the experiment: Over the generated lineups, how many visually interesting null panels are there on average? Alternately, the number of visually interesting null panels could be assessed more formally using a pilot study of Rorschach lineups with $K$ evaluations each.
 \item Select an $\alpha$ value corresponding to the selected band. If lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
 \end{enumerate}
 
-<<alpha-sim-curve, cache = T, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
+<<alpha-sim-curvea, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
+set.seed(2401072)
 alphas <- 10^(seq(-3.6, 3, by = .01)) # seq(0.001, 0.5, by = .001)
 
 prior_pred <- tibble(alpha = alphas,
@@ -491,7 +492,8 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 
 \section*{Author Biography}
 
-\begin{biography}{\includegraphics[width=60pt,height=70pt,draft]{empty}}{\textbf{Author Name.} This is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text.}
+\begin{biography}{%\includegraphics[width=60pt,height=70pt,draft]{empty}
+}{\textbf{Author Name.} This is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text.}
 \end{biography}
 
 \begin{appendix}
