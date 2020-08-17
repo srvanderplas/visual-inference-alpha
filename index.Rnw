@@ -361,8 +361,12 @@ The $\hat\alpha$ estimated from the null lineups would then be used to calculate
 Unfortunately, even in the best designed experiments with extremely difficult lineups, there are usually many panels with no selections.
 As with many estimation methods, the ML estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. 
 This issue is more likely to arise when $\alpha$ is small, because it is more likely that most panels will have zero selections under those conditions.}
+\svp{Unfortunately, in most lineup scenarios, we are also operating in the region $\alpha << 1$; as a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where we typically operate.}
 
 \svp{In order to sidestep the issues with ML-based estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.}
+\svp{There have been several explorations of the use of visual statistics \citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992} as a supplement or an alternative to statistical inference; this topic is of particular interest in fields where forecasting is common. 
+Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates: visual estimates tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest. 
+We expect that visual estimation of $\alpha$ using the process defined in the next section will produce a more robust estimate of $\alpha$ than the numerically derived quantities which are likely to be affected by large numbers of 0-count observations.}
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
 \section{Visual Selection of \texorpdfstring{$\alpha$}{alpha}}
