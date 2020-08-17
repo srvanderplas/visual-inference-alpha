@@ -600,6 +600,7 @@ P(C = c) &=&  \int_0^1 {K \choose c} \theta^c (1-\theta)^{K - c} \cdot
  &=& {K \choose c} \frac{B(c+\alpha, K-c + (m-1)\alpha)}{B(\alpha, (m-1)\alpha)}.
 \end{eqnarray*}
 
+\hh{XXX anything below needs to still be fixed}
 
 Thus, the visual p-value for a lineup with $C$ target selections out of $K$ evaluations is
 \begin{align}
