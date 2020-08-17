@@ -201,7 +201,7 @@ This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m
 \theta_t \mid \alpha &\sim Beta(\alpha, (m-1)\alpha) \\
 C_t \mid \theta_t & \sim Binomial(\theta_t, K),\\
 \end{split}\end{align}
-with a posterior distribution of $\theta_t$ given $c_t$ and \alpha$ of Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
+with a posterior distribution of $\theta_t$ given $c_t$ and $\alpha$ of Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
 
 
 While this model was originally developed under a Bayesian framework, it is philosophically agnostic: it would be equally reasonable to think of this as an overdispersed multinomial model.
