@@ -602,7 +602,7 @@ P(C = c) &=& \int_0^1 P(C = c \mid \theta) f(\theta) d\theta
 P(C = c) &=&  \int_0^1 {K \choose c} \theta^c (1-\theta)^{K - c} \cdot 
 \frac{1}{B(\alpha, (m-1)\alpha)} \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha-1} d\theta = \\
 &=& {K \choose c} \frac{1}{B(\alpha, (m-1)\alpha)} \underbrace{\int_0^1  
- \theta^{c + \alpha - 1}(1-\theta)^{K-c + (m-1)\alpha-1} d\theta}_{\text{form of Beta distribution, integrates to constant}} =\\
+ \theta^{c + \alpha - 1}(1-\theta)^{K-c + (m-1)\alpha-1} d\theta}_{\text{Beta function}} =\\
  &=& {K \choose c} \frac{B(c+\alpha, K-c + (m-1)\alpha)}{B(\alpha, (m-1)\alpha)}.
 \end{eqnarray*}
 
