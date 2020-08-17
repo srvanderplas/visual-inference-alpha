@@ -567,14 +567,12 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 
 \begin{appendix}
 \section{Visual $p$-value distribution}\label{app:pvalue}
-In the marginal case, where we have $K$ evaluations resulting in $C$ target plot evaluations of a lineup with $m$ panels, we start with the following: \hh{first definition isn't right - the beta function is the normalizer and should go into the denominator}
+Assume, we have a lineup of size $m$ with $K$ evaluations resulting in $c_t$ target plot evaluations. We defined the Beta-Binomial model in \autoref{eqn:marginal-model-specification} leading to densities given as:
+
 \begin{align*}
-f(\theta | \alpha) & = \text{Beta}(\alpha, (m-1)\alpha)\\
-& = \frac{\Gamma(m\alpha)}{\Gamma(\alpha)\Gamma((m-1)\alpha)} \cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
-& = \svp{\frac{1}{B\left(\alpha, (m-1)\alpha\right)}}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
+f(\theta \mid \alpha) & = \svp{\frac{1}{B\left(\alpha, (m-1)\alpha\right)}}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
 \\
-P(C |K, \theta) & = \text{Binomial}(C, K, \theta)\\
-& = \binom{K}{C}\theta^C(1-\theta)^{K-C}
+P(C = c_t  \mid K, \theta) & =  \binom{K}{c_t}\theta^{c_t}(1-\theta)^{K-c_t}
 \end{align*}
 % By Bayes Theorem, if $A_1 = C + \alpha$ and $A_2 = K - C + (m-1)\alpha$,
 % \begin{align*}
@@ -608,13 +606,11 @@ P(C = c) &=&  \int_0^1 {K \choose c} \theta^c (1-\theta)^{K - c} \cdot
  &=& {K \choose c} \frac{B(c+\alpha, K-c + (m-1)\alpha)}{B(\alpha, (m-1)\alpha)}.
 \end{eqnarray*}
 
-\hh{XXX anything below needs to still be fixed}
 
-Thus, the visual p-value for a lineup with $C$ target selections out of $K$ evaluations is
+Thus, the visual p-value for a lineup with $c_t$ target selections out of $K$ evaluations is
 \begin{align}
-P(X \geq C) & = \sum_{x=C}^K \frac{\binom{K}{x} B(\alpha, (m-1)\alpha) }{B(x+\alpha, K-x+(m-1)\alpha)},
+P(C \geq c_t) & =  \frac{1}{B(\alpha, (m-1)\alpha) } \sum_{x=c_t}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
 \end{align}
-where $X$ denotes the number of picks of the data panel.
 A similar derivation holds in the full Dirichlet-Multinomial model.
 
 \section{Expected number of panels picked}
@@ -632,9 +628,9 @@ E[Z_c(\alpha)] = \sum_{i=1}^m E\left[ I(X_i > c) \right] =
 \sum_{i=1}^m P(X_i > c).
 \]
 
-The probabilities $P(X_i > c)$ are derived in the previous section as marginal Dirichlet-Multinomials (???):
+The probabilities $P(X_i > c)$ are derived in the previous section as marginal DBeta-binomials:
 \[
-E[Z_c(\alpha)] = m \cdot \sum_{x=c+1}^K \frac{\binom{K}{x} B(\alpha, (m-1)\alpha) }{B(x+\alpha, K-x+(m-1)\alpha)}.
+E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
 \]
 
 \end{appendix}
