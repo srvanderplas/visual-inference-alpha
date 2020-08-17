@@ -568,21 +568,38 @@ f(\theta | \alpha) & = \text{Beta}(\alpha, (m-1)\alpha)\\
 P(C |K, \theta) & = \text{Binomial}(C, K, \theta)\\
 & = \binom{K}{C}\theta^C(1-\theta)^{K-C}
 \end{align*}
-By Bayes Theorem, if $A_1 = C + \alpha$ and $A_2 = K - C + (m-1)\alpha$,
-\begin{align*}
-f(\theta|C, K, \alpha) &= \frac{f(\theta|\alpha) P(C | \theta)}{P(C = c)}\\
-&= \frac{B\left(\alpha, (m-1)\alpha\right)}{P(C=c)} \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\cdot \binom{K}{C}\theta^C(1-\theta)^{K-C}\\
-&= \frac{1}{P(C=c)} B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \theta^{A_1 - 1}(1-\theta)^{A_2 - 1}\\
-\end{align*}
+% By Bayes Theorem, if $A_1 = C + \alpha$ and $A_2 = K - C + (m-1)\alpha$,
+% \begin{align*}
+% f(\theta|C, K, \alpha) &= \frac{f(\theta|\alpha) P(C | \theta)}{P(C = c)}\\
+% &= \frac{B\left(\alpha, (m-1)\alpha\right)}{P(C=c)} \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\cdot \binom{K}{C}\theta^C(1-\theta)^{K-C}\\
+% &= \frac{1}{P(C=c)} B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \theta^{A_1 - 1}(1-\theta)^{A_2 - 1}\\
+% \end{align*}
+% 
+% As $f(\theta|C, K, \alpha)$ is a probability distribution, it integrates to 1. So we can infer that
+% \begin{align*}
+% P(C=c) &= \int B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
+% & = B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \int \theta^{A_1 - 1}(1-\theta)^{X_2 - 1} d\theta\\
+% & = B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \frac{B(A_1, A_2)}{B(A_1, A_2)} \int \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
+% & =   \frac{B\left(\alpha, (m-1)\alpha\right) \binom{K}{C}}{B(A_1, A_2)\alpha)} \int B(A_1, A_2) \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
+% & =  \frac{B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} }{B\left(C+\alpha, K-C+(m-1)\alpha\right)} \\
+% \end{align*}
 
-As $f(\theta|C, K, \alpha)$ is a probability distribution, it integrates to 1. So we can infer that
-\begin{align*}
-P(C=c) &= \int B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
-& = B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \int \theta^{A_1 - 1}(1-\theta)^{X_2 - 1} d\theta\\
-& = B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} \frac{B(A_1, A_2)}{B(A_1, A_2)} \int \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
-& =   \frac{B\left(\alpha, (m-1)\alpha\right) \binom{K}{C}}{B(A_1, A_2)\alpha)} \int B(A_1, A_2) \theta^{A_1 - 1}(1-\theta)^{A_2 - 1} d\theta\\
-& =  \frac{B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} }{B\left(C+\alpha, K-C+(m-1)\alpha\right)} \\
-\end{align*}
+\hh{We are interested in the probability of observing at least $c_t$ picks of the target plot assuming that the target plot is not inconsistent with the null plots generated from the null model, i.e. we are interested in the (unconditional) distribution of counts $C$. We get there by integrating over the rate parameter $\theta$.
+From the theorem of total probability we know that }
+\begin{eqnarray*}
+P(C = c) &=& \int_0^1 P(C = c \mid \theta) f(\theta) d\theta
+\end{eqnarray*}
+
+\hh{Now we use that $C \mid \theta \sim$ Binom$_{\theta, K}$ and $\theta \sim$ Beta$_{\alpha, (m-1)\alpha}$:}
+
+\begin{eqnarray*}
+P(C = c) &=&  \int_0^1 {K \choose c} \theta^c (1-\theta)^{K - c} \cdot 
+\frac{1}{B(\alpha, (m-1)\alpha)} \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha-1} d\theta = \\
+&=& {K \choose c} \frac{1}{B(\alpha, (m-1)\alpha)} \underbrace{\int_0^1  
+ \theta^{c + \alpha - 1}(1-\theta)^{K-c + (m-1)\alpha-1} d\theta}_{\text{form of Beta distribution, integrates to constant}} =\\
+ &=& {K \choose c} \frac{B(c+\alpha, K-c + (m-1)\alpha)}{B(\alpha, (m-1)\alpha)}.
+\end{eqnarray*}
+
 
 Thus, the visual p-value for a lineup with $C$ target selections out of $K$ evaluations is
 \begin{align}
