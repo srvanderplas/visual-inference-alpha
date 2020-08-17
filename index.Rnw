@@ -563,7 +563,7 @@ In the marginal case, where we have $K$ evaluations resulting in $C$ target plot
 \begin{align*}
 f(\theta | \alpha) & = \text{Beta}(\alpha, (m-1)\alpha)\\
 & = \frac{\Gamma(m\alpha)}{\Gamma(\alpha)\Gamma((m-1)\alpha)} \cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
-& = B\left(\alpha, (m-1)\alpha\right)\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
+& = \svp{\frac{1}{B\left(\alpha, (m-1)\alpha\right)}}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
 \\
 P(C |K, \theta) & = \text{Binomial}(C, K, \theta)\\
 & = \binom{K}{C}\theta^C(1-\theta)^{K-C}
