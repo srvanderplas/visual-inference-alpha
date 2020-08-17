@@ -27,6 +27,8 @@
 
 \raggedbottom
 
+\setlength\parindent{0pt} % noindent for the whole document
+
 \begin{document}
 
 \title{This is the sample article title\protect\thanks{This is an example for title footnote.}}
@@ -148,53 +150,59 @@ Scenario 3 is the primary motivation for the model which we will develop in the 
 
 \section{Lineup Model Specification}
 
-We will begin with a generic $m$-panel lineup, with selection probabilities $\theta_i, i = 1, ..., m$ where $\sum_{i=1}^m \theta_i = 1$, that is, the participant will select one (and only one) panel from the lineup as the most different. 
+\hh{Let us assume that we have $K$ evaluations of a lineup under scenario 3, i.e.\ a  lineup consisting of the same $m$ panels was shown to $K$ independent evaluators. Let us assume that $c = (c_1, ..., c_m)$ are the counts of that evaluation, where $c_i$ corresponds to panel $i$ being selected by $c_i$ of the $K$ evaluators. Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
 
-Our lineup has been evaluated by $K$ individuals, with $c_i, i = 1, ..., m$ the selection count for each panel, and $K = \sum_{i=1}^m c_i$.
 
-A natural data model for this data is the Multinomial distribution, which has parameters $K, \bm{\theta}$, where $K$ describes the number of distinct outcomes and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilities of each outcome. 
-We will fix $K$, as that is controlled by the experimental design, and model $\bm{\theta}$.
 
-\begin{align}\label{eqn:multinomial-pmf}
-f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
-\end{align}
+%We will begin with a generic $m$-panel lineup, with selection probabilities $\theta_i, i = 1, ..., m$ where $\sum_{i=1}^m \theta_i = 1$, that is, the participant will select one (and only one) panel from the lineup as the most different. 
 
-We model panel selection probabilities $\theta_i$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha}$, which happens to be conjugate to the multinomial distribution. 
-As the position of the panels within the lineup are random, we use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. 
-This allows us to vary the lineup difficulty through the hyperparameter $\alpha$ without having to specify which plot $i$ is the target plot.
+%Our lineup has been evaluated by $K$ individuals, with $c_i, i = 1, ..., m$ the selection count for each panel, and $K = \sum_{i=1}^m c_i$.
 
-The pdf of the symmetric Dirichlet distribution is
+A natural data model for these is the Multinomial distribution with parameters $K, \bm{\theta}$, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilities of each outcome $1, ..., m$, i.e.\  $\theta_i$ is the probability with which an evaluator chooses panel $i$. 
+%We will fix $K$, as that is controlled by the experimental design, and model $\bm{\theta}$.
+
+% \begin{align}\label{eqn:multinomial-pmf}
+% f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
+% \end{align}
+
+We model panel selection probabilities $\bm{\theta}$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
+As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. 
+%This allows us to vary the lineup difficulty through the hyperparameter $\alpha$ without having to specify which plot $i$ is the target plot. \hh{XXX that's the null model - let's not bring in the target plot just yet}
+
+The density function of the symmetric Dirichlet distribution is given as
 \begin{align}\label{eqn:dirichlet-pdf}
-f(\bm{\theta}|\alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1}
+f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
 \end{align}
+\hh{where $\Gamma(.)$ is the Gamma function defined as }
+\[
+\Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
+\]
+\hh{For integer values $n$ the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$.}
 
-Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution as the Dirichlet$(\bm{c + \alpha})$ distribution.
-
-\hh{why are the distribution assumptions written as mass functions and densities? $C|\theta$ is the random variable that is distributed according to a multinomial distribution, not its mass function.}
-\hh{We also need to distinguish between the upper case random variable and the lower case instances of a random variable, i.e. $C = (C_1, ..., C_m)$ is the multinomially distributed set of random variables, and $(c_1, ..., c_m)$ is the observed number of of selections. }
-\hh{We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
+With observed plot selections 
+$(c_1, ..., c_m)$ and assumed hyper parameter $\alpha > 0$, we specify a Beta-multinomial model as:
 
 \begin{align}\begin{split}\label{eqn:full-model-specification}
-(\alpha_1, ..., \alpha_m) = \bm{\alpha} &= \text{concentration hyperparameter}\\
-(c_1, ..., c_m) = \bm{c} &= \text{observed plot selections}, \sum_{i=1}^m c_i = K\\
-p(\bm{\theta}) &\sim Dirichlet(\bm\alpha)  \\
-f(\bm{c} | \bm{\theta}) & \sim Multinomial(\bm\theta, K)\\
-p(\bm\theta | \bm{c}, \bm{\alpha}) & \sim Dirichlet(\bm{c} + \bm{\alpha})
+\bm{\theta} \mid \alpha &\sim Dirichlet(\bm\alpha)  \\
+\bm{C} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)\\
 \end{split}\end{align}
 
 where $Multinomial(\bm\theta, K)$ is defined as in \autoref{eqn:multinomial-pmf} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}.
 
-Typically, when evaluating lineups, we compare the number of target plot identifications with the aggregate number of null plot identifications (see \citet{majumder2013validation}). 
-This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m$ is the index of the target panel in the lineup; that is, in \citet{majumder2013validation}, a binomial distribution, and in this formulation, a beta-binomial distribution.
+Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution of $\bm{\theta}$ given $c$ and $\alpha$ as  Dirichlet$(\bm{c + \alpha})$.
+
+\hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
+
+
+Typically, when evaluating lineups, we compare the number of target plot identifications with the aggregate number of null plot identifications  \citep[see]{majumder2013validation}. 
+This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m$ is the index of the target panel in the lineup. For a total of $K$ evaluations, and $0 \le c_t \le K$ target plot evaluations, the above model simplifies to a Beta-Binomial Model:
 
 \begin{align}\begin{split}\label{eqn:marginal-model-specification}
-\alpha &= \text{concentration hyperparameter}\\
-c_t &= \text{target plot selections},\\
-K &= \text{total evaluations}\\
-p(\theta_t) &\sim Beta(\alpha, (m-1)\alpha) \\
-f(c_t | \theta_t) & \sim Binomial(\theta_t, K)\\
-p(\theta_t | \bm{c_t}, \alpha) & \sim Beta(c_t + \alpha, K - c_t + (m-1)\alpha)
+\theta_t \mid \alpha &\sim Beta(\alpha, (m-1)\alpha) \\
+C_t \mid \theta_t & \sim Binomial(\theta_t, K),\\
 \end{split}\end{align}
+with a posterior distribution of $\theta_t$ given $c_t$ and \alpha$ of Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
+
 
 While this model was originally developed under a Bayesian framework, it is philosophically agnostic: it would be equally reasonable to think of this as an overdispersed multinomial model.
 
@@ -559,7 +567,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 
 \begin{appendix}
 \section{Visual $p$-value distribution}\label{app:pvalue}
-In the marginal case, where we have $K$ evaluations resulting in $C$ target plot evaluations of a lineup with $m$ panels, we start with the following:
+In the marginal case, where we have $K$ evaluations resulting in $C$ target plot evaluations of a lineup with $m$ panels, we start with the following: \hh{first definition isn't right - the beta function is the normalizer and should go into the denominator}
 \begin{align*}
 f(\theta | \alpha) & = \text{Beta}(\alpha, (m-1)\alpha)\\
 & = \frac{\Gamma(m\alpha)}{\Gamma(\alpha)\Gamma((m-1)\alpha)} \cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
