@@ -149,6 +149,7 @@ Scenario 3 is the primary motivation for the model which we will develop in the 
 \section{Lineup Model Specification}
 
 We will begin with a generic $m$-panel lineup, with selection probabilities $\theta_i, i = 1, ..., m$ where $\sum_{i=1}^m \theta_i = 1$, that is, the participant will select one (and only one) panel from the lineup as the most different. 
+
 Our lineup has been evaluated by $K$ individuals, with $c_i, i = 1, ..., m$ the selection count for each panel, and $K = \sum_{i=1}^m c_i$.
 
 A natural data model for this data is the Multinomial distribution, which has parameters $K, \bm{\theta}$, where $K$ describes the number of distinct outcomes and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilities of each outcome. 
@@ -169,10 +170,14 @@ f(\bm{\theta}|\alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} 
 
 Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution as the Dirichlet$(\bm{c + \alpha})$ distribution.
 
+\hh{why are the distribution assumptions written as mass functions and densities? $C|\theta$ is the random variable that is distributed according to a multinomial distribution, not its mass function.}
+\hh{We also need to distinguish between the upper case random variable and the lower case instances of a random variable, i.e. $C = (C_1, ..., C_m)$ is the multinomially distributed set of random variables, and $(c_1, ..., c_m)$ is the observed number of of selections. }
+\hh{We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
+
 \begin{align}\begin{split}\label{eqn:full-model-specification}
 (\alpha_1, ..., \alpha_m) = \bm{\alpha} &= \text{concentration hyperparameter}\\
 (c_1, ..., c_m) = \bm{c} &= \text{observed plot selections}, \sum_{i=1}^m c_i = K\\
-p(\bm{\theta}) &\sim Dirichlet(\bm\alpha) \\
+p(\bm{\theta}) &\sim Dirichlet(\bm\alpha)  \\
 f(\bm{c} | \bm{\theta}) & \sim Multinomial(\bm\theta, K)\\
 p(\bm\theta | \bm{c}, \bm{\alpha}) & \sim Dirichlet(\bm{c} + \bm{\alpha})
 \end{split}\end{align}
@@ -479,7 +484,7 @@ data_breaks <- 1:20
 
 cuts <- c(-Inf, .02, .05, .1, .35, 1, 10, Inf)
 cuts <- c(-Inf, possible_breakpoints$alpha, Inf)
-labels <- c("O-1 Interesting panels", "2-3 Interesting panels", "4-5 panels", "6-7 panels", "8+ Interesting panels")
+labels <- c("0-1 Interesting panels", "2-3 Interesting panels", "4-5 panels", "6-7 panels", "8+ Interesting panels")
 
 pv <- tidyr::crossing(alpha = alphas, C = data_breaks, 
                       K = 30) %>%
@@ -495,7 +500,7 @@ pv <- tidyr::crossing(alpha = alphas, C = data_breaks,
           "is inconclusive")
          )
    ) #%>%
-  # filter(panel != "O-1 Interesting panels")
+  # filter(panel != "0-1 Interesting panels")
 
 labels_data <- pv %>%
    group_by(panel) %>%
