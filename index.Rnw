@@ -404,15 +404,16 @@ Alternately, the number of visually interesting null panels could be assessed mo
 
 <<alpha-sim-curvea, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in red shows the expected number of panels selected more than once as given in \\autoref{eqn:interesting}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 set.seed(2401072)
-alphas <- 10^(seq(-3.6, 3, by = .01)) # seq(0.001, 0.5, by = .001)
+alphas <- 10^(seq(-3.6, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
 number_panels <- function(alpha, c=1, m = 20, K=30) {
-  x <- (c+1):K
-  summation <- choose(K, x) * beta(x+alpha, K-x+(m-1)*alpha)
+  x <- (c + 1):K
+  summation <- choose(K, x) * beta(x + alpha, K - x + (m - 1)*alpha)
   
-  m/beta(alpha, (m-1)*alpha)*sum(summation)
+  m/beta(alpha, (m - 1)*alpha)*sum(summation)
 }
-exp_average <- alphas %>% sapply(FUN=number_panels)
+
+exp_average <- alphas %>% map_dbl(number_panels)
 
 prior_pred <- tibble(alpha = alphas,
                      plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, k = 30)) %>%
@@ -437,14 +438,17 @@ prior_pred_mean <- prior_pred %>%
    group_by(alpha, rep2) %>%
    summarize(n_sel_plots = mean(n_sel_plots))
 
-model <- gam(n_sel_plots ~ s(log(alpha, 10)), bs = "cs", method = "REML", data = prior_pred_mean)
-model_df <- tibble(alpha = alphas, n_sel_plots = predict(model, newdata = tibble(alpha = alphas), type = "response"))
+# model <- gam(n_sel_plots ~ s(log(alpha, 10)), bs = "cs", method = "REML", data = prior_pred_mean)
+model_df <- tibble(alpha = alphas, 
+                   n_sel_plots = exp_average
+                   # n_sel_plots = predict(model, newdata = tibble(alpha = alphas), type = "response")
+)
 
 possible_breakpoints <- model_df %>% 
   filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
   mutate(tmp = floor(n_sel_plots*2)/2, dist = abs(n_sel_plots - tmp)) %>%
   group_by(tmp) %>%
-  filter(dist==min(dist)) %>%
+  filter(dist == min(dist)) %>%
   filter(tmp %in% c(1.5, 3.5, 5.5, 7.5)) %>%
   ungroup() %>%
   mutate(band = floor(.5 + row_number()/2))
@@ -480,8 +484,6 @@ band_labels <- tibble(
   label = c("2-3", "4-5", "6-7", "8+ Interesting panels")
 )
 
-dframe <- data.frame(alpha = alphas, avg_interesting = exp_average, stringsAsFactors = FALSE)
-
 ggplot() +
   geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
   geom_point(aes(x = alpha, y = n_sel_plots),data = prior_pred_mean, alpha = .05) +
@@ -491,8 +493,7 @@ ggplot() +
                 labels = 10^(seq(-3, 4))) +
   geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
   coord_cartesian(xlim = range(alphas)) + 
-  scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100) +
-   geom_line(aes(x = alpha, y = avg_interesting), data = dframe, colour = "red")
+  scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100)
 
 @
 
@@ -534,7 +535,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
   geom_line(size = .8, aes(colour = type)) +
   scale_y_continuous("Visual p-value") +
    scale_x_log10(expression(alpha), 
-                 expand = expansion(mult= c(0.05,0.25))) + 
+                 expand = expansion(mult = c(0.05,0.25))) + 
   geom_hline(yintercept = 0.05, color = "black") +
   ggrepel::geom_label_repel(
 #     data = labels_data %>% filter(type=="is inconclusive"), 
