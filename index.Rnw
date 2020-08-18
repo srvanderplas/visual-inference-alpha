@@ -161,9 +161,9 @@ Scenario 3 is the primary motivation for the model which we will develop in the 
 A natural data model for these is the Multinomial distribution with parameters $K, \bm{\theta}$, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilities of each outcome $1, ..., m$, i.e.\  $\theta_i$ is the probability with which an evaluator chooses panel $i$. 
 %We will fix $K$, as that is controlled by the experimental design, and model $\bm{\theta}$.
 
-% \begin{align}\label{eqn:multinomial-pmf}
-% f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
-% \end{align}
+\begin{align}\label{eqn:multinomial-pmf}
+f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
+\end{align}
 
 We model panel selection probabilities $\bm{\theta}$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
 As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. 
