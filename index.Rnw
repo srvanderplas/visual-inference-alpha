@@ -521,16 +521,40 @@ ggplot() +
 
 @
 
+\svp{With the visually estimated $\alpha$ value computed from Rorschach lineups, we can more accurately assess the visual p-value of a one or two-target lineup because we have an $\alpha$ value which is tailored to the visual characteristics of our null plot generation method, without the numerical instability which might occur from $\hat\alpha$ estimated using maximum likelihood methods.}
 
-\svp{XXX advantages of this approach - sufficiently flexible and adaptable, but without the numeric instability.}
-\svp{XXX Another advantage is that we avoid the numerical instability inherent in estimating alpha with many 0-count panels. We'll discuss the extremely small $\alpha$ case corresponding to 0-1 interesting null plots at the end of the section}
+\svp{When only one null plot in a Rorschach lineup is visually interesting, however, there is a problem. 
+If there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels, depending on whether the null which is replaced by a data plot is the ``interesting" null plot. 
+But if the ``interesting" null is replaced by the data plot, we would expect that the count values would look similar to those produced when evaluating the Rorschach lineup. 
+So a low $\hat\alpha$ value would indicate a null plot generation method which should be reassessed because it generates plots which attract highly variable amounts of visual interest from participants. 
+Estimation of $\alpha$ from Rorschach lineups provides us with a way to screen for bad null plot generation methods in addition to providing us with more accurate estimates of visual p-values. 
+}
+
+\svp{If there are multiple interesting panels in the Rorschach lineup, then when a single or two-target lineup is generated, we would expect there to be a sufficient number of visually interesting null panels. 
+The number of observed panel selections in this case will depend primarily on the characteristics of the data plot relative to the ``interesting" null plots: if the data plot is only as visually interesting as the interesting null plots, then the number of observed panel selections will be similar to the corresponding Rorschach lineup, and the p-value should be $>0.05$. }
+
+\paragraph{An alternate estimation approach}
+If the visual method of $\alpha$ estimation is not sufficiently precise for the intended application, it is possible to use \autoref{eqn:differentPanels} to generate a more precise estimate of $\alpha$ with a pilot study consisting of many different Rorschach lineups evaluated $K$ times each. 
+Then, the average number of different panels selected by more than $c$ participants can be calculated from the pilot study data and used to determine the best corresponding $\hat\alpha$ according to the expected results in \autoref{eqn:differentPanels}. 
+Studies using visual inference may be relatively small, which would make a formal pilot study to determine $\hat\alpha$ precisely cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:differentPanels}.
+
+
+\svp{In \autoref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance ($p=0.05$). 
+Due to the discretization of the expected number of panels with $>c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, while the thresholds for nonsignificance and significance are explicitly labeled.
+A conservative approach to the treatment of inconclusive results would be to use the smallest $\alpha$ value corresponding to the approximate number of panels selected $>c$ times $K$ evaluations of a Rorschach lineup.
+This approach would treat all inconclusive results as not statistically significant. 
+In most cases, however, only one or two possible values for the number of data plot picks would be ambiguous, and by using an $\alpha$ value derived from the specific null plot generation method, we produce visual p-values that are much more well-calibrated. 
+}
+
+% \svp{XXX advantages of this approach - sufficiently flexible and adaptable, but without the numeric instability.}
+% \svp{XXX Another advantage is that we avoid the numerical instability inherent in estimating alpha with many 0-count panels. We'll discuss the extremely small $\alpha$ case corresponding to 0-1 interesting null plots at the end of the section}
 <<vis-p-val-sensitivity-initial2, fig.cap = "\\hh{XXX needs to be adjusted too} Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
 data_breaks <- 1:20
 
 cuts <- c(-Inf, .02, .05, .1, .35, 1, 10, Inf)
 cuts <- c(-Inf, possible_breakpoints$alpha, Inf)
-labels <- c("0-1 Interesting panels", "2-3 Interesting panels", "4-5 panels", "6-7 panels", "8+ Interesting panels")
+labels <- c("0-1 Interesting null panels", "2-3 Interesting null panels", "4-5 panels", "6-7 panels", "8+ Interesting null panels")
 
 pv <- tidyr::crossing(alpha = alphas, C = data_breaks, 
                       K = 30) %>%
