@@ -7,7 +7,7 @@
 \usepackage{bm}
 \usepackage{multirow}
 \usepackage{hyperref}
-% \usepackage{endfloat} % Figures to the end of the document
+\usepackage{endfloat} % Figures to the end of the document
 
 \usepackage{anyfontsize}% remove font warnings
 % --- Editing ------------------------------------------------------------------
