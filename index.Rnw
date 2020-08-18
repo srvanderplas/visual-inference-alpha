@@ -184,16 +184,21 @@ $(c_1, ..., c_m)$ and assumed hyper parameter $\alpha > 0$, we specify a Beta-mu
 
 \begin{align}\begin{split}\label{eqn:full-model-specification}
 \bm{\theta} \mid \alpha &\sim Dirichlet(\bm\alpha)  \\
-\bm{C} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)\\
+\bm{c} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)\\
 \end{split}\end{align}
 
-where $Multinomial(\bm\theta, K)$ is defined as in \autoref{eqn:multinomial-pmf} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}.
+where $Multinomial(\bm\theta, K)$ \svp{is defined as in \autoref{eqn:multinomial-pmf}} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}. 
+\svp{The joint distribution of $\bm c, \bm theta$ is then a Multinomial-Dirichlet mixture distribution. 
+If we were interested in the value of $\bm\theta$ and wanted to take a Bayesian approach, we would use the conjugate relationship between the Multinomial and Dirichlet distributions to get a posterior distribution }
+% Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution
+of $\bm{\theta}$ given $c$ and $\alpha$ as  Dirichlet$(\bm{c + \alpha})$.
+\svp{However, in most cases, we are primarily interested in obtaining a visual p-value from this mixture model; this does not require that we conduct inference on $\bm\theta$. Rather, }
+\svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ. 
+Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$}
+\svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$. 
+}
 
-Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution of $\bm{\theta}$ given $c$ and $\alpha$ as  Dirichlet$(\bm{c + \alpha})$.
-
-\hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
-
-
+% \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
 Typically, when evaluating lineups, we compare the number of target plot identifications with the aggregate number of null plot identifications  \citep[see]{majumder2013validation}. 
 This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m$ is the index of the target panel in the lineup. For a total of $K$ evaluations, and $0 \le c_t \le K$ target plot evaluations, the above model simplifies to a Beta-Binomial Model:
 
@@ -201,12 +206,13 @@ This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m
 \theta_t \mid \alpha &\sim Beta(\alpha, (m-1)\alpha) \\
 C_t \mid \theta_t & \sim Binomial(\theta_t, K),\\
 \end{split}\end{align}
-with a posterior distribution of $\theta_t$ given $c_t$ and $\alpha$ of Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
+
+with the distribution of $\theta_t$ given $c_t$ and $\alpha$ as Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
 
 
-While this model was originally developed under a Bayesian framework, it is philosophically agnostic: it would be equally reasonable to think of this as an overdispersed multinomial model.
+% While this model was originally developed under a Bayesian framework, it is philosophically agnostic: it would be equally reasonable to think of this as an overdispersed multinomial model.
 
-Examining the parameters of either the full or marginal model specifications in \autoref{eqn:full-model-specification} and \autoref{eqn:marginal-model-specification}, it is evident that $\alpha$ provides the equivalent of pseudo-observations for each plot; that is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup. 
+Examining the parameters of either the full or marginal model specifications in \autoref{eqn:full-model-specification} and \autoref{eqn:marginal-model-specification}, $\alpha$ provides the equivalent of pseudo-observations for each plot; that is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup. 
 When $\alpha$ is small, these pseudo-observations have relatively little influence, but when $\alpha$ is large, the pseudo-observations can quickly dwarf any information provided by the data. 
 This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added. 
 In most lineup studies, a plot might be evaluated between 10 and 30 times; with a $m=20$ lineup, even $\alpha = 1$ can easily dominate the participant selection data.
