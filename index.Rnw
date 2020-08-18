@@ -404,6 +404,14 @@ Alternately, the number of visually interesting null panels could be assessed mo
 set.seed(2401072)
 alphas <- 10^(seq(-3.6, 3, by = .01)) # seq(0.001, 0.5, by = .001)
 
+number_panels <- function(alpha, c=1, m = 20, K=30) {
+  x <- (c+1):K
+  summation <- choose(K, x) * beta(x+alpha, K-x+(m-1)*alpha)
+  
+  m/beta(alpha, (m-1)*alpha)*sum(summation)
+}
+exp_average <- alphas %>% sapply(FUN=number_panels)
+
 prior_pred <- tibble(alpha = alphas,
                      plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, k = 30)) %>%
   mutate(
@@ -470,6 +478,8 @@ band_labels <- tibble(
   label = c("2-3", "4-5", "6-7", "8+ Interesting panels")
 )
 
+dframe <- data.frame(alpha = alphas, avg_interesting = exp_average, stringsAsFactors = FALSE)
+
 ggplot() +
   geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
   geom_point(aes(x = alpha, y = n_sel_plots),data = prior_pred_mean, alpha = .05) +
@@ -479,7 +489,8 @@ ggplot() +
                 labels = 10^(seq(-3, 4))) +
   geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
   coord_cartesian(xlim = range(alphas)) + 
-  scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100) 
+  scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100) +
+   geom_line(aes(x = alpha, y = i), data = dframe, colour = "red")
 
 @
 
@@ -629,9 +640,9 @@ E[Z_c(\alpha)] = \sum_{i=1}^m E\left[ I(X_i > c) \right] =
 \]
 
 The probabilities $P(X_i > c)$ are derived in the previous section as marginal DBeta-binomials:
-\[
+\begin{equation}\label{eqn:differentPanels}
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
-\]
+\end{equation}
 
 \end{appendix}
 \end{document}
