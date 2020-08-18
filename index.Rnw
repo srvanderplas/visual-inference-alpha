@@ -589,7 +589,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 #     data = labels_data %>% filter(type=="is inconclusive"), 
      data = labels_data %>% group_by(panel, type) %>%
         filter(((type == "indicates no significance") & (C == max(C))) | ((type == "indicates significance") & (C == min(C)))),
-     aes(label = C, colour = type), hjust = 0, nudge_x = 0.05, size = 3, alpha = 0.8,
+     aes(label = C), color = "grey30", hjust = 0, nudge_x = 0.05, size = 3, alpha = 0.8,
          min.segment.length= 0, label.padding = 0.1, direction = "y") +
    theme_bw() +
    geom_label(label = "# data picks\n (out of K = 30)", 
