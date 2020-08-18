@@ -383,43 +383,50 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
 
 Clearly, the choice of $\alpha$ is critical. 
 From a practical perspective, the number of null plots which are visually salient and thus likely to be selected by participants is a factor of the lineup design (zero, one, or two targets), null plot generation method, and the form of the plot (aesthetics, geometric representations, scales). 
-While the prior predictive distributions in \autoref{fig:prior-predictive} are illustrative, in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
+While the simulated distributions in \autoref{fig:prior-predictive} are illustrative, \svp{it can be difficult to translate the results from \autoref{fig:prior-predictive} into a useful estimate of $\alpha$.}
+% in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
 
 \svp{There are methods for maximum likelihood estimation of $\alpha$ \citep{sirt, minka} from observed proportions (in this case, the number of selections of a panel divided by the number of total selections). 
 Using these methods, we could design our experiment to include one or two Rorschach lineups which would allow us to estimate $\alpha$ for the null plot generation method. 
 The $\hat\alpha$ estimated from the null lineups would then be used to calculate more accurate $p$-values for the single or two-target lineups. 
-Unfortunately, even in the best designed experiments with extremely difficult lineups, there are usually many panels with no selections.
-As with many estimation methods, the ML estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. 
+Unfortunately, even in the best designed experiments with null plots which are nearly uniformly interesting, there are usually many panels with no selections.
+As with many estimation methods, the maximum likelihood estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. 
 This issue is more likely to arise when $\alpha$ is small, because it is more likely that most panels will have zero selections under those conditions.}
 \svp{Unfortunately, in most lineup scenarios, we are also operating in the region $\alpha << 1$; as a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where we typically operate.}
 
-\svp{In order to sidestep the issues with ML-based estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.}
-\svp{There have been several explorations of the use of visual statistics \citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992} as a supplement or an alternative to statistical inference; this topic is of particular interest in fields which rely on forecasts. 
-Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates: visual estimates tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest. 
+\svp{In order to sidestep the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values. 
+We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.}
+
+\section{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}
+
+\svp{There have been several explorations of the use of visual statistics \citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992} as a supplement or an alternative to statistical inference. 
 There are also studies which supplement available data with visual estimates \citep{hankin1988estimating}, incorporating both objective and subjective measurements into the same statistical model. 
-We expect that visual estimation of $\alpha$ using the process defined in the next section will produce a more robust estimate of $\alpha$ than the numerically derived quantities which are likely to be affected by large numbers of 0-count observations.}
+Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates: visual estimates tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest. 
+We expect that visual estimation of $\alpha$ based on expected values derived from \autoref{eqn:full-model-specification} will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates, while accommodating the constraints which generally preclude running a full experiment to estimate $\alpha$ using Rorschach lineups.}
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
-\section{Visual Selection of \texorpdfstring{$\alpha$}{alpha}}
 \svp{
 Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $K=30$ participants. 
-The heuristic we propose for estimating $\alpha$ is as follows:
+The heuristic we propose for \svp{ad-hoc} estimation of $\alpha$ is as follows:
 }
 \begin{enumerate}
 \item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $t$ (in \autoref{fig:alpha-sim-curve}, $t = 1$). 
 It may be helpful to average the results of ~10 simulations together to reduce the visual noise and make the underlying trend more visible.
-\item Fit a smooth function to the simulated data. Here, we have used a generalized additive model, $y = f(log(\alpha))$ where $f$ is a smooth function. 
+% \item 
+% Fit a smooth function to the simulated data. Here, we have used a generalized additive model, $y = f(log(\alpha))$ where $f$ is a smooth function. 
 \item \hh{The simulation captures the variability around the expected number of `interesting' panels - i.e.\ panels that are selected at least $c$ times. The expected number of interesting panels is given as the sum of probabilities that each panel is selected more than $c$ times: $\sum_{i=1}^m P(C_i > c)$. See \autoref{eqn:differentPanels} in Appendix \ref{appendixB} for details.
 }
-\item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the fitted function. 
+\item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the 
+%fitted function. 
+\svp{expected number of panels with $>c$ selections into approximately equal size bands (with the exception of the case where the expected number of panels selected is equal to one; this case will be handled separately). }
 In \autoref{fig:alpha-sim-curvea}, the bands are approximately 2 panels in width; for $K=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
 \item Generate several Rorschach lineups using the null generative model for the experiment, creating null lineups of size $m$. 
 Determine which band is most representative of the lineups in the experiment: Over the generated lineups, how many visually interesting null panels are there on average? 
-Alternately, the number of visually interesting null panels could be assessed more formally using a pilot study of Rorschach lineups with $K$ evaluations each.
-\item Select an $\alpha$ value corresponding to the selected band. If lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
+svp{It may be helpful to have a number of different individuals evaluate these lineups; in particular, individuals who are not aware of the method for generating the null plots.}
+\item Select an $\alpha$ value corresponding to the selected band. \svp{For instance, if our pilot study showed that} the lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
 \end{enumerate}
 
-<<alpha-sim-curvea, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in red shows the expected number of panels selected more than once as given in \\autoref{eqn:interesting}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
+<<alpha-sim-curvea, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\autoref{eqn:differentPanels}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 set.seed(2401072)
 alphas <- 10^(seq(-3.6, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
