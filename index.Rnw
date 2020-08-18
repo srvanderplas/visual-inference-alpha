@@ -264,7 +264,7 @@ qplot(data=betas, p, y=density, geom="polygon", fill=I("grey50"), alpha=I(.8), c
 theme_set(ggplot2::theme_bw())
 @
 
-While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use prior predictive simulations to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention.
+While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use simulation to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention.
 \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
 <<prior-predictive, echo = F, fig.cap = "Prior predictive distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=30$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
