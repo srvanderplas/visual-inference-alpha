@@ -93,30 +93,33 @@ source("code/functions.R")
 % Something about the power of the human visual system? Don't want to get too off topic...
 
 Graphics provide the opportunity to understand statistical data at an intuitive level: we can gain more information about the relationship between two variables by considering a simple scatter plot than we might obtain from an entire day of generating numerical summaries. 
-Graphics leverage the bandwidth of the visual system for implicit data analysis, and because this analysis is implicit, we often assume graphics are not decisive in the same way that an hypothesis test is decisive: generally, graphics do not come with a significance threshold, and in many cases, we do not explicitly construct the hypothesis we might be testing before viewing the chart. \svp{Too many uses of ``graphics" in a single paragraph}
+\svp{Essentially, statistical graphics} leverage the bandwidth of the visual system for implicit data analysis, and because this analysis is implicit, we often assume \svp{these visual analyses} are not decisive in the same way that an hypothesis test is decisive.
+\svp{G}enerally, graphics do not come with a significance threshold, and in many cases, we do not explicitly construct the hypothesis we might be testing before viewing the chart.
+\svp{However, there are formal protocols for conducting inference through the visual domain.} %\svp{Too many uses of ``graphics" in a single paragraph}
 
 Visual inference allows for us to test graphics as visual statistics: charts are, after all, a quantity computed from values in a sample of data. 
 In order to test whether a chart shows a visually significant result, we can use the same philosophy used by randomization tests: construct a sampling method consistent with the null hypothesis, generate many copies of the test statistic (in this case, the plot), and see where the real statistic falls in the distribution of artificially generated quantites \citep{buja:2009}. 
 An assembly of several null plots with a target (or data) plot is called a \emph{lineup}, after the criminal procedure of the same name. Typically, lineups are composed of 19 ``null" plots (generated under the null hypothesis) and one data plot containing the real data.
 
-Of course, with numerical statistics, there is a natural ordering to computed numerical quantities; with plots, we must run each statistic through another process (evaluation by the visual system, or a facsimile thereof\footnote{Cite Giora's Deep Learning work, \url{http://giorasimchoni.com/deep_visual_inference.html}}) in order to evaluate significance. 
-\svp{XXX add some analogy to functions of data as inputs to a statistical test?}
+Of course, with numerical statistics, there is a natural ordering to computed numerical quantities; with plots, we must run each statistic through another process (evaluation by the visual system, or a facsimile thereof
+%\footnote{Cite Giora's Deep Learning work, \url{http://giorasimchoni.com/deep_visual_inference.html}}) 
+in order to evaluate significance. 
+% \svp{XXX add some analogy to functions of data as inputs to a statistical test?}
 During this evaluation process, the user selects one or more plots from the lineup which are ``different" in some way (though some experiments may specify the particular feature under examination).
-
-% TODO: explain different lineup scenarios here? Not sure if this is the best place for it, or if it's necessary at all.
-
+% TODO: explain different lineup scenarios here? Not sure if this is the best place for it, or if it's necessary at all
 Typically, graphical tests utilize a service like Amazon Mechanical Turk to acquire multiple evaluations of the same lineup.
 If multiple individuals select the plot generated from the data rather than the null plots, the visual statistic is likely to be significant \citep{majumder2013validation}.
-
 % TODO: add lineup here
 
-While visual inference was initially developed to mimic frequentist hypothesis tests, using lineups of 20 plots with one data plot so that the probability of selecting the data plot randomly is $p=0.05$, visual inference itself does not demand use of frequentist techniques. 
-In this paper, we develop a framework for visual inference using a Dirichlet-multinomial distribution to model the probabilities of selecting each panel \svp{and the} observed participant selections. 
+\svp{\citet{majumder2013validation} proposed obtaining a visual p-value from the results of lineup evaluations using the binomial distribution.}
+% While visual inference was initially developed to mimic frequentist hypothesis tests, using lineups of 20 plots with one data plot so that the probability of selecting the data plot randomly is $p=0.05$, visual inference itself does not demand use of frequentist techniques. 
+In this paper, we propose a framework for visual inference using a Dirichlet-multinomial distribution to model the probabilities of selecting each panel \svp{and the} observed participant selections. 
 % This framework for analysis of visual inference data has been in use as part of the \texttt{vinference} package~\citep{vinference} \citep{loyAreYouNormal2015,loy2016variations,vanderplas:2017}, but has not been formally described in any publication. 
 % Here, we provide the mathematical foundation for the multinomial-dirichlet model used in the analysis of visual inference experiments, exploring the implications of the model and proposing a modification which better describes the perceptual process of lineup evaluation.
-\svp{This model is more flexible than the multinomial model used in \citet{majumder2013validation}, allowing us to better represent the perceptual process of lineup evaluation.
+\svp{This model is more flexible than the binomial model used in \citet{majumder2013validation}, allowing us to better represent the perceptual process of lineup evaluation.}
 This expanded framework facilitates the use of visual diagnostics which highlight issues with null plot generation methods.
-We discuss the Dirichlet multinomial framework, its advantages for modeling the perceptual process, and derive a visual method to estimate the hyperparameters and assess the lineup's suitability for inference.}
+\svp{Leveraging the proposed model, we discuss the correspondance between the model and the perceptual process and propose a method for estimation of the hyperparameters and diagnostic procedure for null plot generation models.}
+% We discuss the Dirichlet multinomial framework, its advantages for modeling the perceptual process, and propose a method designed to estimate the hyperparameters and assess the lineup's suitability for inference.}
 
 \subsection{Lineup Evaluations}\label{sec:scenarios}
 % Types of lineups
@@ -264,7 +267,10 @@ qplot(data=betas, p, y=density, geom="polygon", fill=I("grey50"), alpha=I(.8), c
 theme_set(ggplot2::theme_bw())
 @
 
+\svp{Perceptually, the mixture model proposed in this paper mimics the tendency for us to focus in on a handful of the available panels of a lineup. 
+By allowing $\theta$ to vary, we are building into our model the acknowledgement that not all randomly generated plots are equally visually ``interesting"; the less interesting plots tend to not receive equal amounts of attention during the lineup evaluation process.} \svp{XXX can we cite that eye tracking study here? Does it back up that claim? XXX}
 While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use simulation to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention.
+
 \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
 <<prior-predictive, echo = F, fig.cap = "Simulated distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=30$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
@@ -316,14 +322,14 @@ When examining a lineup, we are generally drawn immediately to 1-4 panels, and t
 \begin{align}\label{eqn:beta-binomial}
 P(X\geq C) = \sum_{x = C}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
 \end{align}
-where $X$ is the number of data panel detections,  $K$ is the number of independent evaluations of the lineup, and \hh{$B(., .)$ is the Beta function defined as:
-\[
-B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b > 0. 
-\] }
+where $X$ is the number of data panel detections,  $K$ is the number of independent evaluations of the lineup, and \hh{$B(., .)$ is the Beta function defined as:}
+\begin{align*}
+B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b > 0.
+\end{align*}
 A derivation of this mass function is provided in Appendix~\ref{app:pvalue}. 
 A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex})\citep{vinference}.
 \svp{We know from past studies \citep{loy2016variations,vanderplas:2017} that typically, only a few lineup panels to attract attention, even if all of the panels in a lineup are null plots.
-From \autoref{fig:prior-predictive}, we know that our observations are most consistent with $\alpha << 1$. 
+From \autoref{fig:prior-predictive}, we know that \svp{this phenomenon is} most consistent with $\alpha << 1$. 
 It follows, then, that in order to calculate visual p-values that are representative of the cognitive task at hand, we need to select an appropriate value of $\alpha$.
 }
 % but the more general solution is useful to consider, as we may not actually believe $\theta$ is uniformly distributed over the $(m - 1)$ simplex.
@@ -336,7 +342,7 @@ When that occurs, the interesting null plot will be selected more frequently tha
 The ability to identify stimuli as being different from one another is a fundamental part of cognition; the abstractions that allow us to use the terms `same' and `different' are fundamental to human intelligence~\citep{mingWhenThingsAre2017}.
 As a result, when presented with a lineup, we will typically gravitate towards one or two panels which are different from our mental representation of a generalized panel on some measure, though not always the measure that's under investigation.
 
-\svp{When a lineup contains null plots with interesting visual features, there is the possibility that participants who are not provided with the null and alternative hypotheses may form a hypothesis that is not under investigation, focusing on the randomly generated but visually interesting feature (an excellent example of this phenomenon is found in \citet{vanderplas:2017}). }
+\svp{When a lineup contains null plots with interesting visual features, there is the possibility that participants who are not provided with the null and alternative hypotheses may form a hypothesis that is not under investigation, focusing on the randomly generated but visually interesting feature \citep[For an example, see]{vanderplas:2017}. }
 Note that even though the interesting null plot effect is found in all scenarios proposed in \autoref{sec:scenarios}, it is not a systematic issue in Scenario 1; in Scenario 3, the null plots are not re-generated with each lineup evaluation, so an interesting null plot selected by one individual may also effect the evaluation of by other individuals.
 That is, in Scenario 3, the interesting null plots affect all evaluations, and this effect can significantly affect the experiment results.
 However, in Scenario 3, we can also estimate the size of this effect: by examining repeated evaluations of a lineup, we can leverage that replication to estimate the distinctiveness of the set of null plots in the lineup.
