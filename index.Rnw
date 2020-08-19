@@ -324,7 +324,7 @@ B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b 
 A derivation of this mass function is provided in Appendix~\ref{app:pvalue}. 
 A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex})\citep{vinference}.
 \svp{We know from past studies \citep{loy2016variations,vanderplas:2017} that typically, only a few lineup panels to attract attention, even if all of the panels in a lineup are null plots.
-From \autoref{fig:prior-predictive}, we know that \svp{this phenomenon is} most consistent with $\alpha << 1$. 
+From \autoref{fig:prior-predictive}, we know that \svp{this phenomenon is} most consistent with $\alpha \ll 1$. 
 It follows, then, that in order to calculate visual p-values that are representative of the cognitive task at hand, we need to select an appropriate value of $\alpha$.
 }
 % but the more general solution is useful to consider, as we may not actually believe $\theta$ is uniformly distributed over the $(m - 1)$ simplex.
@@ -337,7 +337,7 @@ When that occurs, the interesting null plot will be selected more frequently tha
 The ability to identify stimuli as being different from one another is a fundamental part of cognition; the abstractions that allow us to use the terms `same' and `different' are fundamental to human intelligence~\citep{mingWhenThingsAre2017}.
 As a result, when presented with a lineup, we will typically gravitate towards one or two panels which are different from our mental representation of a generalized panel on some measure, though not always the measure that's under investigation.
 
-\svp{When a lineup contains null plots with interesting visual features, there is the possibility that participants who are not provided with the null and alternative hypotheses may form a hypothesis that is not under investigation, focusing on the randomly generated but visually interesting feature \citep[For an example, see][]{vanderplas:2017}. }
+\svp{When a lineup contains null plots with interesting visual features, there is the possibility that participants (who are not provided with the null and alternative hypotheses) may form a hypothesis that is not under investigation, focusing on the randomly generated but visually interesting feature \citep[For an example, see][]{vanderplas:2017}. }
 Note that even though the interesting null plot effect is found in all scenarios proposed in \autoref{sec:scenarios}, it is not a systematic issue in Scenario 1; in Scenario 3, the null plots are not re-generated with each lineup evaluation, so an interesting null plot selected by one individual may also effect the evaluation of by other individuals.
 That is, in Scenario 3, the interesting null plots affect all evaluations, and this effect can significantly affect the experiment results.
 However, in Scenario 3, we can also estimate the size of this effect: by examining repeated evaluations of a lineup, we can leverage that replication to estimate the distinctiveness of the set of null plots in the lineup.
@@ -393,7 +393,7 @@ The $\hat\alpha$ estimated from the null lineups would then be used to calculate
 Unfortunately, even in the best designed experiments with null plots which are nearly uniformly interesting, there are usually many panels with no selections.
 As with many estimation methods, the maximum likelihood estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. 
 This issue is more likely to arise when $\alpha$ is small, because it is more likely that most panels will have zero selections under those conditions.}
-\svp{Unfortunately, in most lineup scenarios, we are also operating in the region $\alpha << 1$; as a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where we typically operate.}
+\svp{Unfortunately, in most lineup scenarios, we are also operating in the region $\alpha \ll 1$; as a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where we typically operate.}
 
 \svp{In order to sidestep the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values. 
 We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.}
