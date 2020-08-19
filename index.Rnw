@@ -610,6 +610,42 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 \hh{But in the example the 0-1 panel is actually the one that does not come up with any inconclusive numbers. ... Just go with a high number of data picks and call it good?}
 
 \section{Example}
+<<example-setup, include = F>>=
+exdat <- readr::read_csv("data/turk6_60_96_1_8.csv")
+studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
+
+turk6df <- filter(studies_sum, study == "turk6") %>%
+  group_by(pic_name) %>%
+  filter(n > 0) %>%
+  count()
+
+intercept <- mean(turk6df$n - .5) # Take off 0.5 to correct for the fact that these are data lineups, not Rorschach lineups
+
+exdf <- filter(studies_sum, pic_name == "file147f93f77aae9.png") %>%
+  filter(n != 0) %>%
+  rename(.sample = response_no)
+
+exdf_targetcount <- sum(filter(exdf, response_no == obs_plot_location)$n)
+exdf_nullcount <- sum(filter(exdf, response_no != obs_plot_location)$n)
+total_n <- exdf_targetcount+exdf_nullcount
+old_vispval <- vis_p_value_orig(exdf_targetcount, total_n)
+new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .07)
+@
+\svp{Using the mixture model proposed here, computed visual p-values will be more moderate than those computed using the approach proposed in \citet{majumder2013validation}. 
+\svp{As an example, a lineup from a past experiment is provided in \autoref{fig:example-plot}. This lineup shows a plot which is somewhat ambiguous: the data plot, in panel 5+3, was selected most frequently by participants (14 times), but in total, null plots were selected more frequently than the target plot (22 times).
+Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual p-value of \Sexpr{old_vispval}, which is extremely small given that there were more null plot selections than data plot selections. 
+}
+<<example-plot, echo = F, fig.width = 5, fig.height = 4.25, out.width = ".6\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. This lineup was evaluated 36 times; selection counts are provided in light grey in the lower right corner of each panel which was selected at least once." >>=
+ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) + geom_boxplot() + 
+  facet_wrap(~.sample) + 
+  theme_bw() + 
+  theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  scale_fill_discrete(guide = "none") + 
+  geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, data = exdf, color = "grey40")
+@
+
+\svp{Under the proposed method, our first step would be to assess the expected number of null panels which would attract attention. }
+
 
 \section{Discussion}
 
