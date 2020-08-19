@@ -268,13 +268,13 @@ While graphical illustrations of the 20-dimensional dirichlet distribution are m
 
 \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
-<<prior-predictive, echo = F, fig.cap = "Simulation of the number of panel picks $c_i$ (sorted by frequency) for different values of $\\alpha$ for a fixed number $K=30$ of plot evaluations. For low values of $\\alpha$ plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
+<<prior-predictive, echo = F, fig.cap = "Simulation (of size 50) of the number of panel picks $c_i$ (sorted by their frequency) for different values of $\\alpha$ for a fixed number $K=30$ of plot evaluations. For low values of $\\alpha$ plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. In all 50 simulated lineups with $\alpha=0.001$ only one of the panels was chosen. For $\alpha = 1$ five different panels were each chosen at least two times, and ten different panels were chosen at least once. ", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
 # set.seed(5019230943) # HH: too large for my machine 
 set.seed(519223094)
 
-sim_lineup_model <- function(alpha, m = 20, k = 30, N = 50) {
+sim_lineup_model <- function(alpha, m = 20, K = 30, N = 50) {
   theta <- gtools::rdirichlet(1, rep(alpha, m))
-  sels <- rmultinom(N, size = k, prob = theta)
+  sels <- rmultinom(N, size = K, prob = theta)
   sels
 }
 
@@ -300,7 +300,7 @@ ggplot() +
   geom_path(aes(x = idx, y = jitter(sels, amount = .4), group = interaction(rep, alpha)), alpha = .05) +
   facet_wrap(~label, labeller = label_parsed, nrow = 2) +
   scale_x_continuous("Ordered panel number") +
-  scale_y_continuous("# Simulated Panel Selections (of 30 evaluations)")
+  scale_y_continuous("# panel was picked (in K=30 evaluations)")
 
 @
 
@@ -441,7 +441,7 @@ number_panels <- function(alpha, c=1, m = 20, K=30) {
 exp_average <- alphas %>% map_dbl(number_panels)
 
 prior_pred <- tibble(alpha = alphas,
-                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, k = 30)) %>%
+                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, K = 30)) %>%
   mutate(
     sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
     sel_ordered_long = purrr::map(
