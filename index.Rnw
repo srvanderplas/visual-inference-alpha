@@ -166,16 +166,14 @@ f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^
 
 We model panel selection probabilities $\bm{\theta}$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
 As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. 
-%This allows us to vary the lineup difficulty through the hyperparameter $\alpha$ without having to specify which plot $i$ is the target plot. \hh{XXX that's the null model - let's not bring in the target plot just yet}
-
 The density function of the symmetric Dirichlet distribution is given as
 \begin{align}\label{eqn:dirichlet-pdf}
 f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
 \end{align}
 \hh{where $\Gamma(.)$ is the Gamma function defined as }
-\[
+\begin{align*}
 \Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
-\]
+\end{align*}
 \hh{For integer values $n$ the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$.}
 
 With observed plot selections 
@@ -216,7 +214,8 @@ When $\alpha$ is small, these pseudo-observations have relatively little influen
 This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added. 
 In most lineup studies, a plot might be evaluated between 10 and 30 times; with a $m=20$ lineup, even $\alpha = 1$ can easily dominate the participant selection data.
 
-In addition to the pseudo-observation interpretation, $\alpha$ provides information about the number of panels in a lineup which are likely to attract participant interest. 
+% In addition to the pseudo-observation interpretation, 
+$\alpha$ \svp{also} provides information about the number of panels in a lineup which are likely to attract participant interest. 
 It is useful to detour slightly from the discussion of visual inference to explore the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
 
 \subsection{Dirichlet Hyperparameter}\label{sec:alpha}
