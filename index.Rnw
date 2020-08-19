@@ -268,7 +268,7 @@ While graphical illustrations of the 20-dimensional dirichlet distribution are m
 
 \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$; it is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
-<<prior-predictive, echo = F, fig.cap = "Simulated distribution of number of participant selections of panels $c_i$ (sorted by frequency) for different values of $\\alpha$, with fixed $K=30$ plot evaluations. Low values of $\\alpha$ have fewer plots with any participant selections, while higher values of $\\alpha$ have more plots with participant selections.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
+<<prior-predictive, echo = F, fig.cap = "Simulation of the number of panel picks $c_i$ (sorted by frequency) for different values of $\\alpha$ for a fixed number $K=30$ of plot evaluations. For low values of $\\alpha$ plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots.", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
 # set.seed(5019230943) # HH: too large for my machine 
 set.seed(519223094)
 
