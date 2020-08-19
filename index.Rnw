@@ -388,12 +388,14 @@ From a practical perspective, the number of null plots which are visually salien
 While the simulated distributions in \autoref{fig:prior-predictive} are illustrative, \svp{it can be difficult to translate the results from \autoref{fig:prior-predictive} into a useful estimate of $\alpha$.}
 % in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
 
-\svp{There are methods for maximum likelihood estimation of $\alpha$ \citep{sirt, minka} from observed proportions (in this case, the number of selections of a panel divided by the number of total selections). 
-Using these methods, we could design our experiment to include one or two Rorschach lineups which would allow us to estimate $\alpha$ for the null plot generation method. 
-The $\hat\alpha$ estimated from the null lineups would then be used to calculate more accurate $p$-values for the single or two-target lineups. 
-Unfortunately, even in the best designed experiments with null plots which are nearly uniformly interesting, there are usually many panels with no selections.
-As with many estimation methods, the maximum likelihood estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. 
-This issue is more likely to arise when $\alpha$ is small, because it is more likely that most panels will have zero selections under those conditions.}
+
+\hh{While it is generally possible to estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these maximum likelihood approaches fail because of the large number of observed zeroes (many panels are not selected in a lineup evaluation). This problem is even more pronounced when $\alpha$ values are small. }
+
+
+There are methods to directly estimate $\alpha$ using a maximum likelihood approach \citep{sirt, minka} based on  proportions observed from panel selections in a lineup.
+Using these methods, we could design  experiments to include additional Rorschach lineups to allow us to estimate $\alpha$ for the null plot generation method. 
+%The $\hat\alpha$ estimated from the null lineups would then be used to calculate more accurate $p$-values for the single or two-target lineups. 
+However, as with many estimation methods, the maximum likelihood estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. In the case of lineups, many panels are not selected. This problem is even more pronounced when $\alpha$ values are small.
 \svp{Unfortunately, in most lineup scenarios, we are also operating in the region $\alpha \ll 1$; as a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where we typically operate.}
 
 \svp{In order to sidestep the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values. 
