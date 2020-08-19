@@ -344,7 +344,7 @@ However, in Scenario 3, we can also estimate the size of this effect: by examini
 While this effect may exist in Scenario 1, we cannot estimate the effect because there are not repeated evaluations of the same set of lineups. 
 Thus, in Scenario 1, the best estimate we can make for the generic $\theta$ is $1/m$, which is equivalent to the Multinomial model without the Dirichlet hyperparameter and with $\theta = 1/m$. 
 
-In the theoretical Multinomial-Dirichlet model proposed in this paper, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification} \svp{(a derivation of this expectation is provided in \autoref{app:expected}).} 
+In the theoretical Multinomial-Dirichlet model proposed in this paper, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification} \svp{(a derivation of this expectation is provided in Appendix\~\ref{app:expected}).} 
 In practice, we would create a null plot generating model first, and set $\alpha$ according to the perceived difficulty of lineup evaluation using the null generating model in question. 
 A difficult lineup, with many potentially interesting panels, would have a higher $\alpha$ value than an easy lineup with no null panels which were visually salient relative to the data panel.
 
@@ -676,7 +676,7 @@ P(C \geq c_t) & =  \frac{1}{B(\alpha, (m-1)\alpha) } \sum_{x=c_t}^K \binom{K}{x}
 \end{align}
 A similar derivation holds in the full Dirichlet-Multinomial model.
 
-\section{Expected number of panels picked}\label{appendixB}
+\section{Expected number of panels picked}\label{appendixB}\label{app:expected}
 Define $C = (C_1, ..., C_m) \sim \text{Mult}_{\theta, K}$ to be a (simulated) lineup that is evaluated $K$ times, and $\theta = (\theta_1, ..., \theta_m) \sim \text{Dir}_\alpha = (\alpha, ..., \alpha)$ with $\sum_i \theta_i = 1$. 
 
 With indicator function $I$, defined as 1 for true statements and 0 for false statements, we define:
