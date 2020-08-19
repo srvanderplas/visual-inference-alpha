@@ -625,8 +625,8 @@ exdf <- filter(studies_sum, pic_name == "file147f93f77aae9.png") %>%
   filter(n != 0) %>%
   rename(.sample = response_no)
 
-exdf_targetcount <- sum(filter(exdf, response_no == obs_plot_location)$n)
-exdf_nullcount <- sum(filter(exdf, response_no != obs_plot_location)$n)
+exdf_targetcount <- sum(filter(exdf, .sample == obs_plot_location)$n)
+exdf_nullcount <- sum(filter(exdf, .sample != obs_plot_location)$n)
 total_n <- exdf_targetcount+exdf_nullcount
 old_vispval <- vis_p_value_orig(exdf_targetcount, total_n)
 new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .07)
