@@ -337,15 +337,15 @@ When that occurs, the interesting null plot will be selected more frequently tha
 The ability to identify stimuli as being different from one another is a fundamental part of cognition; the abstractions that allow us to use the terms `same' and `different' are fundamental to human intelligence~\citep{mingWhenThingsAre2017}.
 As a result, when presented with a lineup, we will typically gravitate towards one or two panels which are different from our mental representation of a generalized panel on some measure, though not always the measure that's under investigation.
 
-\svp{When a lineup contains null plots with interesting visual features, there is the possibility that participants who are not provided with the null and alternative hypotheses may form a hypothesis that is not under investigation, focusing on the randomly generated but visually interesting feature \citep[For an example, see]{vanderplas:2017}. }
+\svp{When a lineup contains null plots with interesting visual features, there is the possibility that participants who are not provided with the null and alternative hypotheses may form a hypothesis that is not under investigation, focusing on the randomly generated but visually interesting feature \citep[For an example, see][]{vanderplas:2017}. }
 Note that even though the interesting null plot effect is found in all scenarios proposed in \autoref{sec:scenarios}, it is not a systematic issue in Scenario 1; in Scenario 3, the null plots are not re-generated with each lineup evaluation, so an interesting null plot selected by one individual may also effect the evaluation of by other individuals.
 That is, in Scenario 3, the interesting null plots affect all evaluations, and this effect can significantly affect the experiment results.
 However, in Scenario 3, we can also estimate the size of this effect: by examining repeated evaluations of a lineup, we can leverage that replication to estimate the distinctiveness of the set of null plots in the lineup.
-While this effect may exist in Scenario 1, we cannot estimate the effect because there are not repeated evaluations of the same set of lineups. 
-Thus, in Scenario 1, the best estimate we can make for the generic $\theta$ is $1/m$, which is equivalent to the Multinomial model without the Dirichlet hyperparameter and with $\theta = 1/m$. 
+While this effect may exist in Scenario 1, we cannot estimate the effect because there are not repeated evaluations of the same set of lineups.
+Thus, in Scenario 1, the best estimate we can make for the generic $\theta$ is $1/m$, which is equivalent to the Multinomial model without the Dirichlet hyperparameter and with $\theta = 1/m$.
 
-In the theoretical Multinomial-Dirichlet model proposed in this paper, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification} \svp{(a derivation of this expectation is provided in Appendix\~\ref{app:expected}).} 
-In practice, we would create a null plot generating model first, and set $\alpha$ according to the perceived difficulty of lineup evaluation using the null generating model in question. 
+In the theoretical Multinomial-Dirichlet model proposed in this paper, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification} (a derivation of this expectation is provided in Appendix \ref{app:expected}).
+In practice, we would create a null plot generating model first, and set $\alpha$ according to the perceived difficulty of lineup evaluation using the null generating model in question.
 A difficult lineup, with many potentially interesting panels, would have a higher $\alpha$ value than an easy lineup with no null panels which were visually salient relative to the data panel.
 
 $\alpha$ also modulates the visual p-value calculated from \autoref{eqn:beta-binomial}: lower $\alpha$ values produce a higher visual p-value estimate, and higher $\alpha$ values produce a lower visual p-value estimate. 
@@ -415,19 +415,19 @@ The heuristic we propose for \svp{ad-hoc} estimation of $\alpha$ is as follows:
 It may be helpful to average the results of ~10 simulations together to reduce the visual noise and make the underlying trend more visible.
 % \item 
 % Fit a smooth function to the simulated data. Here, we have used a generalized additive model, $y = f(log(\alpha))$ where $f$ is a smooth function. 
-\item \hh{The simulation captures the variability around the expected number of `interesting' panels - i.e.\ panels that are selected at least $c$ times. The expected number of interesting panels is given as the sum of probabilities that each panel is selected more than $c$ times: $\sum_{i=1}^m P(C_i > c)$. See \autoref{eqn:differentPanels} in Appendix \ref{appendixB} for details.
+\item \hh{The simulation captures the variability around the expected number of `interesting' panels - i.e.\ panels that are selected at least $c$ times. The expected number of interesting panels is given as the sum of probabilities that each panel is selected more than $c$ times: $\sum_{i=1}^m P(C_i > c)$. See \autoref{eqn:differentPanels} in Appendix \ref{app:expected} for details.
 }
 \item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the 
 %fitted function. 
 \svp{expected number of panels with $>c$ selections into approximately equal size bands (with the exception of the case where the expected number of panels selected is equal to one; this case will be handled separately). }
-In \autoref{fig:alpha-sim-curvea}, the bands are approximately 2 panels in width; for $K=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
+In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; for $K=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
 \item Generate several Rorschach lineups using the null generative model for the experiment, creating null lineups of size $m$. 
 Determine which band is most representative of the lineups in the experiment: Over the generated lineups, how many visually interesting null panels are there on average? 
 svp{It may be helpful to have a number of different individuals evaluate these lineups; in particular, individuals who are not aware of the method for generating the null plots.}
 \item Select an $\alpha$ value corresponding to the selected band. \svp{For instance, if our pilot study showed that} the lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
 \end{enumerate}
 
-<<alpha-sim-curvea, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\autoref{eqn:differentPanels}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
+<<alpha-sim-curve, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\autoref{eqn:differentPanels}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 set.seed(2401072)
 alphas <- 10^(seq(-3.6, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
@@ -676,7 +676,7 @@ P(C \geq c_t) & =  \frac{1}{B(\alpha, (m-1)\alpha) } \sum_{x=c_t}^K \binom{K}{x}
 \end{align}
 A similar derivation holds in the full Dirichlet-Multinomial model.
 
-\section{Expected number of panels picked}\label{appendixB}\label{app:expected}
+\section{Expected number of panels picked}\label{app:expected}
 Define $C = (C_1, ..., C_m) \sim \text{Mult}_{\theta, K}$ to be a (simulated) lineup that is evaluated $K$ times, and $\theta = (\theta_1, ..., \theta_m) \sim \text{Dir}_\alpha = (\alpha, ..., \alpha)$ with $\sum_i \theta_i = 1$. 
 
 With indicator function $I$, defined as 1 for true statements and 0 for false statements, we define:
