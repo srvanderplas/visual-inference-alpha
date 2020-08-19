@@ -635,7 +635,7 @@ new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .07)
 \svp{As an example, a lineup from a past experiment is provided in \autoref{fig:example-plot}. This lineup shows a plot which is somewhat ambiguous: the data plot, in panel 5+3, was selected most frequently by participants (14 times), but in total, null plots were selected more frequently than the target plot (22 times).
 Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual p-value of \Sexpr{old_vispval}, which is extremely small given that there were more null plot selections than data plot selections. 
 }
-<<example-plot, echo = F, fig.width = 5, fig.height = 4.25, out.width = ".6\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. This lineup was evaluated 36 times; selection counts are provided in light grey in the lower right corner of each panel which was selected at least once." >>=
+<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 4.25, out.width = ".6\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. This lineup was evaluated 36 times; selection counts are provided in light grey in the lower right corner of each panel which was selected at least once." >>=
 ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) + geom_boxplot() + 
   facet_wrap(~.sample) + 
   theme_bw() + 
