@@ -31,7 +31,7 @@
 
 \begin{document}
 
-\title{This is the sample article title\protect\thanks{This is an example for title footnote.}}
+\title{Scenarios for Visual Inference\protect\thanks{This is an example for title footnote.}}
 
 \author[1]{Susan VanderPlas*}
 
