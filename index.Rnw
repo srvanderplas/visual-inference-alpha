@@ -124,11 +124,7 @@ This expanded framework facilitates the use of visual diagnostics which highligh
 \subsection{Lineup Evaluations}\label{sec:scenarios}
 % Types of lineups
 \citet{buja:2009} introduced two types of lineups: Rorschach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data. 
-\citet{vanderplas:2017} introduced another type of lineup: the two-target lineup. 
-This lineup contains target plots generated from two competing data generating models, with null plots that are generated from a mixture of the two target plot distributions. 
-Two-target lineups can be used to test whether two competing effects have different visual salience. 
-All of the lineup experiments the authors are aware of at this time are one or two-target lineup experiments\svp{; we are not aware of any experiments which included Rorschach lineups.}
-
+\citet{vanderplas:2017} introduced the two-target lineups\svp{, which can be used to test the visual salience of two competing effects.}
 % Types of lineup evaluations
 In addition to different types of lineups, there are different types of lineup experiments.
 
