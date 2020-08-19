@@ -7,7 +7,7 @@
 \usepackage{bm}
 \usepackage{multirow}
 \usepackage{hyperref}
-\usepackage{endfloat} % Figures to the end of the document
+%\usepackage{endfloat} % Figures to the end of the document
 
 \usepackage{anyfontsize}% remove font warnings
 % --- Editing ------------------------------------------------------------------
@@ -240,7 +240,7 @@ ggtern::ggtern(aes(x = p1, y = p2, z = p3), data = simplex) +
 
 \begin{figure}
 \includegraphics[width=\textwidth]{figure/simplex-1.pdf}
-\caption{Dirichlet distributed samples on the 2-dimensional simplex.\label{fig:simplex}}
+\caption{Dirichlet distributed samples on the 2-dimensional simplex. $\alpha = 1$ is a uniform distribution on the simplex, $\alpha < 1$ up-weighs the (hyper)faces of the simplex, $\alpha > 1$ puts more weight towards the center of the simplex.\label{fig:simplex}}
 \end{figure}
 
 %Marginal Beta($\alpha, 2\alpha$) densities corresponding to \\autoref{fig:simplex}.
