@@ -116,9 +116,9 @@ If multiple individuals select the plot generated from the data rather than the 
 In this paper, we propose a framework for visual inference using a Dirichlet-multinomial distribution to model the probabilities of selecting each panel \svp{and the} observed participant selections. 
 % This framework for analysis of visual inference data has been in use as part of the \texttt{vinference} package~\citep{vinference} \citep{loyAreYouNormal2015,loy2016variations,vanderplas:2017}, but has not been formally described in any publication. 
 % Here, we provide the mathematical foundation for the multinomial-dirichlet model used in the analysis of visual inference experiments, exploring the implications of the model and proposing a modification which better describes the perceptual process of lineup evaluation.
-\svp{This model is more flexible than the binomial model used in \citet{majumder2013validation}, allowing us to better represent the perceptual process of lineup evaluation.}
-This expanded framework facilitates the use of visual diagnostics which highlight issues with null plot generation methods.
-\svp{Leveraging the proposed model, we discuss the correspondance between the model and the perceptual process and propose a method for estimation of the hyperparameters and diagnostic procedure for null plot generation models.}
+\svp{This model is more flexible than the binomial model used in \citet{majumder2013validation}, and better represents the perceptual process of lineup evaluation.}
+% This expanded framework facilitates the use of visual diagnostics which highlight issues with null plot generation methods.
+\svp{Leveraging the model, we discuss the correspondance between the model and the perceptual process and propose a method for estimation of the hyperparameters and diagnostic procedure for null plot generation models.}
 % We discuss the Dirichlet multinomial framework, its advantages for modeling the perceptual process, and propose a method designed to estimate the hyperparameters and assess the lineup's suitability for inference.}
 
 \subsection{Lineup Evaluations}\label{sec:scenarios}
