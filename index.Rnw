@@ -95,7 +95,9 @@ source("code/functions.R")
 
 % Something about the power of the human visual system? Don't want to get too off topic...
 
-Graphics provide the opportunity to understand statistical data at an intuitive level: \dc{if the relationship between two variables is not adequately summarized by the numerical statistics} we can gain more information by considering a simple scatter plot than we might obtain from an entire day of staring at the numbers. 
+Graphics provide the opportunity to understand statistical data at an intuitive level: 
+\dc{if the relationship between two variables is not adequately summarized by the numerical statistics} \svp{XXX Is that really the only use case for visual inference? As a backup if classic numerical inference fails?} 
+we can gain more information by considering a simple scatter plot than we might obtain from an entire day of staring at the numbers. 
 \svp{Essentially, statistical graphics} leverage the bandwidth of the visual system for implicit data analysis, and because this analysis is implicit, we often assume \svp{these visual analyses} are not decisive in the same way that a hypothesis test is decisive.
 \svp{G}enerally, graphics do not come with a significance threshold, and \dc{typically,} we do not explicitly \dc{declare} the hypothesis we might be testing before viewing the \dc{data plot}.
 \svp{However, there are} \dc{emerging} \svp{formal protocols for conducting inference through the} data visualization, \dc{loosely grouped into the label, visual inference}. %\svp{Too many uses of ``graphics" in a single paragraph}
