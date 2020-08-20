@@ -95,33 +95,33 @@ source("code/functions.R")
 
 % Something about the power of the human visual system? Don't want to get too off topic...
 
-Graphics provide the opportunity to understand statistical data at an intuitive level: we can gain more information about the relationship between two variables by considering a simple scatter plot than we might obtain from an entire day of generating numerical summaries. 
-\svp{Essentially, statistical graphics} leverage the bandwidth of the visual system for implicit data analysis, and because this analysis is implicit, we often assume \svp{these visual analyses} are not decisive in the same way that an hypothesis test is decisive.
-\svp{G}enerally, graphics do not come with a significance threshold, and in many cases, we do not explicitly construct the hypothesis we might be testing before viewing the chart.
-\svp{However, there are formal protocols for conducting inference through the visual domain.} %\svp{Too many uses of ``graphics" in a single paragraph}
+Graphics provide the opportunity to understand statistical data at an intuitive level: \dc{if the relationship between two variables is not adequately summarized by the numerical statistics} we can gain more information by considering a simple scatter plot than we might obtain from an entire day of staring at the numbers. 
+\svp{Essentially, statistical graphics} leverage the bandwidth of the visual system for implicit data analysis, and because this analysis is implicit, we often assume \svp{these visual analyses} are not decisive in the same way that a hypothesis test is decisive.
+\svp{G}enerally, graphics do not come with a significance threshold, and \dc{typically,} we do not explicitly \dc{declare} the hypothesis we might be testing before viewing the \dc{data plot}.
+\svp{However, there are} \dc{emerging} \svp{formal protocols for conducting inference through the} data visualization, \dc{loosely grouped into the label, visual inference}. %\svp{Too many uses of ``graphics" in a single paragraph}
 
-Visual inference allows for us to test graphics as visual statistics: charts are, after all, a quantity computed from values in a sample of data. 
-In order to test whether a chart shows a visually significant result, we can use the same philosophy used by randomization tests: construct a sampling method consistent with the null hypothesis, generate many copies of the test statistic (in this case, the plot), and see where the real statistic falls in the distribution of artificially generated quantites \citep{buja:2009}. 
-An assembly of several null plots with a target (or data) plot is called a \emph{lineup}, after the criminal procedure of the same name. Typically, lineups are composed of 19 ``null" plots (generated under the null hypothesis) and one data plot containing the real data.
+Visual inference \dc{builds from considering data plots} to \dc{be} visual statistics: charts are, after all, a quantity computed from values in a sample of data. 
+In order to test whether a chart shows a visually significant result, we can use the same \dc{machinery} used by randomization tests: construct a \dc{randomization} method consistent with the null hypothesis, generate many copies of the test statistic (in this case, the plot), and see where the \dc{observed} statistic falls in the distribution of artificially generated quantities (\dc{see the conceptual framework described in} \citet{buja:2009}). 
+An assembly of several null plots with a target (or data) plot is called a \emph{lineup}, after the criminal procedure of the same name. Typically, lineups are composed of 19 ``null" plots (generated under the null hypothesis) and one data plot containing the \dc{observed} data.
 
 Of course, with numerical statistics, there is a natural ordering to computed numerical quantities; with plots, we must run each statistic through another process (evaluation by the visual system, or a facsimile thereof
 %\footnote{Cite Giora's Deep Learning work, \url{http://giorasimchoni.com/deep_visual_inference.html}}) 
 in order to evaluate significance. 
 % \svp{XXX add some analogy to functions of data as inputs to a statistical test?}
-During this evaluation process, the user selects one or more plots from the lineup which are ``different" in some way (though some experiments may specify the particular feature under examination).
+During this evaluation process, the user selects one or more plots from the lineup which are ``different" in some way, \dc{which may or may not be prescribed}.
 % TODO: explain different lineup scenarios here? Not sure if this is the best place for it, or if it's necessary at all
 Typically, graphical tests utilize a service like Amazon Mechanical Turk to acquire multiple evaluations of the same lineup.
-If multiple individuals select the plot generated from the data rather than the null plots, the visual statistic is likely to be significant \citep{majumder2013validation}.
+If multiple individuals select the plot generated from the data rather than the null plots, the visual statistic is likely to be \dc{significantly different from that specified by the null generating mechanism} (\dc{as described in \citet{majumder2013validation} for the infrastructure}).
 % TODO: add lineup here
 
-\svp{\citet{majumder2013validation} proposed obtaining a visual p-value from the results of lineup evaluations using the binomial distribution.}
+\svp{\citet{majumder2013validation} also} \dc{proposed an approach for calculating a $p$-value from the results of lineup evaluations of multiple subjects that uses the binomial distribution.} \dc{This approach is simple, and a reasonably good approximation for assessing the significcanc eeof structure in a plot, but it fails to account for different ways of applying a llineup protocol for multiple observers.}
 % While visual inference was initially developed to mimic frequentist hypothesis tests, using lineups of 20 plots with one data plot so that the probability of selecting the data plot randomly is $p=0.05$, visual inference itself does not demand use of frequentist techniques. 
-In this paper, we propose a framework for visual inference using a Dirichlet-multinomial distribution to model the probabilities of selecting each panel \svp{and the} observed participant selections. 
+In this paper, we propose a \dc{new approach for computing $p$-values} using a Dirichlet-multinomial distribution to model the probabilities of selecting each panel \svp{and the} observed participant selections. 
 % This framework for analysis of visual inference data has been in use as part of the \texttt{vinference} package~\citep{vinference} \citep{loyAreYouNormal2015,loy2016variations,vanderplas:2017}, but has not been formally described in any publication. 
 % Here, we provide the mathematical foundation for the multinomial-dirichlet model used in the analysis of visual inference experiments, exploring the implications of the model and proposing a modification which better describes the perceptual process of lineup evaluation.
 \svp{This model is more flexible than the binomial model used in \citet{majumder2013validation}, and better represents the perceptual process of lineup evaluation.}
 % This expanded framework facilitates the use of visual diagnostics which highlight issues with null plot generation methods.
-\svp{Leveraging the model, we discuss the correspondance between the model and the perceptual process and propose a method for estimation of the hyperparameters and diagnostic procedure for null plot generation models.}
+\svp{Leveraging the model, we discuss the correspondance between the model and the perceptual process and propose a method for estimation of the hyperparameters and a diagnostic procedure for null plot generation models.}
 % We discuss the Dirichlet multinomial framework, its advantages for modeling the perceptual process, and propose a method designed to estimate the hyperparameters and assess the lineup's suitability for inference.}
 
 <<typesoflineups, eval = T,echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=6, fig.cap = "Types of lineups. In a Rorschach, all plots are null plots, with a purpose of understanding patterns that may occur by chance. A one target lineup has one data plot, and the remaining are null plots.">>=
@@ -177,7 +177,7 @@ Thus, in Scenario 3, which is the most common lineup experiment scenario, it is 
 
 Scenario 3 is the primary motivation for the model which we will develop in the next section: while we cannot consider the panels in each lineup as equally likely to be selected, we can model the individual selection probabilities using a hierarchical model.
 
-<<scenarios, eval = T, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=5, fig.cap = "Different scenarios. Need to use patchwork maybe to get better titles.">>=
+<<scenarios, eval = T, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=5, fig.cap = "Illustrations of scenarios 1 and 2. Left column shows what three different subjects would see under scenario 1, and the right column shows what three different subjects would see under scenario 2. In scenario 1, all nulls and data plots are different, while in scenario 2 only the nulls differ.  (Scenario 3 would have all three lineups the same.) The location of the data plot may vary from one subject t another. Need to use patchwork maybe to get better titles.">>=
 set.seed(2020)
 df <- tibble(x=runif(50)) %>%
   mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
@@ -237,7 +237,7 @@ p6 <- ggplot(lineup(null_permute('y1'), df, n=5), aes(x, y1)) +
         axis.ticks = element_blank(), 
         axis.text = element_blank()) +
   xlab("") + ylab("") 
-grid.arrange(p1, p4, p2, p5, p3, p6, ncol=2)
+grid.arrange(p4, p1, p5, p2, p6, p3, ncol=2)
 @
 
 \section{Lineup Model Specification}
