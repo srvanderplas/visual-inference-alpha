@@ -112,7 +112,7 @@ in order to evaluate significance.
 % \svp{XXX add some analogy to functions of data as inputs to a statistical test?}
 During this evaluation process, the user selects one or more plots from the lineup which are ``different" in some way, \dc{which may or may not be prescribed}.
 % TODO: explain different lineup scenarios here? Not sure if this is the best place for it, or if it's necessary at all
-Typically, graphical tests utilize a service like Amazon Mechanical Turk to acquire multiple evaluations of the same lineup.
+Typically, graphical tests utilize a service like Amazon Mechanical Turk~\citep{turk} to acquire multiple evaluations of the same lineup.
 If multiple individuals select the plot generated from the data rather than the null plots, the visual statistic is likely to be \dc{significantly different from that specified by the null generating mechanism} (\dc{as described in \citet{majumder2013validation} for the infrastructure}).
 % TODO: add lineup here
 
@@ -125,6 +125,8 @@ In this paper, we propose a \dc{new approach for computing $p$-values} using a D
 % This expanded framework facilitates the use of visual diagnostics which highlight issues with null plot generation methods.
 \svp{Leveraging the model, we discuss the correspondance between the model and the perceptual process and propose a method for estimation of the hyperparameters and a diagnostic procedure for null plot generation models.}
 % We discuss the Dirichlet multinomial framework, its advantages for modeling the perceptual process, and propose a method designed to estimate the hyperparameters and assess the lineup's suitability for inference.}
+
+\dc{XXX Add comparison of binomial vs dirichlet p-values for same lineups later}
 
 <<typesoflineups, eval = T,echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=6, fig.cap = "Types of lineups. In a Rorschach, all plots are null plots, with a purpose of understanding patterns that may occur by chance. A one target lineup has one data plot, and the remaining are null plots.">>=
 library(nullabor)
