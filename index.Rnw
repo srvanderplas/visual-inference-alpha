@@ -10,6 +10,8 @@
 %\usepackage{endfloat} % Figures to the end of the document
 
 \usepackage{anyfontsize}% remove font warnings
+\usepackage{subcaption}  % an alternative package for sub figures
+\newcommand{\subfloat}[2][need a sub-caption]{\subcaptionbox{\normalsize #1}{#2}}
 % --- Editing ------------------------------------------------------------------
 
 \newcommand{\hh}[1]{{\textcolor{orange}{#1}}}
@@ -610,14 +612,8 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 \hh{But in the example the 0-1 panel is actually the one that does not come up with any inconclusive numbers. ... Just go with a high number of data picks and call it good?}
 
 \section{Example}
-<<example-setup, include = F>>=
-exdat <- readr::read_csv("data/turk6_60_96_1_8.csv")
-studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
-
-turk6df <- filter(studies_sum, study == "turk6") %>%
-  group_by(pic_name) %>%
-  filter(n > 0) %>%
-  count()
+<<example-setup, cache = T, include = F>>=
+options(digits = 3)
 vis_p_value <- function(C, K, alpha = 1, m = 20){
   single_p <- function(cc, kk, aa, mm) {
     x <- cc:kk
@@ -645,7 +641,23 @@ vis_p_value_orig <- function(C, K, m = 20){
     mutate(p = purrr::pmap_dbl(., single_p))
   df$p
 }
-intercept <- mean(turk6df$n - .5) # Take off 0.5 to correct for the fact that these are data lineups, not Rorschach lineups
+
+
+exdat <- readr::read_csv("data/turk6_60_96_1_8.csv")
+
+# Generate a null lineup with the same 19 null plots + one extra null
+exdat2 <- mutate(exdat, group = ifelse(.sample == 8, sample(group, n()), group))
+
+studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
+
+# Number of null plots selected (out of 19)
+turk6df <- filter(studies_sum, study == "turk6") %>%
+  group_by(pic_name) %>%
+  mutate(n_tot = sum(n)) %>%
+  filter(n >= 2/n_tot*36 & response_no != obs_plot_location) %>%
+  summarize(n_tot = n_tot, n = n())
+
+intercept <- mean(turk6df$n/turk6df$n_tot*36)
 
 exdf <- filter(studies_sum, pic_name == "file147f93f77aae9.png") %>%
   filter(n != 0) %>%
@@ -657,21 +669,138 @@ total_n <- exdf_targetcount+exdf_nullcount
 old_vispval <- vis_p_value_orig(exdf_targetcount, total_n)
 new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .07)
 @
-% \svp{Using the mixture model proposed here, computed visual p-values will be more moderate than those computed using the approach proposed in \citet{majumder2013validation}. 
-% \svp{As an example, a lineup from a past experiment is provided in \autoref{fig:example-plot}. This lineup shows a plot which is somewhat ambiguous: the data plot, in panel 5+3, was selected most frequently by participants (14 times), but in total, null plots were selected more frequently than the target plot (22 times).}
-% Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual p-value of \Sexpr{old_vispval}, which is extremely small given that there were more null plot selections than data plot selections. 
+\svp{Using the mixture model proposed here, computed visual p-values will be more moderate than those computed using the approach proposed in \citet{majumder2013validation}.}
+\svp{As an example, a lineup from a past experiment is provided in \autoref{fig:example-plot}. This lineup shows a plot which is somewhat ambiguous: the data plot, in panel 5+3, was selected most frequently by participants (14 times), but in total, null plots were selected more frequently than the target plot (22 times).
+Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual p-value of \Sexpr{old_vispval}, which is extremely small given that there were more null plot selections than data plot selections.}
 
-<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 4.25, out.width = ".6\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. This lineup was evaluated 36 times; selection counts are provided in light grey in the lower right corner of each panel which was selected at least once." >>=
+<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 5, out.width = ".495\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. Selection counts are provided in light grey in the lower right corner of each panel which was selected at least once.", fig.subcap = c("A one-target lineup (data is in panel 3+5).", "A Rorschach version of the same lineup (not evaluated experimentally).") >>=
 ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) + geom_boxplot() + 
   facet_wrap(~.sample) + 
   theme_bw() + 
   theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
   scale_fill_discrete(guide = "none") + 
   geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, data = exdf, color = "grey40")
+
+ggplot(exdat2, aes(x = group, y = vals, fill = factor(group))) + geom_boxplot() + 
+  facet_wrap(~.sample) + 
+  theme_bw() + 
+  theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  scale_fill_discrete(guide = "none") #+ 
+  # geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, data = exdf, color = "grey40")
+@
+\svp{Under the proposed method, our first step would be to assess the expected number of null panels which would attract attention. 
+Using a threshold of $c=1$, we have 6 of 19 null plots selected, so we might expect somewhere between 6 and 7 null panels to be selected in a Rorschach lineup. 
+Ideally, we would generate several Rorschach lineups for this step, but for simplicity, we will work off of a single one-target lineup for this example; a corresponding Rorschach lineup is shown in \autoref{fig:example-plot}(b) but was not evaluated experimentally.}
+
+<<example-alpha-curve, fig.cap = "Generated discretized heuristic plot for the lineup shown in \\autoref{fig:example-plot}(a).", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
+set.seed(2401072)
+
+sim_lineup_model <- function(alpha, m = 20, K = 36, N = 50) {
+  theta <- gtools::rdirichlet(1, rep(alpha, m))
+  sels <- rmultinom(N, size = K, prob = theta)
+  sels
+}
+
+alphas <- 10^(seq(-2, 2, by = .01)) # seq(0.001, 0.5, by = .001)
+
+number_panels <- function(alpha, c=1, m = 20, K=36) {
+  x <- (c + 1):K
+  summation <- choose(K, x) * beta(x + alpha, K - x + (m - 1)*alpha)
+  
+  m/beta(alpha, (m - 1)*alpha)*sum(summation)
+}
+
+exp_average <- alphas %>% map_dbl(number_panels)
+
+prior_pred <- tibble(alpha = alphas,
+                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100)) %>%
+  mutate(
+    sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
+    sel_ordered_long = purrr::map(
+      sel_ordered,
+      ~tibble(idx = rep(1:nrow(.x), times = ncol(.x)),
+              rep = rep(1:ncol(.x), each = nrow(.x)),
+              sels = as.vector(.x, mode = "numeric")))
+  ) %>%
+  select(-plot_sels, -sel_ordered) %>%
+  unnest(cols = c(sel_ordered_long)) %>%
+  arrange(alpha) %>%
+  mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
+
+# Calc mean # plots with >=1 selections
+prior_pred_mean <- prior_pred %>%
+  mutate(rep2 = rep %% 10) %>%
+  group_by(alpha, rep2, rep) %>%
+  summarize(n_sel_plots = sum(sels > 1)) %>%
+  group_by(alpha, rep2) %>%
+  summarize(n_sel_plots = mean(n_sel_plots))
+
+# model <- gam(n_sel_plots ~ s(log(alpha, 10)), bs = "cs", method = "REML", data = prior_pred_mean)
+model_df <- tibble(alpha = alphas, 
+                   n_sel_plots = exp_average
+                   # n_sel_plots = predict(model, newdata = tibble(alpha = alphas), type = "response")
+)
+
+possible_breakpoints <- model_df %>% 
+  filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
+  mutate(tmp = floor(n_sel_plots*2)/2, dist = abs(n_sel_plots - tmp)) %>%
+  group_by(tmp) %>%
+  filter(dist == min(dist)) %>%
+  filter(tmp %in% c(1.5, 4.5, 7, 9.5)) %>%
+  ungroup() %>%
+  mutate(band = floor(.5 + row_number()/2))
+
+lag_polys <- function(data) {
+  x = data$x
+  y = data$y
+  minval = 10e-8
+  bind_rows(
+    tibble(
+      x = c(minval, x[1], x[2], minval, minval),
+      y = c(y[1], y[1], y[2], y[2], y[1]), 
+      type = "h"
+    ),
+    tibble(
+      x = c(x[1], x[2], x[2], x[1], x[1]),
+      y = c(-Inf, -Inf, y[2], y[1], -Inf), 
+      type = "v"
+    ))
+}
+
+bands <- possible_breakpoints %>%
+  rename(x = alpha, y = n_sel_plots) %>%
+  nest(data = -band) %>%
+  mutate(polys = purrr::map(data, lag_polys)) %>%
+  unnest(polys)
+
+mb <- crossing(x = c(2.5, 5, 7.5), y = 10^(seq(-4, 5))) %>% mutate(z = x*y) %>% `[`("z") %>% unlist() %>% as.numeric
+
+band_labels <- tibble(
+  y = c(3, 5.75, 8.25, 10.5),
+  x = min(alphas),
+  label = c("2-4", "5-7", "7-9", "10+ Interesting panels")
+)
+
+ggplot() +
+  geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
+  geom_point(aes(x = alpha, y = n_sel_plots),data = prior_pred_mean, alpha = .05) +
+  geom_line(aes(x = alpha, y = n_sel_plots), data = model_df, color = "blue", size = 1) +
+  scale_x_log10(name = expression(alpha), breaks = c(0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000), 
+                minor_breaks = mb, 
+                labels = 10^(seq(-3, 4))) +
+  geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
+  coord_cartesian(xlim = range(alphas)) + 
+  scale_y_continuous(name = "Average number of panels with >1 selection, with 36 evaluations", breaks = 1:100)
 @
 
-\svp{Under the proposed method, our first step would be to assess the expected number of null panels which would attract attention. }
+\svp{
+We divide the range of the expectation into bands covering 2-3 panels: 2-4, 5-7, 7-9, and 10+ panels. Our lineups tend to have between 6 and 7 null plots selected, so a reasonable choice for $\alpha$ is $0.25$, which is in the middle of the 5-7 band in \autoref{fig:example-alpha-curve}. 
+The visual p-value for the lineup in \autoref{fig:example-plot}(a), under the Beta-Binomial mixture model, is \Sexpr{new_vispval}; while this is still significant at the 0.05 level, it is not nearly as small as the p-value computed under the Binomial model.
+When we consider the actual results of the experimental evaluation of \autoref{fig:example-plot}(a), the p-value computed using the mixture model is much more plausible: the data plot is clearly the most favored of all of the panels in the lineup, but it is not overwhelmingly significant; at least one other panel is almost as popular, and overall, null panels were still selected more frequently than the data panel. 
+This suggests that p-values generated using the Beta-Binomial mixture model are better calibrated than those generated by the Binomial model: by accounting for the underlying perceptual processes, we can produce a more accurate method for conducting visual inference. 
+}
 
+\svp{XXX this still needs a lot of work, but the rough outline is at least there}
 
 \section{Discussion}
 
