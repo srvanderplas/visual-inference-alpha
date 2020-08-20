@@ -554,9 +554,9 @@ In most cases, however, only one or two possible values for the number of data p
 
 % \svp{XXX advantages of this approach - sufficiently flexible and adaptable, but without the numeric instability.}
 % \svp{XXX Another advantage is that we avoid the numerical instability inherent in estimating alpha with many 0-count panels. We'll discuss the extremely small $\alpha$ case corresponding to 0-1 interesting null plots at the end of the section}
-<<vis-p-val-sensitivity-initial2, fig.cap = "\\hh{XXX needs to be adjusted too} Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
+<<vis-p-val-sensitivity-initial2, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model, for a $m=20$ panel lineup with $K=30$ evaluations. Data picks which result in ambiguous results under the discretized bands of $\\alpha$ values are highlighted in red. At any particular $\\alpha$ level, there are only a few values which result in an inconclusive results.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
-data_breaks <- 1:20
+data_breaks <- 1:30
 
 cuts <- c(-Inf, .02, .05, .1, .35, 1, 10, Inf)
 cuts <- c(-Inf, possible_breakpoints$alpha, Inf)
