@@ -11,7 +11,7 @@
 
 \usepackage{anyfontsize}% remove font warnings
 \usepackage{subcaption}  % an alternative package for sub figures
-\newcommand{\subfloat}[2][need a sub-caption]{\subcaptionbox{\normalsize #1}{#2}}
+\renewcommand{\subfloat}[2][need a sub-caption]{\subcaptionbox{\normalsize #1}{#2}}
 % --- Editing ------------------------------------------------------------------
 
 \newcommand{\hh}[1]{{\textcolor{orange}{#1}}}
