@@ -185,18 +185,18 @@ Thus, in Scenario 3, which is the most common lineup experiment scenario, it is 
 
 Scenario 3 is the primary motivation for the model which we will develop in the next section: while we cannot consider the panels in each lineup as equally likely to be selected, we can model the individual selection probabilities using a hierarchical model.
 
-<<scenarios, eval = T, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Illustrations of scenarios 1 and 2. Left column shows what three different subjects would see under scenario 1, and the right column shows what three different subjects would see under scenario 2. In scenario 1, all nulls and data plots are different, while in scenario 2 only the nulls differ.  (Scenario 3 would have all three lineups the same.) The location of the data plot may vary from one subject to another.">>=
+<<scenarios, eval = T, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Illustrations of scenarios 1 and 2. Left column shows what three different evaluators would see under scenario 1, and the right column shows what three different evaluators would see under scenario 2. In scenario 1, all nulls and data plots are different, while in scenario 2 only the nulls differ.  (Scenario 3 would have all three lineups the same.) The location of the data plot may vary from one evaluator to another.">>=
 set.seed(2020)
 df <- tibble(x=runif(50)) %>%
   mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
   mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
                      (x-0.5) - 5 + rnorm(50)))
 l1 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "Subject 1")
+  mutate(subject = "evaluator 1")
 l2 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "Subject 2")
+  mutate(subject = "evaluator 2")
 l3 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "Subject 3")
+  mutate(subject = "evaluator 3")
 l <- bind_rows(l1, l2, l3)
 p1 <- ggplot(l, aes(x, y1)) +
   geom_point() +
@@ -212,19 +212,19 @@ df <- tibble(x=runif(50)) %>%
   mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
                      (x-0.5) - 5 + rnorm(50)))
 l1 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "Subject 1")
+  mutate(subject = "evaluator 1")
 df <- tibble(x=runif(50)) %>%
   mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
   mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
                      (x-0.5) - 5 + rnorm(50)))
 l2 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "Subject 2")
+  mutate(subject = "evaluator 2")
 df <- tibble(x=runif(50)) %>%
   mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
   mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
                      (x-0.5) - 5 + rnorm(50)))
 l3 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "Subject 3")
+  mutate(subject = "evaluator 3")
 l <- bind_rows(l1, l2, l3)
 p2 <- ggplot(l, aes(x, y1)) +
   geom_point() +
