@@ -108,16 +108,19 @@ formal protocols for \emph{visual inference}, \svp{using graphical displays to t
 
 Visual inference \dc{builds from considering data plots} to \dc{be} visual statistics: charts are, after all, a quantity computed from values in a sample of data. 
 
-In order to test whether a chart shows a visually significant result, we can use the same \dc{machinery} used by randomization tests: construct a method to generate data consistent with the null hypothesis, such as using randomization or drawing samples from a model consistent with the null hypothesis, generate many copies of the test statistic (in this case, the plot), and see where the \dc{observed} statistic falls in the distribution of artificially generated quantities. \dc{The conceptual framework was described in \citet{buja:2009}), who introduced two protocols: a Rorschach and a lineup. Figure \ref{fig:typesoflineups} illustrates these.} In a Rorschach all plots are null plots, and the \hh{Rorschach's main} purpose is to assess the \hh{extent of visual} variation that occurs in data generated  by the null mechanism.
+In order to test whether a chart shows a visually significant result, we can use the same \dc{machinery} used by randomization tests: 
+(1) construct a method to generate data consistent with the null hypothesis, such as using randomization or drawing samples from a model consistent with the null hypothesis, (2) generate many copies of the test statistic (in this case, the plot), and (3) see where the \dc{observed} statistic falls in the distribution of artificially generated quantities.
+\dc{The conceptual framework was described in \citet{buja:2009}), who introduced two protocols: a Rorschach and a lineup. Figure \ref{fig:typesoflineups} illustrates these.} In a Rorschach all plots are null plots, and the \hh{Rorschach's main} purpose is to assess the \hh{extent of visual} variation that occurs in data generated  by the null mechanism.
 
 An assembly of several null plots with a target (or data) plot is called a \emph{lineup}, \hh{named} after the \hh{law-enforcement} procedure  to line up a  suspect among a set of innocents  to check if a victim can identify the suspect as the  perpetrator of the crime. 
-\hh{In its visual version, } lineups are typically composed of $m-1$ ``null" plots (generated under the null hypothesis) and one data plot containing the \dc{observed} data. \hh{This lineup is also called a  one target lineup; two-target lineups have been introduced in  \citet{vanderplas:2017}. Two-target lineups} can be used to test the visual salience of two competing effects. Technically, \hh{this makes} the Rorschach \hh{protocol a zero-target} lineup.
+\hh{In its visual version, } lineups are typically composed of $m-1$ ``null" plots (generated under the null hypothesis) and one data plot containing the \dc{observed} data. 
+%\hh{This lineup is also called a  one target lineup; two-target lineups have been introduced in  \citet{vanderplas:2017}. Two-target lineups} can be used to test the visual salience of two competing effects. Technically, \hh{this makes} the Rorschach \hh{protocol a zero-target} lineup.
 
 With numerical statistics, there is a natural ordering to \dc{the computed numerical quantities. With} plots, though, we must run each statistic through another \dc{process: evaluation} by the visual system, or a facsimile thereof
 %\footnote{Cite Giora's Deep Learning work, \url{http://giorasimchoni.com/deep_visual_inference.html}}) 
 in order to evaluate significance. 
 % \svp{XXX add some analogy to functions of data as inputs to a statistical test?}
-During this evaluation process, the user selects one or more plots from the lineup which are ``different" in some way, \dc{which may or may not be prescribed}.
+During this evaluation process, the user selects one or more plots from the lineup which are ``different" in some way. This choice  \dc{may or may not} be based on a feature under investigation by the test.
 % TODO: explain different lineup scenarios here? Not sure if this is the best place for it, or if it's necessary at all
 
 Typically, graphical tests utilize a service like Amazon Mechanical Turk~\citep{turk} to acquire multiple evaluations of the same lineup.
