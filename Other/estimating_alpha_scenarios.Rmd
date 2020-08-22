@@ -1,0 +1,46 @@
+---
+title: "Exploring Options for Alpha Estimation"
+author: "Susan Vanderplas"
+date: "8/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+Main factors in estimating $\alpha$:
+
+- One-target lineup vs. Rorschach lineup
+  - Data plot: does it count as a null plot?
+  - Which distribution to compare to? $m=19$ or $m=20$, $K=K$ or $K=(K-\#$ data plot selections$)$?
+- Can we estimate from a single lineup, or do we need many?
+- Type of estimation: visual, numerical optimization (quasi-method-of-moments), or ML?
+
+
+***
+
+In practice, we can envision several different scenarios:
+
+1. Run a pilot study of several Rorschach lineups    
+In this scenario, we would use $m=20$ and ensure exactly $K$ evaluations. There are a couple of options once the pilot data is collected:
+
+    a. Take the average number of panels with $c_i > c$ selections, then optimize numerically using the expected number of panels with $c_i > c$ selections to determine $\hat\alpha$. 
+    b. Take the most typical range of the number of null plots with $c_i > c$ selections. Use visual estimation method to select $\hat\alpha$
+        - at the lower end of the range (overly conservative)
+        - in the middle of the range
+        - at the upper end of the range (walking the line between well calibrated and liberal, depending on worst-case or best-case scenario)
+    c. Use the (unstable) ML estimator for the Multinomial-Dirichlet
+
+2. Use a **set** of one-target lineups as if they were Rorschach lineups (e.g. operate under $H_0$: there is no difference between the null and data plot)    
+Under this scenario, the worst-case possibility (for $\hat\alpha$) is that the data plots are radically different than the null plots, which would lead to under-estimation of $\alpha$ and a higher p-value; when the $\hat\alpha$ is later used for p-value calculation, the p-value would be nonsignificant (in the pathological case). More commonly, though, this would just lead to an overly conservative estimate so long as there is significant mass on the null plots. The best-case possibility (for $\hat\alpha$) is that the data plots are not radically different than the null plots, so the number of plots identified is accurate and the value of $\hat\alpha$ is accurate.     
+*This scenario is basically useless if there are a lot of selections of the data plot, but may be more useful in e.g. the scenario like the example in the paper, where the number of data plot selections isn't* that *overwhelming*. 
+
+3. Use a **set** of one-target lineups, excluding the data plot from consideration and working with the remaining nulls. Here, $K$ cannot be controlled (because participants would have selected from $m=20$ plots, one of which is a data plot, and $K_{null} < K$). 
+
+    a. Separately estimate each $\hat\alpha_j$ for lineups $j=1, ...$ using numerical optimization and pool the estimates somehow (mean? median? mode?), using $m=19$ for the estimation process
+    b. Separately estimate each $\hat\alpha_j$ for lineups $j=1, ...$ using numerical optimization and pool the estimates somehow (mean? median? mode?), using $m=20$ for the estimation process. This will slightly under-estimate the number of null plot selections (x vs 20/19*x), but may make for easier comparisons/generalizations.
+    c. Group plots into rough categories based on total number of null plot identifications. Generate several separate curves, and use the visual estimation method on each set of plots with roughly similar number of null plot identifications. Pool the $\hat\alpha$s to get a consensus estimate, using $m=19$ for the estimation process.
+    d. Group plots into rough categories based on total number of null plot identifications. Generate several separate curves, and use the visual estimation method on each set of plots with roughly similar number of null plot identifications. Pool the $\hat\alpha$s to get a consensus estimate, using $m=20$ for the estimation process. This will slightly under-estimate the number of null plot selections (x vs 20/19*x), but may make for easier comparisons/generalizations.
+    
+4. Re-evaluate a set of one-target lineups, with the data plot blanked out. This is much the same as (3) except that $K$ can be controlled, so the expected number of panels selected can be computed based on the lineup evaluations, pooled, and only one $\hat\alpha$ estimate needs to be generated (visually or numerically). Best option would be to compare against $m=19$. 
