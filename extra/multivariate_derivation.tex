@@ -14,23 +14,23 @@ We model $\bm c \sim \text{Multinomial}(\bm\theta)$, that is,
 $$p(\bm c | \bm \theta) = \frac{K!}{\prod_{i=1}^m c_i!} \prod_{i=1}^m \theta_i^{c_i}$$
 
 We model $\bm \theta  \sim \text{Beta}(\bm \alpha)$, that is, 
-$$p(\bm \theta) \sim \frac{1}{B(\bm \alpha)} \prod_{i=1}^m\theta_i^{\alpha_i - 1}$$
+$$f(\bm \theta) \sim \frac{1}{B(\bm \alpha)} \prod_{i=1}^m\theta_i^{\alpha_i - 1}$$
 
-As $p(\bm\theta)$ is a prior distribution, we might instead write it as $\pi(\bm\theta)$ or even $\pi(\bm\theta|\bm\alpha)$ to emphasize the addition of the hyperparameter $\bm\alpha$. $\bm\alpha = (\alpha_1, ..., \alpha_m)$ is the concentration hyperparameter for our Beta prior. 
+As $f(\bm\theta)$ is a prior distribution, we might instead write it as $\pi(\bm\theta)$ or even $\pi(\bm\theta|\bm\alpha)$ to emphasize the addition of the hyperparameter $\bm\alpha$. $\bm\alpha = (\alpha_1, ..., \alpha_m)$ is the concentration hyperparameter for our Beta prior. 
 
-For Bayesian inference, we would typically be interested in $\bm\theta$. In this case we stop short of calculating $p(\bm\theta|\bm c)$ because we don't actually care about $\bm\theta$ - we're less interested in the panel selection probabilities than we are in adding additional flexibility to our model by including a hyperparameter. Thus, we're much closer to a mixture model than to actual Bayesian inference here, even if I did start out using full-on Bayes. 
+For Bayesian inference, we would typically be interested in $\bm\theta$. In this case we stop short of calculating $f(\bm\theta|\bm c)$ because we don't actually care about $\bm\theta$ - we're less interested in the panel selection probabilities than we are in adding additional flexibility to our model by including a hyperparameter. Thus, we're much closer to a mixture model than to actual Bayesian inference here, even if I did start out using full-on Bayes. 
 
 Just as an explanation of how Bayesian inference would work...
 
 Basic Bayes' theorem says $P(A|B) = \displaystyle\frac{P(B|A)P(A)}{P(B)}$. So in this case, we would write 
 \begin{align*}
-p(\bm\theta | \bm c) &= \frac{p(\bm c|\bm\theta)p(\bm \theta)}{\int p(\bm c|\bm \theta)p(\bm\theta) d\bm\theta}\\
+f(\bm\theta | \bm c) &= \frac{p(\bm c|\bm\theta)f(\bm \theta)}{\int p(\bm c|\bm \theta)f(\bm\theta) d\bm\theta}\\
 &\propto \left(\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\prod_{i=1}^m\theta_i^{c_i}\right)\left(\frac{1}{B(\bm\alpha)}\prod_{i=1}^m\theta_i^{\alpha_i - 1}\right)
 \end{align*}
 Where the normalizing constant A is defined such that $$\frac{1}{A} = \displaystyle\int\left(\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\prod_{i=1}^m\theta_i^{c_i}\right)\left(\frac{1}{B(\bm\alpha)}\prod_{i=1}^m\theta_i^{\alpha_i - 1}\right)d\bm\theta $$
 
 \begin{align*}
-p(\bm\theta | \bm c) &\propto \left(\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\prod_{i=1}^m\theta_i^{c_i}\right)\left(\frac{1}{B(\bm\alpha)}\prod_{i=1}^m\theta_i^{\alpha_i - 1}\right) \\
+f(\bm\theta | \bm c) &\propto \left(\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\prod_{i=1}^m\theta_i^{c_i}\right)\left(\frac{1}{B(\bm\alpha)}\prod_{i=1}^m\theta_i^{\alpha_i - 1}\right) \\
 &\propto\underbrace{ \left(\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\frac{1}{B(\bm\alpha)}\right)}_{\text{Constant with respect to }\bm\theta}\prod_{i=1}^m \theta_i^{c_i + \alpha_i - 1}\\
 &\propto \prod_{i=1}^m \theta_i^{c_i + \alpha_i - 1} 
 \end{align*}
@@ -42,13 +42,13 @@ But, since we only care about $\bm c$ and $\bm \alpha$, we would just want to in
 So, using $\bm x$ to represent a specific set of observed panel selection counts, where $\bm c$ represents the random variable, we use the law of total probability
 
 \begin{align*}
-\frac{1}{A} = p(\bm c) & = \int p(\bm c | \bm\theta) p(\bm\theta) d\bm\theta\\
+\frac{1}{A} = p(\bm c) & = \int p(\bm c | \bm\theta) f(\bm\theta) d\bm\theta\\
 &=\left(\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\frac{1}{B(\bm\alpha)}\right) \underbrace{\int \prod_{i=1}^m \theta_i^{c_i + \alpha_i - 1}d\bm\theta}_{\text{Beta distribution, integrates to }B(\bm\alpha + \bm c)}\\
 &= \frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\frac{B(\bm\alpha + \bm c)}{B(\bm\alpha)}
 \end{align*}
 
-For the sake of completeness, our normalizing constant for $p(\bm\theta | \bm c)$ is $$\tilde A = \frac{\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\frac{1}{B(\bm\alpha)}}{\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\frac{B(\bm\alpha + \bm c)}{B(\bm\alpha)}} = \frac{1}{B(\bm \alpha + \bm c)},$$
-which means that $$p(\bm\theta | \bm c) = \frac{1}{B(\bm \alpha + \bm c)} \prod_{i=1}^m \theta_i^{c_i + \alpha_i - 1}$$
+For the sake of completeness, our normalizing constant for $f(\bm\theta | \bm c)$ is $$\tilde A = \frac{\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\frac{1}{B(\bm\alpha)}}{\frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!}\frac{B(\bm\alpha + \bm c)}{B(\bm\alpha)}} = \frac{1}{B(\bm \alpha + \bm c)},$$
+which means that $$f(\bm\theta | \bm c) = \frac{1}{B(\bm \alpha + \bm c)} \prod_{i=1}^m \theta_i^{c_i + \alpha_i - 1}$$
 or, in other words, the posterior distribution for $\bm\theta$ is $\text{Beta}(\bm\alpha + \bm c)$
 
 
