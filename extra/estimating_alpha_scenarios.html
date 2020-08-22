@@ -406,6 +406,30 @@ Under this scenario, the worst-case possibility (for <span class="math inline">\
 </ol></li>
 <li><p>Re-evaluate a set of one-target lineups, with the data plot blanked out. This is much the same as (3) except that <span class="math inline">\(K\)</span> can be controlled, so the expected number of panels selected can be computed based on the lineup evaluations, pooled, and only one <span class="math inline">\(\hat\alpha\)</span> estimate needs to be generated (visually or numerically). Best option would be to compare against <span class="math inline">\(m=19\)</span>.</p></li>
 </ol>
+<hr />
+<p>Define <span class="math inline">\(\bf c = (\tilde{\bf c}, c_t)'\)</span>, where <span class="math inline">\(c_t\)</span> is the number of target plot selections (the panels are exchangeable) and <span class="math inline">\(\bf\alpha = (\tilde{\bf\alpha},\alpha_t)\)</span> where <span class="math inline">\(\tilde{\bf\alpha} = \alpha \cdot 1_{1\times(m-1)}\)</span> and <span class="math inline">\(\alpha_t = \alpha \cdot 1_{1\times1}\)</span>.</p>
+<p>Let <span class="math inline">\(K = \sum_{i=1}^m c_i\)</span> be the total number of evaluations, and <span class="math inline">\(K - c_t\)</span> be the total number of null plot evaluations. <span class="math display">\[\begin{align}
+f(\bf c_{1\times m}|\bf\alpha_{1\times m}) &amp; = \frac{\left(\sum_{i=1}^m c_i\right)!}{\prod_{i=1}^m c_i!} \frac{B(\alpha + \bf c)}{B(\bf\alpha)}\\
+&amp; = \left(\frac{K!}{\prod_{i=1}^m c_i!}\right)\left(\frac{B(\bf\alpha + \bf c)}{B(\bf\alpha)}\right)
+\end{align}\]</span></p>
+<p>Now, <span class="math display">\[\frac{K!}{\prod_{i=1}^m c_i!} = \frac{K!}{c_t!\cdot\prod_{i=1}^{m-1} c_i!}\cdot\frac{(K-c_t)!}{(K-c_t)!} = \frac{K!}{(K-c_t)!c_t!} \frac{(K-c_t)!}{\prod_{i=1}^{m-1}c_i!} = \binom{K}{c_t}\frac{(K-c_t)!}{\prod_{i=1}^{m-1}c_i!}\]</span></p>
+<p>Also, <span class="math display">\[\begin{align}
+\frac{B(\bf\alpha + \bf c)}{B(\bf\alpha)} &amp;= \frac{\prod_{i=1}^m\Gamma(\alpha + c_i)}{\Gamma(m\alpha + K)}\cdot\frac{\Gamma(m\alpha)}{\prod_{i=1}^m\Gamma(\alpha)}\\
+&amp;=\frac{\prod_{i=1}^m\Gamma(\alpha + c_i)}{\Gamma(m\alpha + K)}\cdot\frac{\Gamma(m\alpha)}{\prod_{i=1}^m\Gamma(\alpha)}\cdot\frac{\Gamma\left((m-1)\alpha + K - c_t\right)}{\Gamma\left((m-1)\alpha + K - c_t\right)}\cdot\frac{\Gamma\left((m-1)\alpha \right)}{\Gamma\left((m-1)\alpha\right)}\\
+&amp; = \frac{\Gamma(\alpha + c_t)\Gamma\left((m-1)\alpha + K - c_t\right)}{\Gamma(m\alpha + K)}\cdot 
+\frac{\Gamma(m\alpha)}{\Gamma(\alpha)\Gamma\left((m-1)\alpha\right)}\cdot
+\frac{\prod_{i=1}^{m-1}\Gamma(\alpha + c_i)}{\Gamma\left((m-1)\alpha + K - c_t\right)}\cdot
+\frac{\Gamma\left((m-1)\alpha\right)}{\prod_{i=1}^{m-1}\Gamma(\alpha)}\\
+&amp; = \frac{B(\alpha + c_t, (m-1)\alpha + K - c_t)}{B(\alpha, (m-1)\alpha)}\frac{B(\tilde\alpha + \tilde{\bf c})}{B(\tilde\alpha)}
+\end{align}\]</span></p>
+<p>So <span class="math display">\[\begin{align}
+f(\bf c_{1\times m}|\bf\alpha_{1\times m}) &amp; = \left(\frac{K!}{\prod_{i=1}^m c_i!}\right)\left(\frac{B(\bf\alpha + \bf c)}{B(\bf\alpha)}\right)\\
+&amp; = \binom{K}{c_t}\frac{(K-c_t)!}{\prod_{i=1}^{m-1}c_i!}\cdot \frac{B(\alpha + c_t, (m-1)\alpha + K - c_t)}{B(\alpha, (m-1)\alpha)}\frac{B(\tilde\alpha + \tilde{\bf c})}{B(\tilde\alpha)}\\
+&amp; = \binom{K}{c_t}\frac{B(\alpha + c_t, (m-1)\alpha + K - c_t)}{B(\alpha, (m-1)\alpha)}\cdot\frac{(K-c_t)!}{\prod_{i=1}^{m-1}c_i!}\frac{B(\tilde\alpha + \tilde{\bf c})}{B(\tilde\alpha)}\\
+&amp; = f(c_t | K, \alpha, (m-1)\alpha) \cdot f(\bf c_{1\times(m-1)} | \alpha_{1\times(m-1)})
+\end{align}\]</span></p>
+<p>That is, conditional on the overall total number of evaluations, the null plot evaluations have a Multinomial-Dirichlet distribution with hyperparameter <span class="math inline">\(\alpha\)</span>, independent of the target plot selections.</p>
+<p>So we can estimate <span class="math inline">\(\alpha\)</span> from the null plot selections, if there are enough null plot selections.</p>
 
 
 
