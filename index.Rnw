@@ -576,30 +576,31 @@ number_panels <- function(alpha, c=1, m = 20, K=30) {
   m/beta(alpha, (m - 1)*alpha)*sum(summation)
 }
 
+sim_interesting_panels <- function(c = m/K, N_points = 10, m = 19, K = 30, point_avg_sims = 10, alphas = alphas) {
+  # Each point (of N_points) is an average of point_avg_sims separate lineups
+  # First, generate all of the lineups and count the number of interesting panels
+  df <- tibble(alpha = alphas, 
+               plot_sels = purrr::map(alpha, sim_lineup_model, 
+                                      N = N_points*point_avg_sims, K = K),
+               interesting_panels = purrr::map(
+                 plot_sels,
+                 ~tibble(n_interesting = colSums(.x > c),
+                         rep = 1:ncol(.x)))
+  ) %>% unnest(interesting_panels)
+  
+  # Then, average the panels together a bit  
+  df2 <- df %>%
+    mutate(point_num = floor(rep/N_points)) %>%
+    group_by(alpha, point_num) %>%
+    summarize(n_interesting = mean(n_interesting))
+}
+
 exp_average <- alphas %>% map_dbl(number_panels, c = interest_threshold)
 
-prior_pred <- tibble(alpha = alphas,
-                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, K = 30)) %>%
-  mutate(
-    sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
-    sel_ordered_long = purrr::map(
-      sel_ordered,
-      ~tibble(idx = rep(1:nrow(.x), times = ncol(.x)),
-              rep = rep(1:ncol(.x), each = nrow(.x)),
-              sels = as.vector(.x, mode = "numeric")))
-  ) %>%
-  select(-plot_sels, -sel_ordered) %>%
-  unnest(cols = c(sel_ordered_long)) %>%
+prior_pred_mean <- sim_interesting_panels(c = interest_threshold, alphas = alphas) %>%
   arrange(alpha) %>%
-  mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
-
-# Calc mean # plots with >=1 selections
-prior_pred_mean <- prior_pred %>%
-  mutate(rep2 = rep %% 10) %>%
-   group_by(alpha, rep2, rep) %>%
-   summarize(n_sel_plots = sum(sels > interest_threshold)) %>%
-   group_by(alpha, rep2) %>%
-   summarize(n_sel_plots = mean(n_sel_plots))
+  mutate(label = sprintf("alpha == %f", alpha) %>% 
+           factor(levels = sprintf("alpha == %f", alphas), ordered = T))
 
 # model <- gam(n_sel_plots ~ s(log(alpha, 10)), bs = "cs", method = "REML", data = prior_pred_mean)
 model_df <- tibble(alpha = alphas, 
@@ -649,7 +650,7 @@ band_labels <- tibble(
 
 ggplot() +
   geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
-  geom_point(aes(x = alpha, y = n_sel_plots),data = prior_pred_mean, alpha = .05) +
+  geom_point(aes(x = alpha, y = n_interesting),data = prior_pred_mean, alpha = .05) +
   geom_line(aes(x = alpha, y = n_sel_plots), data = model_df, color = "blue", size = 1) +
   scale_x_log10(name = expression(alpha), breaks = c(0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000), 
                 minor_breaks = mb, 
@@ -830,12 +831,6 @@ Ideally, we would generate several Rorschach lineups for this step, but for simp
 
 <<example-alpha-curve, fig.cap = "Number of expected panels with more than one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}(a).", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
 set.seed(2401072)
-
-sim_lineup_model <- function(alpha, m = 19, K = 22, N = 50) {
-  theta <- gtools::rdirichlet(1, rep(alpha, m))
-  sels <- rmultinom(N, size = K, prob = theta)
-  sels
-}
 
 alphas <- 10^(seq(-2, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
