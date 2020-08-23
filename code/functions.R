@@ -29,3 +29,11 @@ vis_p_value <- function(C, K, alpha = 1, m = 20){
     mutate(p = purrr::pmap_dbl(., single_p))
   df$p
 }
+
+
+
+sim_lineup_model <- function(alpha, m = 19, K = 22, N = 50) {
+  theta <- gtools::rdirichlet(1, rep(alpha, m))
+  sels <- rmultinom(N, size = K, prob = theta)
+  sels
+}
