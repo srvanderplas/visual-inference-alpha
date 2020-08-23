@@ -871,7 +871,7 @@ Ideally, we would generate several Rorschach lineups for this step, but for simp
 
 <<example-alpha-curve, fig.cap = "Number of expected panels with more than one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}(a).", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
 
-interest_threshold <- 1
+interest_threshold <- 0
 alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
 # Get theoretical function
