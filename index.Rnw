@@ -670,38 +670,43 @@ ggplot() +
 @
 
 \svp{
-Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K$ evaluations. 
-The heuristic we propose for \svp{ad-hoc} estimation of $\alpha$ is as follows:
+Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations. 
+The heuristic we propose for \svp{ad-hoc} estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
 }
 \begin{enumerate}
-\item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $c$. In \autoref{fig:alpha-sim-curve}, $K_0/m_0 = 30/19$, so $c \approx 1.58$). 
-It may be helpful to average the results of several simulations together to reduce the variability and make the underlying trend more visible.
-\hh{The simulation captures the variability around the expected number of `interesting' panels}\svp{.}
-% The expected number of interesting panels is given as the sum of probabilities that each panel is selected more than $c$ times: $\sum_{i=1}^m P(C_i > c)$. See \autoref{eqn:differentPanels} in Appendix \ref{app:expected} for details.
-\svp{Note that this simulation should use $m = m_0$, that is, the number of null panels in the lineup, rather than the total number of panels, and $K_0$, the total number of null panel selections. }
+\item Using a visual display with both simulated values and the expected value for the situation ($c = 1, m_0 = 19, $K_0 = 30$), such as that shown in \autoref{fig:alpha-sim-curve}, determine ranges of interesting null panel counts which correspond to about 4 levels of null panel selection activity. In \autoref{fig:alpha-sim-curve}, these levels are 2-3, 4-5, 6-7, and 8+ panels with more than $c=1$ selection.
+% Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $c$. In \autoref{fig:alpha-sim-curve}, $K_0/m_0 = 30/19$, so $c \approx 1.58$). 
+% It may be helpful to average the results of several simulations together to reduce the variability and make the underlying trend more visible.
+% \hh{The simulation captures the variability around the expected number of `interesting' panels}\svp{.}
 
-\item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the \svp{expected number of panels with more than $c$ selections into approximately equal size bands (with the exception of the case where the expected number of panels selected is equal to one; this case will be handled separately). }
-In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; for $K_0=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
+If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \autoref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
 
-If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable. This possibility will be discussed in more detail below; for now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
-\item Using the simulated selected panel counts, find the band which is most consistent with the number of null panels selected more than $c$ times in the lineup. For instance, if there were four null panels with more than $c$ selections, we would use a range of 4-5 panels. 
+\item Using the simulated selected panel counts, find the band which is most consistent with the number of null panels selected more than $c$ times in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels. 
+
 Use of a range instead of the single point estimate is intended to account for some of the variability resulting from the use of a single lineup with non-deterministic $K_0$ null panel evaluations. 
 In a simulation, it is easy to increase $N$ until the results no longer change; this is expensive and much more time consuming when using human evaluations and setting $K$ instead of $K_0$ in the experimental design. 
 
-\item Select an $\hat\alpha$ value corresponding to the selected band. \svp{For instance, if our pilot study showed that} the lineups typicaly contain 2-3 interesting null panels, we might use $\hat\alpha = 0.045$. 
-% \item To generate a visual p-value, it may be helpful to create a sensitivity plot similar to \autoref{fig:vis-p-value-sensitivity2}; this plot shows the p-value generated by a range of $\hat\alpha$ values, for a lineup evaluated $K$ times. Each panel corresponds to a range of $\hat\alpha$ values generated when there are a certain number of interesting null plots. In most cases, it is likely that the number of data plot picks will result in a clear determination of significance; data plot picks highlighted in red result in an ambiguous result. 
+\item Select an $\hat\alpha$ value corresponding to the selected band. \svp{For instance, if our selected lineup contained 3 interesting null panels}, we might use $\hat\alpha = 0.075$, as it approximately corresponds to $Z_c = 3$; we should compare to $\alpha = 0.02$ and $\alpha=0.1$ (the approximate outer range of $\alpha$ for our band) to get a sense of the sensitivity of our p-value to $\alpha$.
+
+\item A plot such as the one shown in \autoref{fig:vis-p-val-sensitivity-initial2} may be helpful when assessing the sensitivity of the visual p-value to different values of $\alpha$ in each band. \autoref{fig:vis-p-val-sensitivity-initial2} is a segmented version of \autoref{fig:vis-p-val-sensitivity-initial}; each panel corresponds to the bands of interesting panel counts selected in step 1. 
+
+Locate the relevant panel of the plot, and, using the number of target panel selections, determine whether the visual p-value calculation is conclusive for every $\alpha$ in the panel. If it is, then it is safe to draw a strong conclusion; if not, it may be useful to use a secondary experiment to more precisely estimate $\hat\alpha$, as discussed in \autoref{sec:rorschach-est-alpha}. 
+
+In this case, we have 10 target selections ($K = 40, $K_0 = 30$), and 3 null plots of 19 which were selected more than once. This corresponds to a visual p-value that will not be significant for any range of $\alpha$ in our selected band, so we do not need to run any secondary experiments to more precisely estimate $\alpha$. 
+
 \end{enumerate}
 
-<<vis-p-val-sensitivity-initial2, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model, for a $m=20$ panel lineup with $K=30$ evaluations. Data picks which result in ambiguous results under the discretized bands of $\\alpha$ values are highlighted in red. At any particular $\\alpha$ level, there are only a few values which result in an inconclusive results.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
+<<vis-p-val-sensitivity-initial2, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model, for a $m=20$ panel lineup with $K=40$ evaluations. Data picks which result in ambiguous results under the discretized bands of $\\alpha$ values are highlighted in red. At any particular $\\alpha$ level, there are only a few values which result in an inconclusive results.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
-data_breaks <- 1:30
+data_breaks <- 1:40
+K <- 40
+m <- 20
 
 cuts <- c(-Inf, .02, .05, .1, .35, 1, 10, Inf)
 cuts <- c(-Inf, possible_breakpoints$alpha, Inf)
 labels <- c("0-1 Interesting null panels", "2-3 Interesting null panels", "4-5 panels", "6-7 panels", "8+ Interesting null panels")
 
-pv <- tidyr::crossing(alpha = alphas, C = data_breaks, 
-                      K = 30) %>%
+pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = K) %>%
   mutate(p = vis_p_value(C, K, alpha)) %>%
   mutate(
      panel = cut(alpha, breaks = cuts, labels = labels)
@@ -713,8 +718,7 @@ pv <- tidyr::crossing(alpha = alphas, C = data_breaks,
           ifelse(all(p < 0.05), "indicates significance",
           "is inconclusive")
          )
-   ) #%>%
-  # filter(panel != "0-1 Interesting panels")
+   )
 
 labels_data <- pv %>%
    group_by(panel) %>%
@@ -730,13 +734,12 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
                  expand = expansion(mult = c(0.05,0.25))) + 
   geom_hline(yintercept = 0.05, color = "black") +
   ggrepel::geom_label_repel(
-#     data = labels_data %>% filter(type=="is inconclusive"), 
      data = labels_data %>% group_by(panel, type) %>%
         filter(((type == "indicates no significance") & (C == max(C))) | ((type == "indicates significance") & (C == min(C)))),
      aes(label = C), color = "grey30", hjust = 0, nudge_x = 0.05, size = 3, alpha = 0.8,
          min.segment.length= 0, label.padding = 0.1, direction = "y") +
    theme_bw() +
-   geom_label(label = "# data picks\n (out of K = 30)", 
+   geom_label(label = paste0("# data picks\n (out of K = ", K, ")"), 
               aes(x = .0010, y = .09), size = 3,
          data = labels_data[1,], hjust = 0, vjust = 1) +
    scale_colour_manual("Number of data picks ...",
@@ -746,7 +749,8 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 @
 
 
-\svp{In \autoref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance at the $p=0.05$ level. 
+\svp{
+In \autoref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance at the $p=0.05$ level.
 Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for nonsignificance and significance.
 In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options. 
 The inexpensive, conservative approach is to declare any inconclusive results to be nonsignificant, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
@@ -772,7 +776,7 @@ In a Rorschach lineup, however, there are $m$ null panels which may be selected 
 }
 Studies using visual inference may be relatively small (that is, with few participant lineup evaluations), which would make a formal secondary study to precisely determine $\hat\alpha$ cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:differentPanels}.
 
-\subsection{Degenerate null generation methods}
+\subsection{Degenerate null generation methods}\label{sec:bad-null}
 \svp{When only one null plot in a Rorschach lineup is visually interesting, we encounter two problems.
 First, we cannot estimate $\hat\alpha$ with any real precision (visually or numerically), because many different $\alpha$ values below $\alpha\approx 0.025$ could give rise to a situation where only one panel is visually interesting.
 Second, if there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels. The number of interesting panels in the data plot would depend on whether the interesting null plot is the null replaced by a data plot. 
