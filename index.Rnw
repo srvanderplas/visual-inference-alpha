@@ -747,7 +747,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 
 
 \svp{In \autoref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance at the $p=0.05$ level. 
-Due to the discretization of the expected number of panels with $>c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for nonsignificance and significance.
+Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for nonsignificance and significance.
 In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options. 
 The inexpensive, conservative approach is to declare any inconclusive results to be nonsignificant, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
 Alternately, the experimenter could use the method described in \autoref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results.
