@@ -576,7 +576,7 @@ number_panels <- function(alpha, c=1, m = 20, K=30) {
   m/beta(alpha, (m - 1)*alpha)*sum(summation)
 }
 
-sim_interesting_panels <- function(c = m/K, N_points = 10, m = 19, K = 30, point_avg_sims = 10, alphas = alphas) {
+sim_interesting_panels <- function(c = m/K, N_points = 5, m = 19, K = 30, point_avg_sims = 10, alphas = alphas) {
   # Each point (of N_points) is an average of point_avg_sims separate lineups
   # First, generate all of the lineups and count the number of interesting panels
   df <- tibble(alpha = alphas, 
@@ -585,12 +585,12 @@ sim_interesting_panels <- function(c = m/K, N_points = 10, m = 19, K = 30, point
                interesting_panels = purrr::map(
                  plot_sels,
                  ~tibble(n_interesting = colSums(.x > c),
-                         rep = 1:ncol(.x)))
+                         rep = 1:ncol(.x) - 1))
   ) %>% unnest(interesting_panels)
   
   # Then, average the panels together a bit  
   df2 <- df %>%
-    mutate(point_num = floor(rep/N_points)) %>%
+    mutate(point_num = (rep - (rep %% point_avg_sims))/N_points) %>%
     group_by(alpha, point_num) %>%
     summarize(n_interesting = mean(n_interesting))
 }
