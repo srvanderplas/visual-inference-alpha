@@ -565,9 +565,9 @@ svp{It may be helpful to have a number of different individuals evaluate these l
 \end{enumerate}
 
 <<alpha-sim-curve, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\autoref{eqn:differentPanels}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
-set.seed(2401072)
+set.seed(2501072)
 interest_threshold <- 1
-alphas <- 10^(seq(-3.6, 2, by = .01)) # seq(0.001, 0.5, by = .001)
+alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
 number_panels <- function(alpha, c=1, m = 20, K=30) {
   x <- (floor(c) + 1):K
@@ -595,28 +595,7 @@ sim_interesting_panels <- function(c = m/K, N_points = 10, m = 19, K = 30, point
     summarize(n_interesting = mean(n_interesting))
 }
 
-exp_average <- alphas %>% map_dbl(number_panels, c = interest_threshold)
-
-prior_pred_mean <- sim_interesting_panels(c = interest_threshold, alphas = alphas) %>%
-  arrange(alpha) %>%
-  mutate(label = sprintf("alpha == %f", alpha) %>% 
-           factor(levels = sprintf("alpha == %f", alphas), ordered = T))
-
-# model <- gam(n_sel_plots ~ s(log(alpha, 10)), bs = "cs", method = "REML", data = prior_pred_mean)
-model_df <- tibble(alpha = alphas, 
-                   n_sel_plots = exp_average
-                   # n_sel_plots = predict(model, newdata = tibble(alpha = alphas), type = "response")
-)
-
-possible_breakpoints <- model_df %>% 
-  filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
-  mutate(tmp = floor(n_sel_plots*2)/2, dist = abs(n_sel_plots - tmp)) %>%
-  group_by(tmp) %>%
-  filter(dist == min(dist)) %>%
-  filter(tmp %in% c(1.5, 3.5, 5.5, 7.5)) %>%
-  ungroup() %>%
-  mutate(band = floor(.5 + row_number()/2))
-
+# Create polygons that connect a function to the y and x axes
 lag_polys <- function(data) {
   x = data$x
   y = data$y
@@ -634,20 +613,52 @@ lag_polys <- function(data) {
   ))
 }
 
+# Get theoretical function
+model_df <- tibble(alpha = alphas, 
+                   n_sel_plots = alphas %>% map_dbl(number_panels, c = interest_threshold)
+)
+
+# Get simulated data
+prior_pred_mean <- sim_interesting_panels(c = interest_threshold, alphas = alphas) %>%
+  arrange(alpha) %>%
+  mutate(label = sprintf("alpha == %f", alpha) %>% 
+           factor(levels = sprintf("alpha == %f", alphas), ordered = T))
+
+# Get possible breakpoints for alphas and panels
+panel_sel_breaks <- c(1.5, 3.5, 5.5, 7.5)
+possible_breakpoints <- model_df %>% 
+  filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | 
+           round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
+  mutate(tmp = floor(n_sel_plots*2)/2, dist = abs(n_sel_plots - tmp)) %>%
+  group_by(tmp) %>%
+  filter(dist == min(dist)) %>%
+  filter(tmp %in% panel_sel_breaks) %>%
+  ungroup() %>%
+  mutate(band = floor(.5 + row_number()/2))
+
+# polygons for the grey-and-white bands
 bands <- possible_breakpoints %>%
   rename(x = alpha, y = n_sel_plots) %>%
   nest(data = -band) %>%
   mutate(polys = purrr::map(data, lag_polys)) %>%
   unnest(polys)
 
-mb <- crossing(x = c(2.5, 5, 7.5), y = 10^(seq(-4, 5))) %>% mutate(z = x*y) %>% `[`("z") %>% unlist() %>% as.numeric
+# minor break points
+mb <- crossing(x = c(2.5, 5, 7.5), y = 10^(seq(-4, 5))) %>% 
+  mutate(z = x*y) %>% 
+  `[`("z") %>% 
+  unlist() %>% 
+  as.numeric
 
+# text labels for polygon bands
+band_label_pos <- panel_sel_breaks + 1 # this is a good default but may need customizing
 band_labels <- tibble(
-  y = c(2.5, 4.5, 6.5, 8.5),
+  y = band_label_pos,
   x = min(alphas),
   label = c("2-3", "4-5", "6-7", "8+ Interesting panels")
 )
 
+# Finally, the actual plot
 ggplot() +
   geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
   geom_point(aes(x = alpha, y = n_interesting),data = prior_pred_mean, alpha = .05) +
