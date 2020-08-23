@@ -798,10 +798,10 @@ ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) +
 Using a threshold of $c=1$,  six of 19 null plots \hh{were} selected, so we might expect somewhere between \hh{XXX let's run the simulation for $K = 22$ and $m = 19$; XXX for $\alpha$ it doesn't matter whether we have dimension 19 or 20 - I'll put that piece of math into the appendix} 6 and 7 null panels to be selected in a Rorschach lineup.
 Ideally, we would generate several Rorschach lineups for this step, but for simplicity, we will work off of a single one-target lineup for this example; a corresponding Rorschach lineup is shown in \autoref{fig:example-plot}(b) but was not evaluated experimentally.}
 
-<<example-alpha-curve, fig.cap = "Generated discretized heuristic plot for the lineup shown in \\autoref{fig:example-plot}(a).", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
+<<example-alpha-curve, fig.cap = "Number of expected panels with more than one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}(a).", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
 set.seed(2401072)
 
-sim_lineup_model <- function(alpha, m = 20, K = 36, N = 50) {
+sim_lineup_model <- function(alpha, m = 19, K = 22, N = 50) {
   theta <- gtools::rdirichlet(1, rep(alpha, m))
   sels <- rmultinom(N, size = K, prob = theta)
   sels
@@ -809,7 +809,7 @@ sim_lineup_model <- function(alpha, m = 20, K = 36, N = 50) {
 
 alphas <- 10^(seq(-2, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
-number_panels <- function(alpha, c=1, m = 20, K=36) {
+number_panels <- function(alpha, c=0, m = 19, K=22) {
   x <- (c + 1):K
   summation <- choose(K, x) * beta(x + alpha, K - x + (m - 1)*alpha)
   
@@ -888,6 +888,7 @@ band_labels <- tibble(
 )
 
 ggplot() +
+  ggtitle("Simulation based on K = 22 evaluations and m = 19 (null) plots") + 
   geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
   geom_point(aes(x = alpha, y = n_sel_plots),data = prior_pred_mean, alpha = .05) +
   geom_line(aes(x = alpha, y = n_sel_plots), data = model_df, color = "blue", size = 1) +
@@ -896,7 +897,7 @@ ggplot() +
                 labels = 10^(seq(-3, 4))) +
   geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
   coord_cartesian(xlim = range(alphas)) + 
-  scale_y_continuous(name = "Average number of panels with >1 selection, with 36 evaluations", breaks = 1:100)
+  scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100)
 @
 
 \svp{
