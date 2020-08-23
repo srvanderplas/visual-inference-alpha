@@ -870,99 +870,69 @@ Using a threshold of $c=1$,  six of 19 null plots \hh{were} selected, so we migh
 Ideally, we would generate several Rorschach lineups for this step, but for simplicity, we will work off of a single one-target lineup for this example; a corresponding Rorschach lineup is shown in \autoref{fig:example-plot}(b) but was not evaluated experimentally.}
 
 <<example-alpha-curve, fig.cap = "Number of expected panels with more than one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}(a).", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
-set.seed(2401072)
 
-alphas <- 10^(seq(-2, 2, by = .01)) # seq(0.001, 0.5, by = .001)
+interest_threshold <- 1
+alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
-number_panels <- function(alpha, c=0, m = 19, K=22) {
-  x <- (c + 1):K
-  summation <- choose(K, x) * beta(x + alpha, K - x + (m - 1)*alpha)
-  
-  m/beta(alpha, (m - 1)*alpha)*sum(summation)
-}
-
-exp_average <- alphas %>% map_dbl(number_panels)
-
-prior_pred <- tibble(alpha = alphas,
-                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100)) %>%
-  mutate(
-    sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
-    sel_ordered_long = purrr::map(
-      sel_ordered,
-      ~tibble(idx = rep(1:nrow(.x), times = ncol(.x)),
-              rep = rep(1:ncol(.x), each = nrow(.x)),
-              sels = as.vector(.x, mode = "numeric")))
-  ) %>%
-  select(-plot_sels, -sel_ordered) %>%
-  unnest(cols = c(sel_ordered_long)) %>%
-  arrange(alpha) %>%
-  mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
-
-# Calc mean # plots with >=1 selections
-prior_pred_mean <- prior_pred %>%
-  mutate(rep2 = rep %% 10) %>%
-  group_by(alpha, rep2, rep) %>%
-  summarize(n_sel_plots = sum(sels > 1)) %>%
-  group_by(alpha, rep2) %>%
-  summarize(n_sel_plots = mean(n_sel_plots))
-
-# model <- gam(n_sel_plots ~ s(log(alpha, 10)), bs = "cs", method = "REML", data = prior_pred_mean)
+# Get theoretical function
 model_df <- tibble(alpha = alphas, 
-                   n_sel_plots = exp_average
-                   # n_sel_plots = predict(model, newdata = tibble(alpha = alphas), type = "response")
+                   n_sel_plots = alphas %>% 
+                     map_dbl(number_panels, K = 22, m = 19, c = interest_threshold)
 )
 
+# Get simulated data
+prior_pred_mean <- sim_interesting_panels(c = interest_threshold, K = 22, m = 19, alphas = alphas) %>%
+  arrange(alpha) %>%
+  mutate(label = sprintf("alpha == %f", alpha) %>% 
+           factor(levels = sprintf("alpha == %f", alphas), ordered = T))
+
+# Get possible breakpoints for alphas and panels
+panel_sel_breaks <- c(1.5, 3.5, 5.5, 7.5)
 possible_breakpoints <- model_df %>% 
-  filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
+  filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | 
+           round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
   mutate(tmp = floor(n_sel_plots*2)/2, dist = abs(n_sel_plots - tmp)) %>%
   group_by(tmp) %>%
   filter(dist == min(dist)) %>%
-  filter(tmp %in% c(1.5, 4.5, 7, 9.5)) %>%
+  filter(tmp %in% panel_sel_breaks) %>%
   ungroup() %>%
   mutate(band = floor(.5 + row_number()/2))
 
-lag_polys <- function(data) {
-  x = data$x
-  y = data$y
-  minval = 10e-8
-  bind_rows(
-    tibble(
-      x = c(minval, x[1], x[2], minval, minval),
-      y = c(y[1], y[1], y[2], y[2], y[1]), 
-      type = "h"
-    ),
-    tibble(
-      x = c(x[1], x[2], x[2], x[1], x[1]),
-      y = c(-Inf, -Inf, y[2], y[1], -Inf), 
-      type = "v"
-    ))
-}
-
+# polygons for the grey-and-white bands
 bands <- possible_breakpoints %>%
   rename(x = alpha, y = n_sel_plots) %>%
   nest(data = -band) %>%
   mutate(polys = purrr::map(data, lag_polys)) %>%
   unnest(polys)
 
-mb <- crossing(x = c(2.5, 5, 7.5), y = 10^(seq(-4, 5))) %>% mutate(z = x*y) %>% `[`("z") %>% unlist() %>% as.numeric
+# minor break points
+mb <- crossing(x = c(2.5, 5, 7.5), y = 10^(seq(-4, 5))) %>% 
+  mutate(z = x*y) %>% 
+  `[`("z") %>% 
+  unlist() %>% 
+  as.numeric
 
+# text labels for polygon bands
+band_label_pos <- panel_sel_breaks + 1 # this is a good default but may need customizing
 band_labels <- tibble(
-  y = c(3, 5.75, 8.25, 10.5),
+  y = band_label_pos,
   x = min(alphas),
-  label = c("2-4", "5-7", "7-9", "10+ Interesting panels")
+  label = c("2-3", "4-5", "6-7", "8+ Interesting panels")
 )
 
+# Finally, the actual plot
 ggplot() +
-  ggtitle("Simulation based on K = 22 evaluations and m = 19 (null) plots") + 
   geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
-  geom_point(aes(x = alpha, y = n_sel_plots),data = prior_pred_mean, alpha = .05) +
+  geom_point(aes(x = alpha, y = n_interesting),data = prior_pred_mean, alpha = .05) +
   geom_line(aes(x = alpha, y = n_sel_plots), data = model_df, color = "blue", size = 1) +
   scale_x_log10(name = expression(alpha), breaks = c(0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000), 
                 minor_breaks = mb, 
                 labels = 10^(seq(-3, 4))) +
   geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
   coord_cartesian(xlim = range(alphas)) + 
-  scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100)
+  scale_y_continuous(name = paste0("Number of panels with more than ", 
+                                   interest_threshold, " selection"), breaks = 1:100)
+
 @
 
 \svp{
