@@ -503,10 +503,12 @@ Using these methods, we could design  experiments to include additional Rorschac
 However, as with many estimation methods, the maximum likelihood estimates of $\alpha$ are unstable when there are too many zeroes in the observed data. In the case of lineups, many panels are not selected. This problem is even more pronounced when $\alpha$ values are small.
 \svp{Unfortunately, in most lineup scenarios, we are also operating in the region $\alpha \ll 1$; as a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where we typically operate.}
 
-\svp{In order to sidestep the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values. 
-We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.}
 
 \section{Estimation of \texorpdfstring{$\alpha$}{alpha}}
+
+\svp{In order to sidestep the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values. 
+We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.
+In this section, we describe both methods, as well as an alternate use of the estimated $\alpha$ value to screen for problems in the null plot generation method.}
 
 \subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
 
