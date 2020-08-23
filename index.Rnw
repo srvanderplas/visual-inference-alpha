@@ -506,7 +506,9 @@ However, as with many estimation methods, the maximum likelihood estimates of $\
 \svp{In order to sidestep the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values. 
 We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.}
 
-\section{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}
+\section{Estimation of \texorpdfstring{$\alpha$}{alpha}}
+
+\subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
 
 \svp{There have been several explorations of the use of visual statistics \citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992} as a supplement or an alternative to statistical inference. 
 There are also studies which supplement available data with visual estimates \citep{hankin1988estimating}, incorporating both objective and subjective measurements into the same statistical model. 
@@ -533,7 +535,10 @@ One relatively simple heuristic would be to set $c > K/m$; that is, setting the 
 }
 
 \svp{
-In the case where a tested lineup has selections which overwhelmingly favor the data plot, we have a problem: the lineup is likely significant (based on the overwhelming evidence that the data plot attracts the most visual interest), but we cannot estimate $\alpha$ because there are insufficient null panel selections. In this case, estimation of $\alpha$ will depend on creation of a Rorschach lineup (that is, a lineup consisting entirely of plots generated under the null hypothesis). Having this Rorschach lineup evaluated separately will provide an estimate of $\alpha$ which is unaffected by the data plot; then, a p-value for the data lineup can be computed using the $\alpha$ estimated from the Rorschach lineup.
+In the case where a tested lineup has selections which overwhelmingly favor the data plot, we have a problem: the lineup is likely significant (based on the overwhelming evidence that the data plot attracts the most visual interest), but we cannot estimate $\alpha$ because there are insufficient null panel selections. 
+In this case, estimation of $\alpha$ will depend on creation of a Rorschach lineup (that is, a lineup consisting entirely of plots generated under the null hypothesis). 
+This process is described in more detail in \autoref{sec:rorschach-est-alpha}.
+% Having this Rorschach lineup evaluated separately will provide an estimate of $\alpha$ which is unaffected by the data plot; then, a p-value for the data lineup can be computed using the $\alpha$ estimated from the Rorschach lineup.
 }
 
 \svp{
@@ -544,25 +549,6 @@ A proof of this property is provided in the Appendix XXXX - is it worth it?.
 }
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
-\svp{
-Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$) lineup that will be evaluated by $K=30$ participants. 
-The heuristic we propose for \svp{ad-hoc} estimation of $\alpha$ is as follows:
-}
-\begin{enumerate}
-\item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $c$ (in \autoref{fig:alpha-sim-curve}, $K/m = 30/20 = 1.5 = c$). 
-It may be helpful to average the results of several simulations together to reduce the visual noise and make the underlying trend more visible.
-\hh{The simulation captures the variability around the expected number of `interesting' panels - i.e.\ panels that are selected at least $c$ times. 
-The expected number of interesting panels is given as the sum of probabilities that each panel is selected more than $c$ times: $\sum_{i=1}^m P(C_i > c)$. See \autoref{eqn:differentPanels} in Appendix \ref{app:expected} for details.
-}
-\item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the 
-%fitted function. 
-\svp{expected number of panels with $>c$ selections into approximately equal size bands (with the exception of the case where the expected number of panels selected is equal to one; this case will be handled separately). }
-In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; for $K=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
-\item Generate several Rorschach lineups using the null generative model for the experiment, creating null lineups of size $m$. 
-Determine which band is most representative of the lineups in the experiment: Over the generated lineups, how many visually interesting null panels are there on average? 
-svp{It may be helpful to have a number of different individuals evaluate these lineups; in particular, individuals who are not aware of the method for generating the null plots.}
-\item Select an $\alpha$ value corresponding to the selected band. \svp{For instance, if our pilot study showed that} the lineups typicaly contain 2-3 interesting null panels, we might use $\alpha = 0.03$. 
-\end{enumerate}
 
 <<alpha-sim-curve, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\autoref{eqn:differentPanels}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 set.seed(2501072)
@@ -672,33 +658,29 @@ ggplot() +
 
 @
 
-\svp{With the visually estimated $\alpha$ value computed from Rorschach lineups, we can more accurately assess the visual p-value of a one or two-target lineup because we have an $\alpha$ value which is tailored to the visual characteristics of our null plot generation method, without the numerical instability which might occur from $\hat\alpha$ estimated using maximum likelihood methods.}
-
-\svp{When only one null plot in a Rorschach lineup is visually interesting, however, there is a problem. 
-If there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels, depending on whether the null which is replaced by a data plot is the ``interesting" null plot. 
-But if the ``interesting" null is replaced by the data plot, we would expect that the count values would look similar to those produced when evaluating the Rorschach lineup. 
-So a low $\hat\alpha$ value would indicate a null plot generation method which should be reassessed because it generates plots which attract highly variable amounts of visual interest from participants. 
-Estimation of $\alpha$ from Rorschach lineups provides us with a way to screen for bad null plot generation methods in addition to providing us with more accurate estimates of visual p-values. 
+\svp{
+Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K$ evaluations. 
+The heuristic we propose for \svp{ad-hoc} estimation of $\alpha$ is as follows:
 }
-
-\svp{If there are multiple interesting panels in the Rorschach lineup, then when a single or two-target lineup is generated, we would expect there to be a sufficient number of visually interesting null panels. 
-The number of observed panel selections in this case will depend primarily on the characteristics of the data plot relative to the ``interesting" null plots: if the data plot is only as visually interesting as the interesting null plots, then the number of observed panel selections will be similar to the corresponding Rorschach lineup, and the p-value should be $>0.05$. }
-
-\paragraph{An alternate estimation approach}
-If the visual method of $\alpha$ estimation is not sufficiently precise for the intended application, it is possible to use \autoref{eqn:differentPanels} to generate a more precise estimate of $\alpha$ with a pilot study consisting of many different Rorschach lineups evaluated $K$ times each. 
-Then, the average number of different panels selected by more than $c$ participants can be calculated from the pilot study data and used to determine the best corresponding $\hat\alpha$ according to the expected results in \autoref{eqn:differentPanels}. 
-Studies using visual inference may be relatively small, which would make a formal pilot study to determine $\hat\alpha$ precisely cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:differentPanels}.
-
-
-\svp{In \autoref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance ($p=0.05$). 
-Due to the discretization of the expected number of panels with $>c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, while the thresholds for nonsignificance and significance are explicitly labeled.
-A conservative approach to the treatment of inconclusive results would be to use the smallest $\alpha$ value corresponding to the approximate number of panels selected $>c$ times $K$ evaluations of a Rorschach lineup.
-This approach would treat all inconclusive results as not statistically significant. 
-In most cases, however, only one or two possible values for the number of data plot picks would be ambiguous, and by using an $\alpha$ value derived from the specific null plot generation method, we produce visual p-values that are much more well-calibrated. 
+\begin{enumerate}
+\item Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $c$ (in \autoref{fig:alpha-sim-curve}, $K_0/m_0 = 30/19 \approx 1.58 = c$). 
+It may be helpful to average the results of several simulations together to reduce the visual noise and make the underlying trend more visible.
+\hh{The simulation captures the variability around the expected number of `interesting' panels - i.e.\ panels that are selected at least $c$ times. 
+The expected number of interesting panels is given as the sum of probabilities that each panel is selected more than $c$ times: $\sum_{i=1}^m P(C_i > c)$. See \autoref{eqn:differentPanels} in Appendix \ref{app:expected} for details.
+Note that this simulation should use $m = m_0$, that is, the number of null panels in the lineup, rather than the total number of panels, and $K_0$, the number of null panel selections. 
 }
+\item Determine cutoffs for ~5 bands indicating different levels of interest, by segmenting the range of the \svp{expected number of panels with more than $c$ selections into approximately equal size bands (with the exception of the case where the expected number of panels selected is equal to one; this case will be handled separately). }
+In \autoref{fig:alpha-sim-curve}, the bands are approximately 2 panels in width; for $K_0=30$ this provides a balance between level of detail and our ability to estimate the number of visually interesting null plots.
 
-% \svp{XXX advantages of this approach - sufficiently flexible and adaptable, but without the numeric instability.}
-% \svp{XXX Another advantage is that we avoid the numerical instability inherent in estimating alpha with many 0-count panels. We'll discuss the extremely small $\alpha$ case corresponding to 0-1 interesting null plots at the end of the section}
+If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable. This possibility will be discussed in more detail below; for now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
+\item Using the simulated selected panel counts, find the band which is most consistent with the number of null panels selected more than $c$ times in the lineup. For instance, if there were four null panels with more than $c$ selections, we would use a range of 4-5 panels. 
+Use of a range instead of the single point estimate is intended to account for some of the sampling variability: the same individuals shown the same lineup tomorrow might select slightly different panels. 
+In a simulation, it is easy to increase $N$ until the results no longer change; this is expensive and much more time consuming when using human evaluations. 
+\item Using the simulated selected panel counts, determine a range of panel selections which is most consistent with the number of null panels selected more than $c$ times in the lineup. For instance, if there were four null panels with more than $c$ selections, we might use a range of 4-5 panels. Use of a range instead of the single point estimate is intended to account for some of the sampling variability: the same individuals shown the same lineup tomorrow might select slightly different panels. In a simulation, it is easy to increase $N$ until the results no longer change; this is expensive and much more time consuming when using human evaluations. 
+\item Select an $\hat\alpha$ value corresponding to the selected band. \svp{For instance, if our pilot study showed that} the lineups typicaly contain 2-3 interesting null panels, we might use $\hat\alpha = 0.045$. 
+% \item To generate a visual p-value, it may be helpful to create a sensitivity plot similar to \autoref{fig:vis-p-value-sensitivity2}; this plot shows the p-value generated by a range of $\hat\alpha$ values, for a lineup evaluated $K$ times. Each panel corresponds to a range of $\hat\alpha$ values generated when there are a certain number of interesting null plots. In most cases, it is likely that the number of data plot picks will result in a clear determination of significance; data plot picks highlighted in red result in an ambiguous result. 
+\end{enumerate}
+
 <<vis-p-val-sensitivity-initial2, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the beta-binomial model, for a $m=20$ panel lineup with $K=30$ evaluations. Data picks which result in ambiguous results under the discretized bands of $\\alpha$ values are highlighted in red. At any particular $\\alpha$ level, there are only a few values which result in an inconclusive results.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
 data_breaks <- 1:30
@@ -753,8 +735,44 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 @
 
 
-\hh{If the null plots generally produce just one very interesting plot (out of $m_o$ nulls) we should not use this null generator for a lineup.  discussion point?}
-\hh{But in the example the 0-1 panel is actually the one that does not come up with any inconclusive numbers. ... Just go with a high number of data picks and call it good?}
+\svp{In \autoref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance at the $p=0.05$ level. 
+Due to the discretization of the expected number of panels with $>c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for nonsignificance and significance.
+In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options. 
+The inexpensive, conservative approach is to declare any inconclusive results to be nonsignificant, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
+Alternately, the experimenter could use the method described in \autoref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results.
+}
+
+\svp{By estimating $\alpha$, we produce visual p-values which are calibrated based on the specific null plot generation method. 
+In most cases, we get the improved calibration for free, because we can obtain this information from the null panels in one or two target lineups.
+Occasionally, either because the signal in the data plot is too strong, or because the visual estimation method for $\alpha$ produces a range of p-values which are inconclusive given the number of target plot selections, we may need to invest additional effort in order to generate a precise $\hat\alpha$ estimate numerically.}
+
+\subsection{Numerical Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:rorschach-est-alpha}
+
+\svp{If the visual method of $\alpha$ estimation is inconclusive, or there are insufficient null panel selections to estimate $\alpha$ visually, \autoref{eqn:differentPanels} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each. 
+To ensure validity of the estimated $\alpha$, the Rorschach lineups should use the same null data generating mechanism used in the standard lineup.
+Then, the average number of different panels selected by more than $c$ participants can be calculated from the secondary study data; numerical optimization can be used to obtain $\hat\alpha$ from this information.
+Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \autoref{eqn:differentPanels} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$. 
+When the estimated $\hat\alpha$ is extremely small, this is a signal that there is a problem with the null plot generation method; this case is described in more detail below.}
+
+\svp{The numerical estimation approach does require each Rorschach lineup to have the same number of null plot evaluations, so that the experimentally determined average number of interesting panels is consistent and the same reference distribution can be used. 
+In contrast to the reference distribution used in \autoref{sec:visual-est-alpha}, the reference distribution in this approach is one with $m$ null panels.
+The previous approach used $m_0$ null panels because when the data plot is excluded from the lineup, there are only $m_0$ null plots remaining. 
+In a Rorschach lineup, however, there are $m$ null panels which may be selected by participants. 
+}
+Studies using visual inference may be relatively small (that is, with few participant lineup evaluations), which would make a formal secondary study to precisely determine $\hat\alpha$ cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:differentPanels}.
+
+\subsection{Degenerate null generation methods}
+\svp{When only one null plot in a Rorschach lineup is visually interesting, we encounter two problems.
+First, we cannot estimate $\hat\alpha$ with any real precision (visually or numerically), because many different $\alpha$ values below $\alpha\approx 0.025$ could give rise to a situation where only one panel is visually interesting.
+Second, if there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels. The number of interesting panels in the data plot would depend on whether the interesting null plot is the null replaced by a data plot. 
+If the interesting null is replaced by the data plot, we would expect that the count values would look similar to those produced when evaluating the Rorschach lineup, but even if it is not, the distribution of counts might not differ enough to show statistical significance. 
+The lineup hypothesis testing method is predicated on the ability to visually distinguish a Rorschach lineup from a lineup with a data target, but a method which sporadically generates overwhelmingly interesting null plots provides insufficient grounds for rejection of the null hypothesis.}
+
+\svp{An extremely low $\hat\alpha$ value (estimated visually or numerically) would indicate a null plot generation method which should be reassessed because it generates plots which attract highly variable amounts of visual interest from participants. 
+One example of such a null plot generating method would be the method described in \citet{vanderplas:2017}, which occasionally generated null plots which were missing important visual signals (such as a cluster consisting of one or two points, and a corresponding missing bounding ellipse). 
+Estimation of $\alpha$ provides us with a way to screen for bad null plot generation methods in addition to providing us with more accurate estimates of visual p-values.}
+
+\svp{We can see from \autoref{fig:vis-p-value-sensitivity-initial} that the proposed method will generate p-values which are more moderate than the simpler Binomial model that does not involve the extra step of estimating $\alpha$. In the next section, we explore the practical implications of this method by examining actual lineups which were tested experimentally and the visual p-values calculated using each method.}
 
 \section{Example}
 <<example-setup, cache = T, include = F>>=
