@@ -81,3 +81,66 @@ That is, conditional on the overall total number of evaluations, the null plot e
 
 So we can estimate $\alpha$ from the null plot selections, if there are enough null plot selections.
 
+***
+
+How many null plot selections are necessary?
+
+```{r}
+library(tidyverse)
+library(gtools) # rdirichlet
+
+n_null_sels <- function(K, theta, threshold) {
+  sum(rmultinom(1, size = K, prob = theta) > threshold)
+}
+
+expected_panels <- function(alpha, ev, m, K, threshold) {
+  x <- (threshold + 1):K
+  (ev - m/beta(alpha, (m - 1)*alpha)*sum(choose(K, x)*beta(x + alpha, K - x + (m - 1)*alpha)))^2
+}
+
+est_alpha <- function(params) {
+  # browser()
+  N <- 100
+  m <- 20
+  threshold <- 1
+  stopifnot("alpha" %in% names(params))
+  stopifnot("K" %in% names(params))
+  list2env(params, envir = as.environment(-1))
+  
+  thetas <- rdirichlet(N, rep(alpha, m))
+  counts <- rmultinom(1, size = K, prob = thetas)
+  # counts <- apply(thetas, 1, n_null_sels, K = K, threshold = threshold)
+  ev <- mean(counts)
+  ests <- optimize(expected_panels, c(0.01, 100), ev = ev, threshold = threshold, m = m, K = K)
+  as.data.frame(ests) %>%
+    rename(alpha_est = minimum, optim_obj = objective) %>%
+    mutate(alpha = alpha, ev = ev, sim = list(data.frame(counts = counts, thetas = t(thetas))))
+}
+
+try_est_alpha <- safely(est_alpha)
+
+sim_params <- crossing(K = 5:50, alpha = c(0.05, 0.1, 0.25, 0.5, 1), N = 1:20, idx = 1:10) %>%
+  mutate(row = row_number()) %>%
+  mutate(m = 19, threshold = 1) %>%
+  nest(data = -c(idx, row)) %>%
+  mutate(res = purrr::map(data, try_est_alpha))
+
+sim_params2 <- sim_params %>% mutate(res = purrr::map(res, "result")) %>% unnest(res) %>% unnest(data, names_repair = "universal") %>%
+  select(-alpha...10) %>% rename(alpha = alpha...4)
+```
+
+Simulation:
+- Between 5 and 50 evaluations of 
+- Between 1 and 20 null plots
+- repeated 10x
+- for alpha between `r min(sim_params2$alpha)` and `r max(sim_params2$alpha)`
+
+```{r}
+filter(sim_params2, K <10,
+       # optim_obj < 0.05
+       ) %>%
+  ggplot(aes(x = alpha, y = alpha_est)) + 
+  facet_wrap(~N) +
+  geom_jitter()
+
+```
