@@ -510,17 +510,25 @@ However, as with many estimation methods, the maximum likelihood estimates of $\
 We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.
 In this section, we describe both methods, as well as an alternate use of the estimated $\alpha$ value to screen for problems in the null plot generation method.}
 
+\svp{Both the visual and numeric methods for estimating $\alpha$ leverage the expected number of ``interesting" panels in a lineup. The expected number of panels selected more than $c$ times, $E[Z_c]$, is provided in \autoref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \autoref{eqn:full-model-specification} is provided in \autoref{app:expected}.}
+
+\begin{equation}\label{eqn:ev-panel}
+E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
+\end{equation}
+
 \subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
 
 \svp{There have been several explorations of the use of visual statistics \citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992} as a supplement or an alternative to statistical inference. 
 % There are also studies which supplement available data with visual estimates \citep{hankin1988estimating}, incorporating both objective and subjective measurements into the same statistical model. 
 Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not because the visual system is inaccurate or misleading. 
 Instead, estimates derived visually tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.}
-\svp{In this application, we expect that visual estimation of $\alpha$ based on the expected number of ``interesting" panels, derived from \autoref{eqn:full-model-specification}, will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates.}
+\svp{In this application, we expect that visual estimation of $\alpha$ based on the expected number of ``interesting" panels will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates.}
 
-\svp{In a lineup experiment, we compare the selections of the data panel relative to the aggregate selections of the null panel, using the marginal Beta-Binomial model. 
-While this makes the calculations much simpler, because there is no need to keep track of the locations and selections of individual null plots, it does throw away some information. 
-This visual estimation method is predicated on utilizing that discarded information to estimate $\alpha$.
+\svp{In a lineup experiment, we typically compare the selections of the data panel relative to the \emph{aggregate} selections of null panels, using the marginal Beta-Binomial model. 
+While this makes the calculations much simpler, because there is no need to keep track of the locations and selections of individual null plots, it does throw away some information; namely, the distribution of participant interest in the null panels. 
+This visual estimation method is predicated on utilizing that discarded information to estimate $\alpha$.}
+
+\svp{
 In \autoref{fig:prior-predictive}, it is clear that $\alpha$ is directly related to the number of panels which are selected as interesting by participants. 
 There is some variability around how many times each panel was selected, but the number of panels which attract participant attention is fairly consistent across multiple simulations.
 We propose estimating $\alpha$ visually from the number of null panels which attract participant interest, recovering some of the information discarded and using that information to attenuate our visual p-value. 
@@ -532,9 +540,9 @@ Second, we must handle the case where the data plot is the only panel selected; 
 }
 
 \svp{
-It is obvious that the mathematical quantity associated with `attract participant interest' would correspond to a threshold: if a panel is selected at least $c$ times out of $K$ total evaluations, it is interesting. 
+As implied at the beginning of \autoref{sec:alpha-est}, the mathematical quantity associated with `attract participant interest' would correspond to a threshold: if a panel is selected at least $c$ times out of $K$ total evaluations, it is interesting. 
 Determining what the value of the threshold $c$ should be is another matter. 
-One relatively simple heuristic would be to set $c > K/m$; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
+One broadly applicable approach would be to let $c = K/m$; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
 }
 
 \svp{
