@@ -750,7 +750,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for nonsignificance and significance.
 In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options. 
 The inexpensive, conservative approach is to declare any inconclusive results to be nonsignificant, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
-Alternately, the experimenter could use the method described in \autoref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results.
+Alternately, the experimenter could use the method described in \autoref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
 }
 
 \svp{By estimating $\alpha$, we produce visual p-values which are calibrated based on the specific null plot generation method. 
