@@ -85,7 +85,7 @@ So we can estimate $\alpha$ from the null plot selections, if there are enough n
 
 How many null plot selections are necessary?
 
-```{r}
+```{r, eval = F}
 library(tidyverse)
 library(gtools) # rdirichlet
 
@@ -108,39 +108,44 @@ est_alpha <- function(params) {
   list2env(params, envir = as.environment(-1))
   
   thetas <- rdirichlet(N, rep(alpha, m))
-  counts <- rmultinom(1, size = K, prob = thetas)
-  # counts <- apply(thetas, 1, n_null_sels, K = K, threshold = threshold)
-  ev <- mean(counts)
-  ests <- optimize(expected_panels, c(0.01, 100), ev = ev, threshold = threshold, m = m, K = K)
-  as.data.frame(ests) %>%
-    rename(alpha_est = minimum, optim_obj = objective) %>%
-    mutate(alpha = alpha, ev = ev, sim = list(data.frame(counts = counts, thetas = t(thetas))))
+  counts <- rmultinom(1, size = K, prob = thetas) %>%
+    matrix(nrow = m, ncol = N)
+  ev <- mean(colSums(counts > threshold))
+  as <- seq(0.01, 100, .001)
+  ests <- purrr::map_dbl(as, ~expected_panels(., ev, m, K, threshold))
+  # ests <- optimize(expected_panels, c(0.01, 100), ev = ev, threshold = threshold, m = m, K = K)
+  
+  tibble(alpha_est = as[which.min(ests)], optim_obj = min(ests),
+         alpha_actual = alpha, ev = ev, sim = list(data.frame(counts = counts, thetas = t(thetas))))
 }
 
 try_est_alpha <- safely(est_alpha)
 
-sim_params <- crossing(K = 5:50, alpha = c(0.05, 0.1, 0.25, 0.5, 1), N = 1:20, idx = 1:10) %>%
+sim_params <- crossing(K = seq(5, 30, by = 5), alpha = c(0.05, 0.1, 0.25, 0.5, 1), N = 1:10, idx = 1:10) %>%
   mutate(row = row_number()) %>%
   mutate(m = 19, threshold = 1) %>%
   nest(data = -c(idx, row)) %>%
   mutate(res = purrr::map(data, try_est_alpha))
 
-sim_params2 <- sim_params %>% mutate(res = purrr::map(res, "result")) %>% unnest(res) %>% unnest(data, names_repair = "universal") %>%
-  select(-alpha...10) %>% rename(alpha = alpha...4)
+sim_params2 <- sim_params %>% 
+  mutate(res = purrr::map(res, "result")) %>% 
+  unnest(res) %>% 
+  unnest(data)
 ```
 
 Simulation:
+
 - Between 5 and 50 evaluations of 
 - Between 1 and 20 null plots
 - repeated 10x
-- for alpha between `r min(sim_params2$alpha)` and `r max(sim_params2$alpha)`
 
-```{r}
-filter(sim_params2, K <10,
+```{r, eval = F}
+filter(sim_params2, K ==5,
        # optim_obj < 0.05
        ) %>%
   ggplot(aes(x = alpha, y = alpha_est)) + 
   facet_wrap(~N) +
-  geom_jitter()
+  geom_jitter() + 
+  scale_x_log10() + scale_y_log10()
 
 ```
