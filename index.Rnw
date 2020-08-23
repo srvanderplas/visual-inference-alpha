@@ -537,16 +537,17 @@ svp{It may be helpful to have a number of different individuals evaluate these l
 
 <<alpha-sim-curve, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\autoref{eqn:differentPanels}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 set.seed(2401072)
+interest_threshold <- 1
 alphas <- 10^(seq(-3.6, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
 number_panels <- function(alpha, c=1, m = 20, K=30) {
-  x <- (c + 1):K
+  x <- (floor(c) + 1):K
   summation <- choose(K, x) * beta(x + alpha, K - x + (m - 1)*alpha)
   
   m/beta(alpha, (m - 1)*alpha)*sum(summation)
 }
 
-exp_average <- alphas %>% map_dbl(number_panels)
+exp_average <- alphas %>% map_dbl(number_panels, c = interest_threshold)
 
 prior_pred <- tibble(alpha = alphas,
                      plot_sels = purrr::map(alpha, sim_lineup_model, N = 100, K = 30)) %>%
@@ -567,7 +568,7 @@ prior_pred <- tibble(alpha = alphas,
 prior_pred_mean <- prior_pred %>%
   mutate(rep2 = rep %% 10) %>%
    group_by(alpha, rep2, rep) %>%
-   summarize(n_sel_plots = sum(sels > 1)) %>%
+   summarize(n_sel_plots = sum(sels > interest_threshold)) %>%
    group_by(alpha, rep2) %>%
    summarize(n_sel_plots = mean(n_sel_plots))
 
