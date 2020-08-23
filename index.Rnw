@@ -803,8 +803,9 @@ old_vispval <- vis_p_value_orig(exdf_targetcount, total_n)
 new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .07)
 @
 \svp{Using the mixture model proposed here, computed visual p-values will be more moderate than those computed using the approach proposed in \citet{majumder2013validation}.}
-\svp{As an example, a lineup from a past experiment is provided in \autoref{fig:example-plot}. This lineup shows a plot which is somewhat ambiguous: the data plot, in panel 5+3, was selected most frequently by participants (14 times), but in total, null plots were selected more frequently than the target plot (22 times).
-Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual p-value of \Sexpr{old_vispval}, which is extremely small given that there were more null plot selections than data plot selections.}
+\svp{As an example, a lineup from a past experiment is provided in \autoref{fig:example-plot}. This lineup shows a plot which is somewhat ambiguous: the data plot, in panel 5+3, was selected most frequently by participants (14 times), but in total, null plots were selected more frequently than the target plot (22 times).}
+Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual $p$-value \hh{on the order} of $10^-9$, %\Sexpr{old_vispval}
+which \hh{seems} extremely small given that there were more null plot selections than data plot selections.
 
 <<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 5, fig.align="center", out.width = ".8\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. Selection counts are provided in light grey in the lower right corner of each panel which was selected at least once.">>=
 ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) + 
@@ -823,14 +824,14 @@ ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) +
 #  scale_fill_discrete(guide = "none") #+ 
   # geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, data = exdf, color = "grey40")
 @
-\svp{Under the proposed method, our first step would be to assess the expected number of null panels which would attract attention. 
-Using a threshold of $c=1$, we have 6 of 19 null plots selected, so we might expect somewhere between 6 and 7 null panels to be selected in a Rorschach lineup. 
+\svp{Under the \hh{Dirichlet model XXX we need a name or an equation for this XXX}, the first step \hh{is} to assess the expected number of null panels which  attract attention. 
+Using a threshold of $c=1$,  six of 19 null plots \hh{were} selected, so we might expect somewhere between \hh{XXX let's run the simulation for $K = 22$ and $m = 19$; XXX for $\alpha$ it doesn't matter whether we have dimension 19 or 20 - I'll put that piece of math into the appendix} 6 and 7 null panels to be selected in a Rorschach lineup.
 Ideally, we would generate several Rorschach lineups for this step, but for simplicity, we will work off of a single one-target lineup for this example; a corresponding Rorschach lineup is shown in \autoref{fig:example-plot}(b) but was not evaluated experimentally.}
 
-<<example-alpha-curve, fig.cap = "Generated discretized heuristic plot for the lineup shown in \\autoref{fig:example-plot}(a).", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
+<<example-alpha-curve, fig.cap = "Number of expected panels with more than one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}(a).", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
 set.seed(2401072)
 
-sim_lineup_model <- function(alpha, m = 20, K = 36, N = 50) {
+sim_lineup_model <- function(alpha, m = 19, K = 22, N = 50) {
   theta <- gtools::rdirichlet(1, rep(alpha, m))
   sels <- rmultinom(N, size = K, prob = theta)
   sels
@@ -838,7 +839,7 @@ sim_lineup_model <- function(alpha, m = 20, K = 36, N = 50) {
 
 alphas <- 10^(seq(-2, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
-number_panels <- function(alpha, c=1, m = 20, K=36) {
+number_panels <- function(alpha, c=0, m = 19, K=22) {
   x <- (c + 1):K
   summation <- choose(K, x) * beta(x + alpha, K - x + (m - 1)*alpha)
   
@@ -917,6 +918,7 @@ band_labels <- tibble(
 )
 
 ggplot() +
+  ggtitle("Simulation based on K = 22 evaluations and m = 19 (null) plots") + 
   geom_polygon(aes(x = x, y = y, group = interaction(type, band)), data = bands, fill = "grey", alpha = 0.5) + 
   geom_point(aes(x = alpha, y = n_sel_plots),data = prior_pred_mean, alpha = .05) +
   geom_line(aes(x = alpha, y = n_sel_plots), data = model_df, color = "blue", size = 1) +
@@ -925,7 +927,7 @@ ggplot() +
                 labels = 10^(seq(-3, 4))) +
   geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
   coord_cartesian(xlim = range(alphas)) + 
-  scale_y_continuous(name = "Average number of panels with >1 selection, with 36 evaluations", breaks = 1:100)
+  scale_y_continuous(name = "Average number of panels with >1 selection", breaks = 1:100)
 @
 
 \svp{
