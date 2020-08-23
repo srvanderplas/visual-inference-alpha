@@ -80,7 +80,7 @@
 library(tidyverse)
 library(mgcv)
 knitr::opts_chunk$set(echo = F, message = F, warning = F)
-# theme_set(theme_bw())
+theme_set(theme_bw())
 @
 
 <<code, include = F>>=
