@@ -506,7 +506,7 @@ However, as with many estimation methods, the maximum likelihood estimates of $\
 
 \section{Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:est-alpha}
 
-\svp{In order to sidestep the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values. 
+\svp{In order to avoid the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values. 
 We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.
 In this section, we describe both methods, as well as an alternate use of the estimated $\alpha$ value to screen for problems in the null plot generation method.}
 
