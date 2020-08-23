@@ -513,8 +513,9 @@ In this section, we describe both methods, as well as an alternate use of the es
 \subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
 
 \svp{There have been several explorations of the use of visual statistics \citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992} as a supplement or an alternative to statistical inference. 
-There are also studies which supplement available data with visual estimates \citep{hankin1988estimating}, incorporating both objective and subjective measurements into the same statistical model. 
-Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not in a problematic way; rather, visual estimates tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.}
+% There are also studies which supplement available data with visual estimates \citep{hankin1988estimating}, incorporating both objective and subjective measurements into the same statistical model. 
+Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not because the visual system is inaccurate or misleading. 
+Instead, estimates derived visually tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.}
 \svp{In this application, we expect that visual estimation of $\alpha$ based on the expected number of ``interesting" panels, derived from \autoref{eqn:full-model-specification}, will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates.}
 
 \svp{In a lineup experiment, we compare the selections of the data panel relative to the aggregate selections of the null panel, using the marginal Beta-Binomial model. 
