@@ -417,11 +417,12 @@ The data model used in \citet{majumder2013validation} assumes $\theta_t = 1/m$, 
 When examining a lineup, we are generally drawn immediately to 1-4 panels, and the remaining evaluation is to decide between those panels; we also know that typically the same panels are selected across multiple individuals. 
 \svp{If we consult \autoref{fig:prior-predictive}, we can see that this roughly corresponds to an $\alpha$ between 0.05 and 0.1.}
 % To account for this issue, recent analyses of lineups calculate visual p-values using the mass function
-\svp{The general formula for calculating a visual p-value under the beta-binomial model is:}
+
+The general formula for calculating a visual $p$-value under this model is:
 \begin{align}\label{eqn:beta-binomial}
-P(X\geq C) = \sum_{x = C}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
+p\text{-value} = P(C\geq c_t) = \sum_{x = c_t}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
 \end{align}
-where $X$ is the number of data panel detections,  $K$ is the number of independent evaluations of the lineup, and \hh{$B(., .)$ is the Beta function defined as:}
+where $c_t$ is the number of times the data panel was picked in $K$  evaluations of the lineup. \hh{$B(., .)$ is the Beta function defined as:}
 \begin{align*}
 B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b > 0.
 \end{align*}
