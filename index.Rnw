@@ -413,7 +413,6 @@ ggplot() +
 
 @
 
-% A modification of the frequentist paradigm developed in \citet{majumder2013validation} and released as a technical report \todo{get citation!} simulates p-values from a Dirichlet-Multinomial distribution with $\alpha=1$; based on the prior predictive distributions alone, $\alpha=1$ does not appear to fit the observed data or theoretical process (e.g. the tendency to identify even small differences from among similar things) well.
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention. }
 The data model used in \citet{majumder2013validation} assumes $\theta_t = 1/m$, that is, $\theta_t$ is fixed and equal to the selection probability of every other panel in the lineup. 
