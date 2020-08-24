@@ -251,7 +251,16 @@ grid.arrange(p2, p1, ncol=2)
 
 \section{Lineup Model Specification}
 
-\hh{Let us assume that we have $K$ evaluations of a lineup under scenario 3, i.e.\ a  lineup consisting of the same $m$ panels was shown to $K$ independent evaluators. Let us assume that $c = (c_1, ..., c_m)$ are the counts of that evaluation, where $c_i$ corresponds to panel $i$ being selected by $c_i$ of the $K$ evaluators. Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
+\svp{Consider a lineup under} 
+% Let us assume that we have $K$ evaluations of a lineup under
+\hh{scenario 3, i.e.\ }
+\svp{the same lineup containing $m$ panels}%\hh{a  lineup consisting of the same $m$ panels},
+\svp{independently evaluated $K$ times.} % \hh{was shown to $K$ independent evaluators.}
+\svp{Define} % \hh{Let us assume that }
+\hh{$c = (c_1, ..., c_m)$} \svp{to be} %are 
+\svp{the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.}
+% \hh{the counts of that evaluation, where $c_i$ corresponds to panel $i$ being selected by $c_i$ of the $K$ evaluators. 
+\hh{Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
 
 
 
@@ -259,7 +268,9 @@ grid.arrange(p2, p1, ncol=2)
 
 %Our lineup has been evaluated by $K$ individuals, with $c_i, i = 1, ..., m$ the selection count for each panel, and $K = \sum_{i=1}^m c_i$.
 
-A natural data model for these is the Multinomial distribution with parameters $K, \bm{\theta}$, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilities of each outcome $1, ..., m$, i.e.\  $\theta_i$ is the probability with which an evaluator chooses panel $i$. 
+\svp{The Multinomial $(K, \theta)$ distribution is } a natural model for \svp{the counts $c_i$}, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilit\svp{y that each panel $i=1, ..., m$ is selected}. 
+\svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}.
+%of each outcome $1, ..., m$, i.e.\  $\theta_i$ is the probability with which an evaluator chooses panel $i$. 
 %We will fix $K$, as that is controlled by the experimental design, and model $\bm{\theta}$.
 
 \begin{align}\label{eqn:multinomial-pmf}
@@ -267,7 +278,7 @@ f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^
 \end{align}
 
 We model panel selection probabilities $\bm{\theta}$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
-As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. 
+As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. \svp{This is necessary because we do not know where a specific panel will be placed when the lineup is initially generated.}
 The density function of the symmetric Dirichlet distribution is given as
 \begin{align}\label{eqn:dirichlet-pdf}
 f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
