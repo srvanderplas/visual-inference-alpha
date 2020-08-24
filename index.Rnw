@@ -802,7 +802,7 @@ In a Rorschach lineup, however, there are $m$ null panels which may be selected 
 }
 Studies using visual inference may be relatively small (that is, with few participant lineup evaluations), which would make a formal secondary study to precisely determine $\hat\alpha$ cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:differentPanels}.
 
-\subsection{Degenerate null generation methods}\label{sec:bad-null}
+\subsection{Screening null generation methods}\label{sec:bad-null}
 \svp{When only one null plot in a Rorschach lineup is visually interesting, we encounter two problems.
 First, we cannot estimate $\hat\alpha$ with any real precision (visually or numerically), because many different $\alpha$ values below $\alpha\approx 0.025$ could give rise to a situation where only one panel is visually interesting.
 Second, if there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels. The number of interesting panels in the data plot would depend on whether the interesting null plot is the null replaced by a data plot. 
