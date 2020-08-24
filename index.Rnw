@@ -934,8 +934,8 @@ ggplot() +
                 labels = 10^(seq(-3, 4))) +
   geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
   coord_cartesian(xlim = range(alphas)) + 
-  scale_y_continuous(name = paste0("Number of panels with more than ", 
-                                   interest_threshold, " selection"), breaks = 1:100)
+  scale_y_continuous(name = paste0("Number of panels with at least ", 
+                                   interest_threshold+1, " selection"), breaks = 1:100)
 
 @
 
