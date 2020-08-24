@@ -310,7 +310,7 @@ Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \
 }
 
 % \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
-Typically, when evaluating lineups, we compare the number of target plot identifications with the aggregate number of null plot identifications  \citep[see]{majumder2013validation}. 
+When evaluating lineups, we generally compare the number of target plot identifications with the aggregate number of null plot identifications \citep[see]{majumder2013validation}. 
 This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m$ is the index of the target panel in the lineup. For a total of $K$ evaluations, and $0 \le c_t \le K$ target plot evaluations, the above model simplifies to a Beta-Binomial Model:
 
 \begin{align}\begin{split}\label{eqn:marginal-model-specification}
@@ -319,9 +319,6 @@ C_t \mid \theta_t & \sim Binomial(\theta_t, K),\\
 \end{split}\end{align}
 
 with the distribution of $\theta_t$ given $c_t$ and $\alpha$ as Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
-
-
-% While this model was originally developed under a Bayesian framework, it is philosophically agnostic: it would be equally reasonable to think of this as an overdispersed multinomial model.
 
 Examining the parameters of either the full or marginal model specifications in \autoref{eqn:full-model-specification} and \autoref{eqn:marginal-model-specification}, $\alpha$ provides the equivalent of pseudo-observations for each plot; that is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup. 
 When $\alpha$ is small, these pseudo-observations have relatively little influence, but when $\alpha$ is large, the pseudo-observations can quickly dwarf any information provided by the data. 
