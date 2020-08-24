@@ -796,7 +796,7 @@ Note that if on average only one null panel is selected, the estimated $\hat\alp
 When the estimated $\hat\alpha$ is extremely small, this is a signal that there is a problem with the null plot generation method; this case is described in more detail below.}
 
 \svp{The numerical estimation approach does require each Rorschach lineup to have the same number of null plot evaluations, so that the experimentally determined average number of interesting panels is consistent and the same reference distribution can be used. 
-In contrast to the reference distribution used in \autoref{sec:visual-est-alpha}, the reference distribution in this approach is one with $m$ null panels.
+In contrast to the reference distribution used in \autoref{sec:vis-estimation-alpha}, the reference distribution in this approach is one with $m$ null panels.
 The previous approach used $m_0$ null panels because when the data plot is excluded from the lineup, there are only $m_0$ null plots remaining. 
 In a Rorschach lineup, however, there are $m$ null panels which may be selected by participants. 
 }
