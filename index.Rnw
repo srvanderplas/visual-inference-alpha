@@ -79,7 +79,8 @@
 <<setup, echo = F, include = F>>=
 library(tidyverse)
 library(mgcv)
-knitr::opts_chunk$set(echo = F, message = F, warning = F)
+library(Cairo)
+knitr::opts_chunk$set(echo = F, message = F, warning = F, dev = "CairoPDF")
 theme_set(theme_bw())
 @
 
@@ -463,14 +464,14 @@ B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b 
 \end{align*}
 A derivation of this mass function is provided in Appendix~\ref{app:pvalue}. 
 
-\svp{Using \autoref{eqn:beta-binomial}, we can still calculate a visual p-value, but this p-value is dependent on the hyperparameter $\alpha$.
+\svp{Using \autoref{eqn:beta-binomial}, we can still calculate a visual p-value, but this p-value is dependent on the hyperparameter $\alpha$.}
 \svp{We know from past studies \citep{loy2016variations,vanderplas:2017} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots}\footnote{
 \svp{In fact, it would make very little sense to use a Rorschach lineup under Scenario 1; with no shared information between different evaluations, there would be no reasonable way to aggregate the results.}}.
 \svp{Combining this observation with} \autoref{fig:prior-predictive}, \svp{ we would expect that} $\alpha \ll 1$.
 
 \svp{$\alpha$ would be expected to vary based on the null generating model, type of plot, and other aesthetic choices: all of these factors would affect the visual distinctiveness of the null and actual data.}
 In order to calculate visual p-values \svp{for lineups evaluated under Scenario 3}, we must match the \svp{underlying} data generation method and visual evaluation processes with an appropriate value of $\alpha$.
-}
+
 % 
 % A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex})\citep{vinference}.
 
@@ -485,33 +486,39 @@ $\alpha$ also modulates the visual p-value calculated from \autoref{eqn:beta-bin
 
 <<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the marginal beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
-data_breaks <- c(1:5, 6, 8, 10, 15, 20)
+# data_breaks <- c(1:5, 6, 8, 10, 15, 20)
+data_breaks <- c(1, 2, 3, 5, 7, 10, 15, 20, 25, 30)
+K <- 30
 
-pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = 20) %>%
+color_pal <- RColorBrewer::brewer.pal(length(data_breaks), "Paired")#[c(6, 5, 8, 7, 4, 3, 2, 1, 10, 9)]
+
+breaks <- c(10^seq(-3, 2, 1), 5*10^seq(-3, 1, 1)) %>% sort()
+minor.breaks <- c(2.5, 7.5) * rep(10^seq(-3, 1, 1), each = 2)
+labels <- sprintf("%.3f", breaks) %>% gsub("\\.?0{1,}$", "", .)
+
+pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = K) %>%
   mutate(p = vis_p_value(C, K, alpha)) 
-pv2 <- tidyr::crossing(C = data_breaks, K = 20) %>%
+pv2 <- tidyr::crossing(C = data_breaks, K = K) %>%
   mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F))
 
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
-   # facet_wrap(~panel, scales = "free") + 
-   # facet_wrap(~panel, scales = "free") + 
-  geom_line(size = 1) +
+  annotate("segment", x =115, xend = 115, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
+  annotate("text", x = 115, y = .8,
+           label = "Binomial", vjust = 0, hjust = .75) +
+  annotate("segment", x = 1, xend = 1, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
+  annotate("text", x = 1, y = 0.8,
+           label = expression(paste("θ ~ Unif on m-1 simplex")), vjust = 0, hjust = .5) +
+  geom_line(size = 0.75) +
   geom_point(aes(x = 115, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
   scale_y_continuous("Visual p-value") +
-   scale_x_log10(expression(alpha)) + 
-  # scale_x_continuous(expression(alpha), trans = "log10", breaks = c(0.001, 0.005, 0.01, 0.05, .1, .5,  1, 5, 10, 100),
-  #                    labels = c("0.001", "0.005", "0.01", "0.05", "0.1","0.5", "1","5", "10", "100")) +
-  scale_color_brewer("# Data\nPanel\nIdentifications\n(K = 20)", palette = "Paired") +
+  scale_x_log10(expression(alpha), breaks = breaks, labels = labels, minor_breaks = minor.breaks) +
+  scale_color_manual(paste0("# Data Panel\nIdentifications\n(K =", K, ")"), values = color_pal) +
   scale_shape_discrete("") +
-  geom_hline(yintercept = 0.05, color = "grey") +
-  guides(color = guide_legend(override.aes = list(shape = NA))) +
-  annotate("segment", x =115, xend = 115, y = -Inf, yend = .7, color = "grey", alpha = .5) +
-  annotate("text", x = 115, y = 0.75,
-           label = "Binomial\nmodel", vjust = 1, hjust = .75) +
-  annotate("segment", x = 1, xend = 1, y = -Inf, yend = .7, color = "grey", alpha = .5) +
-  annotate("text", x = 1, y = 0.75,
-           label = "vinference\npackage", vjust = 1, hjust = .5) +
-  theme_bw()
+  geom_hline(yintercept = 0.05, color = "grey40") +
+  guides(color = guide_legend(override.aes = list(shape = NA), order = 1),
+         shape = guide_legend(order = 2)) +
+  theme_bw() + 
+  theme(legend.position = c(0, 1), legend.justification = c(0, 1), legend.background = element_blank(), legend.box = "horizontal")
 @
 
 Clearly, the choice of $\alpha$ is critical. 
