@@ -299,12 +299,13 @@ $(c_1, ..., c_m)$ and assumed hyper parameter $\alpha > 0$, we specify a Beta-mu
 
 where $Multinomial(\bm\theta, K)$ \svp{is defined as in \autoref{eqn:multinomial-pmf}} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}. 
 \svp{The joint distribution of $\bf c$, $\bf \theta$ is then a Multinomial-Dirichlet mixture distribution. 
+
 If we were interested in the value of $\bm\theta$ and wanted to take a Bayesian approach, we would use the conjugate relationship between the Multinomial and Dirichlet distributions to get a posterior distribution }
 % Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution
 of $\bm{\theta}$ given $c$ and $\alpha$ as  Dirichlet$(\bm{c + \alpha})$.
 \svp{However, in most cases, we are primarily interested in obtaining a visual p-value from this mixture model; this does not require that we conduct inference on $\bm\theta$. Rather, }
 \svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ. 
-Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$}
+Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.}
 \svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$. 
 }
 
