@@ -371,10 +371,6 @@ ggplot(data=betas, aes(x=p, y=density)) +
 
 % End stolen from heike/lineup-scenarios
 
-<<set-theme-bw, include = F>>=
-theme_set(ggplot2::theme_bw())
-@
-
 \svp{Perceptually, the mixture model proposed in this paper mimics the tendency for us to focus in on a handful of the available panels of a lineup. 
 By allowing $\theta$ to vary, we are building into our model the acknowledgement that not all randomly generated plots are equally visually ``interesting"; the less interesting plots tend to not receive equal amounts of attention during the lineup evaluation process.} \svp{XXX can we cite that eye tracking study here? Does it back up that claim? XXX} \hh{XXX we've seen that phenomenon over and over again. but, yes, the eye-tracker study shows it, too.}
 While graphical illustrations of the 20-dimensional dirichlet distribution are more difficult, we can use simulation to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention.
