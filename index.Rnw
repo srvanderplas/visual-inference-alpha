@@ -474,15 +474,17 @@ In order to calculate visual p-values \svp{for lineups evaluated under Scenario 
 
 % 
 % A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex})\citep{vinference}.
-
-\subsection{Hyperparameter Selection}
-\svp{In \autoref{sec:scenario-alpha}, we described the differences in visual p-value calculations for different lineup scenarios.}
-In the theoretical Multinomial-Dirichlet model proposed in this paper, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification} (a derivation of this expectation is provided in Appendix \ref{app:expected}).
+% 
+% \subsection{Hyperparameter Selection}
+% \svp{In \autoref{sec:scenario-alpha}, we described the differences in visual p-value calculations for different lineup scenarios.}
+% In the theoretical Multinomial-Dirichlet model in \autoref{eqn:full-model-specification}, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification} (a derivation of this expectation is provided in Appendix \ref{app:expected}).
 \svp{As it is difficult to design a null plot generating method which will result in a specific $\alpha$ value, in practice, we will need to select an appropriate $\alpha$ for a predetermined null plot generating model.}
-\svp{A lineup with null panels that are of similar visual interest would have a higher $\alpha$ value than a lineup with only one or two visually distinctive null panels in addition to the data panel.}
-
-$\alpha$ also modulates the visual p-value calculated from \autoref{eqn:beta-binomial}: \svp{when $\alpha$ is low, it is likely that there are one or more visually distinctive null plots, making it difficult to attribute data panel selections to definitive visual differences betweeen the null and data plots.}
+% \svp{A lineup with null panels that are of similar visual interest would have a higher $\alpha$ value than a lineup with only one or two visually distinctive null panels in addition to the data panel.}
+\svp{The selected} $\alpha$ modulates the calculated visual p-value, as shown in \autoref{fig:vis-p-val-sensitivity-initial}: \svp{when $\alpha$ is low, it is likely that there are one or more visually distinctive null plots, making it difficult to attribute data panel selections to definitive visual differences betweeen the null and data plots.}
 \svp{When $\alpha$ is relatively high, however, there are likely to be more null plots which attract visual attention; in this situation, it is very easy to determine whether the data panel is visually distinct compared to the null panels.}
+Clearly, the choice of $\alpha$ is critical. 
+% The simulated distributions in \autoref{fig:prior-predictive} are illustrative, \svp{it can be difficult to translate the results from \autoref{fig:prior-predictive} into a useful estimate of $\alpha$.}
+% in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
 
 <<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the marginal beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
@@ -521,9 +523,6 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   theme(legend.position = c(0, 1), legend.justification = c(0, 1), legend.background = element_blank(), legend.box = "horizontal")
 @
 
-Clearly, the choice of $\alpha$ is critical. 
-% The simulated distributions in \autoref{fig:prior-predictive} are illustrative, \svp{it can be difficult to translate the results from \autoref{fig:prior-predictive} into a useful estimate of $\alpha$.}
-% in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method. 
 
 \section{Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:est-alpha}
 
@@ -536,7 +535,11 @@ This problem is even more pronounced when $\alpha$ values are small \svp{and onl
 We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.
 In this section, we describe both methods, as well as an alternate use of the estimated $\alpha$ value to screen for problems in the null plot generation method.}
 
-\svp{Both the visual and numeric methods for estimating $\alpha$ leverage the expected number of ``interesting" panels in a lineup. The expected number of panels selected more than $c$ times, $E[Z_c]$, is provided in \autoref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \autoref{eqn:full-model-specification} is provided in \autoref{app:expected}.}
+
+\svp{Both the visual and numeric methods for estimating $\alpha$ leverage the expected number of ``interesting" panels in a lineup.}
+
+\svp{Let us first define the random variable $Z_c$, the number of panels selected more than $c$ times in $K$ evaluations of a $m$-panel lineup.}
+\svp{The expected number of panels selected more than $c$ times, $E[Z_c]$, is provided in \autoref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \autoref{eqn:full-model-specification} is provided in \autoref{app:expected}.}
 
 \begin{equation}\label{eqn:ev-panel}
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
