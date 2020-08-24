@@ -674,7 +674,7 @@ Let us start with a simulation using the Dirichlet-multinomial model in \autoref
 The heuristic we propose for \svp{ad-hoc} estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
 }
 \begin{enumerate}
-\item Using a visual display with both simulated values and the expected value for the situation ($c = 1, m_0 = 19, $K_0 = 30$), such as that shown in \autoref{fig:alpha-sim-curve}, determine ranges of interesting null panel counts which correspond to about 4 levels of null panel selection activity. In \autoref{fig:alpha-sim-curve}, these levels are 2-3, 4-5, 6-7, and 8+ panels with more than $c=1$ selection.
+\item Using a visual display with both simulated values and the expected value for the situation ($c = 1, m_0 = 19, K_0 = 30$), such as that shown in \autoref{fig:alpha-sim-curve}, determine ranges of interesting null panel counts which correspond to about 4 levels of null panel selection activity. In \autoref{fig:alpha-sim-curve}, these levels are 2-3, 4-5, 6-7, and 8+ panels with more than $c=1$ selection.
 % Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $c$. In \autoref{fig:alpha-sim-curve}, $K_0/m_0 = 30/19$, so $c \approx 1.58$). 
 % It may be helpful to average the results of several simulations together to reduce the variability and make the underlying trend more visible.
 % \hh{The simulation captures the variability around the expected number of `interesting' panels}\svp{.}
@@ -692,7 +692,7 @@ In a simulation, it is easy to increase $N$ until the results no longer change; 
 
 Locate the relevant panel of the plot, and, using the number of target panel selections, determine whether the visual p-value calculation is conclusive for every $\alpha$ in the panel. If it is, then it is safe to draw a strong conclusion; if not, it may be useful to use a secondary experiment to more precisely estimate $\hat\alpha$, as discussed in \autoref{sec:rorschach-est-alpha}. 
 
-In this case, we have 10 target selections ($K = 40, $K_0 = 30$), and 3 null plots of 19 which were selected more than once. This corresponds to a visual p-value that will not be significant for any range of $\alpha$ in our selected band, so we do not need to run any secondary experiments to more precisely estimate $\alpha$. 
+In this case, we have 10 target selections ($K = 40, K_0 = 30$), and 3 null plots of 19 which were selected more than once. This corresponds to a visual p-value that will not be significant for any range of $\alpha$ in our selected band, so we do not need to run any secondary experiments to more precisely estimate $\alpha$. 
 
 \end{enumerate}
 
@@ -891,7 +891,7 @@ prior_pred_mean <- sim_interesting_panels(c = interest_threshold, K = 22, m = 19
            factor(levels = sprintf("alpha == %f", alphas), ordered = T))
 
 # Get possible breakpoints for alphas and panels
-panel_sel_breaks <- c(1.5, 3.5, 5.5, 7.5)
+panel_sel_breaks <- c(5, 7)
 possible_breakpoints <- model_df %>% 
   filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | 
            round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
@@ -901,6 +901,19 @@ possible_breakpoints <- model_df %>%
   filter(tmp %in% panel_sel_breaks) %>%
   ungroup() %>%
   mutate(band = floor(.5 + row_number()/2))
+
+panel_selected <- 6
+selected_breakpoints <- model_df %>% 
+  filter(round(n_sel_plots - floor(n_sel_plots), 1) == .5 | 
+           round(n_sel_plots - floor(n_sel_plots), 1) == 0) %>%
+  mutate(tmp = floor(n_sel_plots*2)/2, dist = abs(n_sel_plots - tmp)) %>%
+  group_by(tmp) %>%
+  filter(dist == min(dist)) %>%
+  filter(tmp %in% panel_selected) %>%
+  ungroup() %>%
+  mutate(band = floor(.5 + row_number()/2))
+
+
 
 # polygons for the grey-and-white bands
 bands <- possible_breakpoints %>%
@@ -921,7 +934,7 @@ band_label_pos <- panel_sel_breaks + 1 # this is a good default but may need cus
 band_labels <- tibble(
   y = band_label_pos,
   x = min(alphas),
-  label = c("2-3", "4-5", "6-7", "8+ Interesting panels")
+  label = c("5-7 (26%-37%)\ninteresting panels", "")
 )
 
 # Finally, the actual plot
@@ -932,10 +945,18 @@ ggplot() +
   scale_x_log10(name = expression(alpha), breaks = c(0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000), 
                 minor_breaks = mb, 
                 labels = 10^(seq(-3, 4))) +
-  geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30") + 
+  geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30", size = 3) + 
   coord_cartesian(xlim = range(alphas)) + 
   scale_y_continuous(name = paste0("Number of panels with at least ", 
-                                   interest_threshold+1, " selection"), breaks = 1:100)
+                                   interest_threshold+1, " selection"),
+                     breaks = 1:100) +
+  annotate("segment", x=0.000001, xend=selected_breakpoints$alpha, 
+               y=6, yend=6, 
+               colour="grey50") +
+  annotate("segment", x=selected_breakpoints$alpha, 
+           xend=selected_breakpoints$alpha, 
+               y=-Inf, yend=6, 
+               colour="grey50") 
 
 @
 
