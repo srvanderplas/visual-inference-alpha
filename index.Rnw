@@ -527,8 +527,8 @@ Clearly, the choice of $\alpha$ is critical.
 
 \section{Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:est-alpha}
 
-\hh{While it is generally possible to estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these maximum likelihood approaches fail because of the large number of observed zeroes (many panels are not selected in a lineup evaluation). This problem is even more pronounced when $\alpha$ values are small. }
-\svp{Under Scenario 3, one consequence of our tendency to consider the same subset of interesting null panels is that the less interesting null panels generally have 0 selections.}
+\hh{While it is generally possible to estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these maximum likelihood approaches fail because of the large number of observed zeroes.}
+\svp{Under Scenario 3, one consequence of our tendency to consider the same subset of interesting null panels is that many less interesting null panels have no participant selections.}
 This problem is even more pronounced when $\alpha$ values are small \svp{and only one or two null panels attracts participant interest}.
 \svp{As a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where lineup experiments typically operate.}
 
