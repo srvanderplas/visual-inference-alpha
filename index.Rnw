@@ -492,7 +492,7 @@ alphas <- 10^(seq(-3, 2, by = .01))
 data_breaks <- c(1, 2, 3, 5, 7, 10, 15, 20, 25, 30)
 K <- 30
 
-color_pal <- RColorBrewer::brewer.pal(length(data_breaks), "Paired")#[c(6, 5, 8, 7, 4, 3, 2, 1, 10, 9)]
+color_pal <- RColorBrewer::brewer.pal(length(data_breaks), "Paired")
 
 breaks <- c(10^seq(-3, 2, 1), 5*10^seq(-3, 1, 1)) %>% sort()
 minor.breaks <- c(2.5, 7.5) * rep(10^seq(-3, 1, 1), each = 2)
