@@ -414,15 +414,44 @@ ggplot() +
 @
 
 
-\svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention. }
-The data model used in \citet{majumder2013validation} assumes $\theta_t = 1/m$, that is, $\theta_t$ is fixed and equal to the selection probability of every other panel in the lineup. 
-\svp{This assumption, which corresponds to infinite $\alpha$, implies that each panel is equally likely to be selected. Even in Rorschach lineups, we know that this assumption does not hold - some panels are just more visually interesting, even if these differences arise by chance. }
-% This assumption, which would correspond to infinite $\alpha$, does not match our experience when evaluating a lineup, nor the accumulated experimental evidence (assembled under Scenario 3, as discussed in \autoref{sec:scenarios}) which shows that even null plots do not show equal selection probabilities for each panel. 
-When examining a lineup, we are generally drawn immediately to 1-4 panels, and the remaining evaluation is to decide between those panels; we also know that typically the same panels are selected across multiple individuals. 
-\svp{If we consult \autoref{fig:prior-predictive}, we can see that this roughly corresponds to an $\alpha$ between 0.05 and 0.1.}
-% To account for this issue, recent analyses of lineups calculate visual p-values using the mass function
+\svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
 
-The general formula for calculating a visual $p$-value under this model is:
+\subsection{Hyperparameters for Lineup Scenarios}\label{sec:scenario-alpha}
+
+% Argument outline:
+% 1. alpha provides information about how many panels attract participant attention
+% 2. Participant attention is a function of visual difference perception, but it is also a function of the data generation method
+% 3. Compare Scenario 1 vs. Scenario 3
+%     a. Scenario 1: new panels with each new lineup; no dependencies between panels. Every panel is equally interesting (at least, under $H_0$). This corresponds to infinite $\alpha$, or, more explicitly, to $\theta = 1/m$. 
+%     b. Scenario 3: each participant evaluates the same lineup, so the relationship between the interest level of each panel is constant. This corresponds to finite $\alpha$, and generally, $\alpha \lt 1$, that is, all panels are not equally interesting.
+% 4. The binomial model is effective in scenario 1, because we do not have any information about $\theta_i$ shared between subsequent lineup evaluations. In Scenario 3, however, we do, and thus, it becomes important to model that difference using the mixture model we propose in this paper. 
+% 5. If we work under Scenario 3, we should expect $\alpha$ to differ based on the data generation model and based on the form and aesthetic presentation of the plot. Thus, for each experiment, we need to estimate $\alpha$.
+
+\svp{That not all panels in a lineup are equally interesting is a function of both the statistical generation method and the visual system.}
+\svp{The lineup protocol may provide participants with some information about the hypothesis under investigation, using a question such as ``Which panel has the strongest trend?", but more often, we ask generic questions such as ``Which panel is the most different".}
+The ability to identify stimuli as being different from one another is a fundamental part of cognition: the abstractions that allow us to use the terms `same' and `different' are fundamental to human intelligence~\citep{mingWhenThingsAre2017}.
+\svp{When presented with a lineup and a generic prompt, the contrast between the visually interesting and uninteresting panel(s) help us to scaffold a mental representation of "same" and "different", ideally corresponding to the measure that is under investigation.}
+When a lineup contains null plots with interesting visual features, there is the possibility that participants (who are not provided with the null and alternative hypotheses) may form a hypothesis that is not under investigation, focusing \svp{instead} on the randomly generated but visually interesting feature \citep[for an example, see][]{vanderplas:2017}. 
+% \svp{Moreover, assessments of interesting features in plots are shared across participants and even across generated lineups. When one participant identifies a unique feature, other participants are likely to note the same feature; allowing participants to provide open-ended reasoning in lineup studies can be used to identify some of these insights.}
+% \svp{This dependence has no equivalence in an equivalent numerical test: under randomization testing or resampling models, there is a single, pre-specified evaluation metric used to aggregate the data. 
+% An individual sample (or the relationships between a collection of $m$ samples) would have no effect on the selection of the evaluation metric, because that metric is set before the samples are created.}
+% \svp{One of the most powerful features of lineup-based inference is that it allows us to identify differences in visual statistics using a battery of perceptual evaluations simultaneously; }
+\svp{The process of assessment of a representative baseline, identification of unique and visually interesting features, and development of a corresponding hypothesis occurs in all lineup evaluations.
+When combined with the lineup administration scenario, however, there are implications for our understanding of the meaning of $\alpha$.}
+
+\svp{Under Scenario 1, each participant sees an entirely different lineup: the data plot(s) and null plots are exchanged between each participant evaluation. 
+Thus while there may be differences in the visual interest of each panel in any one lineup, these differences do not carry over to the next lineup. 
+While all panels in a single generated lineup may not be equally likely to be selected, we do not have any information or ability to quantify these differences. 
+Our selection of $\alpha$ under this scenario goes beyond what might be considered a noninformative $\alpha=1$ (corresponding to uniformly distributed $\theta_i$ over the $m-1$ simplex). 
+Instead, because we are averaging over all panels which could be generated by the data and null models (as both the data plot and the null plots are exchanged every time), we can claim that $\theta = 1/m$ under $H_0$. In the Beta-Binomial mixture model, this corresponds to infinite $\alpha$. 
+As shown in \autoref{fig:vis-p-val-sensitivity-initial}, when $\alpha \rightarrow\infty$, the Beta-Binomial model converges asymptotically to the Binomial model proposed in \citet{majumder2013validation}.}
+
+\svp{Under Scenario 3, however, each participant sees the same lineup, with the same data plot(s) and null plots. 
+In this scenario, we have enough information that we can model the $\theta_i$ across different lineup evaluations.
+Because the perceptual mechanisms which determine visual interest are shared across participants, and the same null plots and data plot(s) are used, we must allow $\theta_i$ to vary.
+The Dirichlet-Multinomial model provides this flexibility through the introduction of the hyperparameter $\alpha$.}
+
+The general formula for calculating a visual $p$-value under \svp{the Beta-Binomial model appropriate for use in Scenario 3} is:
 \begin{align}\label{eqn:beta-binomial}
 p\text{-value} = P(C\geq c_t) = \sum_{x = c_t}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
 \end{align}
@@ -431,12 +460,6 @@ where $c_t$ is the number of times the data panel was picked in $K$  evaluations
 B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b > 0.
 \end{align*}
 A derivation of this mass function is provided in Appendix~\ref{app:pvalue}. 
-A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex})\citep{vinference}.
-\svp{We know from past studies \citep{loy2016variations,vanderplas:2017} that typically, only a few lineup panels to attract attention, even if all of the panels in a lineup are null plots.
-From \autoref{fig:prior-predictive}, we know that \svp{this phenomenon is} most consistent with $\alpha \ll 1$. 
-It follows, then, that in order to calculate visual p-values that are representative of the cognitive task at hand, we need to select an appropriate value of $\alpha$.
-}
-% but the more general solution is useful to consider, as we may not actually believe $\theta$ is uniformly distributed over the $(m - 1)$ simplex.
 
 \subsection{Hyperparameter Selection}
 % As a result, it's important to understand the effect of $\alpha$ on the posterior distribution.
