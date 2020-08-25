@@ -250,7 +250,26 @@ grid.arrange(p2, p1, ncol=2)
 
 \hh{XXX We need explicit hypotheses - that's the point of lineups, to make implicit looking at plots into explicit visual inference.}
 
-\section{Lineup Model Specification}
+\hh{XXX I'm just writing out a couple of ideas that we discussed on Sunday}
+
+
+\hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
+\hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
+
+\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
+
+\hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
+
+\hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
+
+\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
+
+\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
+
+
+\hh{Depending on the scenario, different distributions hold under the null hypothesis. Should we include the proof for Binomial under Scenario 1 in the appendix?}
+
+\section{Lineup Model Specification under Scenario 3}
 
 \svp{Consider a lineup under} 
 % Let us assume that we have $K$ evaluations of a lineup under
