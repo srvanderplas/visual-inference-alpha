@@ -255,7 +255,44 @@ grid.arrange(p2, p1, ncol=2)
 
 \hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
 \hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
+<<evidence-panel-sels, include = F>>=
 
+studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
+studies_sorted <- studies_sum %>%
+  mutate(study = factor(study, levels = paste0("turk", c(4:7, 10:11, 13:14)))) %>%
+  group_by(study, pic_id, pic_name) %>%
+  arrange(desc(n)) %>%
+  filter(obs_plot_location != response_no) %>%
+  mutate(sorted_panel = row_number(), prop = n/sum(n)) %>%
+  ungroup()
+# 
+# ggplot(studies_sorted, aes(x = sorted_panel, y = prop*30, group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study)
+# 
+# studies_sorted %>%
+#   filter(study == "turk4") %>%
+#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study) + 
+#   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# studies_sorted %>%
+#   filter(study == "turk4", obs_plot_location != response_no) %>%
+#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study) + 
+#   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# # studies_sorted %>%
+# #   filter(study == "turk6") %>%
+# #   mutate(test_param2 = str_remove_all(test_param, "^turk6_|ref$|\\d{1,}"),
+# #          color = str_extract(str_remove_all(test_param, "turk6_"), "\\d{1,}")) %>%
+# #   ggplot(aes(x = sorted_panel, y = prop*30, group = pic_id, color = color)) + 
+# #   geom_line(alpha = .3) + facet_wrap(~test_param2) + ggtitle("turk6") + 
+# #   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# 
+# ## Still working through the rest of these...I w
+
+@
 \hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
 
 \hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
@@ -281,7 +318,6 @@ grid.arrange(p2, p1, ncol=2)
 \svp{the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.}
 % \hh{the counts of that evaluation, where $c_i$ corresponds to panel $i$ being selected by $c_i$ of the $K$ evaluators. 
 \hh{Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
-
 
 
 %We will begin with a generic $m$-panel lineup, with selection probabilities $\theta_i, i = 1, ..., m$ where $\sum_{i=1}^m \theta_i = 1$, that is, the participant will select one (and only one) panel from the lineup as the most different. 
