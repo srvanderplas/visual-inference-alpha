@@ -480,20 +480,23 @@ breaks <- c(10^seq(-3, 2, 1), 5*10^seq(-3, 1, 1)) %>% sort()
 minor.breaks <- c(2.5, 7.5) * rep(10^seq(-3, 1, 1), each = 2)
 labels <- sprintf("%.3f", breaks) %>% gsub("\\.?0{1,}$", "", .)
 
+breaks <- c(breaks, 150)
+labels <- c(labels, "∞")
+
 pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = K) %>%
   mutate(p = vis_p_value(C, K, alpha)) 
 pv2 <- tidyr::crossing(C = data_breaks, K = K) %>%
   mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F))
 
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
-  annotate("segment", x =115, xend = 115, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
-  annotate("text", x = 115, y = .8,
+  annotate("segment", x =150, xend = 150, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
+  annotate("text", x = 150, y = .8,
            label = "Binomial", vjust = 0, hjust = .75) +
   annotate("segment", x = 1, xend = 1, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
   annotate("text", x = 1, y = 0.8,
-           label = expression(paste("θ ~ Unif on m-1 simplex")), vjust = 0, hjust = .5) +
+           label = expression(paste("θ ~ Uniform on m-1 simplex")), vjust = 0, hjust = .5) +
   geom_line(size = 0.75) +
-  geom_point(aes(x = 115, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
+  geom_point(aes(x = 150, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
   scale_y_continuous("Visual p-value") +
   scale_x_log10(expression(alpha), breaks = breaks, labels = labels, minor_breaks = minor.breaks) +
   scale_color_manual(paste0("# Data Panel\nIdentifications\n(K =", K, ")"), values = color_pal) +
