@@ -271,39 +271,35 @@ grid.arrange(p2, p1, ncol=2)
 
 \section{Lineup Model Specification under Scenario 3}
 
-\svp{Consider a lineup under} 
-% Let us assume that we have $K$ evaluations of a lineup under
-\hh{scenario 3, i.e.\ }
-\svp{the same lineup containing $m$ panels}%\hh{a  lineup consisting of the same $m$ panels},
-\svp{independently evaluated $K$ times.} % \hh{was shown to $K$ independent evaluators.}
-\svp{Define} % \hh{Let us assume that }
-\hh{$c = (c_1, ..., c_m)$} \svp{to be} %are 
-\svp{the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.}
-% \hh{the counts of that evaluation, where $c_i$ corresponds to panel $i$ being selected by $c_i$ of the $K$ evaluators. 
-\hh{Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
+Consider a lineup under
+scenario 3, i.e.\ 
+the same lineup containing $m$ panels
+independently evaluated $K$ times.
+Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times panel $i$ was selected by a participant to be the most different.
+
+Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. 
 
 
 
-%We will begin with a generic $m$-panel lineup, with selection probabilities $\theta_i, i = 1, ..., m$ where $\sum_{i=1}^m \theta_i = 1$, that is, the participant will select one (and only one) panel from the lineup as the most different. 
+The Multinomial $(K, \theta)$ distribution is  a natural model for the counts $c_i$, where $K$ describes the number of evaluations and $\bm{\theta} = \theta_1, ..., \theta_m$  describes the probability that each panel $i=1, ..., m$ is selected. 
+% HH: commenting out multinomial distribution - I don't think we need it here.
+% \svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}.
+% 
+% \begin{align}\label{eqn:multinomial-pmf}
+% f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
+% \end{align}
 
-%Our lineup has been evaluated by $K$ individuals, with $c_i, i = 1, ..., m$ the selection count for each panel, and $K = \sum_{i=1}^m c_i$.
-
-\svp{The Multinomial $(K, \theta)$ distribution is } a natural model for \svp{the counts $c_i$}, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilit\svp{y that each panel $i=1, ..., m$ is selected}. 
-\svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}.
-%of each outcome $1, ..., m$, i.e.\  $\theta_i$ is the probability with which an evaluator chooses panel $i$. 
-%We will fix $K$, as that is controlled by the experimental design, and model $\bm{\theta}$.
-
-\begin{align}\label{eqn:multinomial-pmf}
-f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
-\end{align}
 
 We model panel selection probabilities $\bm{\theta}$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
-As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. \svp{This is necessary because we do not know where a specific panel will be placed when the lineup is initially generated.}
+
+
+\hh{Under the null hypothesis, the data plot is not distinguishable from the null plots generated from the null model. We therefore have an overall symmetric Dirichlet distribution,} with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. 
+%\svp{This is necessary because we do not know where a specific panel will be placed when the lineup is initially generated.}
 The density function of the symmetric Dirichlet distribution is given as
 \begin{align}\label{eqn:dirichlet-pdf}
 f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
 \end{align}
-\hh{where $\Gamma(.)$ is the Gamma function defined as }
+where $\Gamma(.)$ is the Gamma function defined as 
 \begin{align*}
 \Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
 \end{align*}
@@ -324,9 +320,9 @@ where $Multinomial(\bm\theta, K)$ \svp{is defined as in \autoref{eqn:multinomial
 % Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution
 of $\bm{\theta}$ given $c$ and $\alpha$ as  Dirichlet$(\bm{c + \alpha})$.
 \svp{However, in most cases, we are primarily interested in obtaining a visual p-value from this mixture model; this does not require that we conduct inference on $\bm\theta$. Rather, }
-\svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ. 
-Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.}
-\svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$. 
+\svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ.}
+%Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.}
+%\svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$. 
 }
 
 % \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
