@@ -903,7 +903,7 @@ new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .07)
 Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual $p$-value \hh{on the order} of $10^-9$, %\Sexpr{old_vispval}
 which \hh{seems} extremely small given that there were more null plot selections than data plot selections.
 
-<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 5, fig.align="center", out.width = ".8\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. Selection counts from a lineup evaluation are provided in light grey for each panel which was selected at least once.">>=
+<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 5, fig.align="center", out.width = ".8\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. Selection counts from a lineup evaluation are provided in light grey for each panel which was selected at least once. Panel 8 shows the data plot.">>=
 ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) + 
   geom_boxplot() + 
   facet_wrap(~.sample) + 
