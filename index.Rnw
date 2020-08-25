@@ -939,7 +939,7 @@ ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) +
 
 
 @
-\svp{Under the \hh{Dirichlet model XXX we need a name or an equation for this XXX}, the first step \hh{is} to assess the expected number of null panels which  attract attention. 
+\svp{Under the Dirichlet-Multinomial model in \autoref{eqn:full-model-specification}, the first step \hh{is} to assess the expected number of null panels which  attract attention. 
 Using a threshold of $c=1$,  six of 19 null plots \hh{were} selected, so we might expect somewhere between \hh{XXX let's run the simulation for $K = 22$ and $m = 19$; XXX for $\alpha$ it doesn't matter whether we have dimension 19 or 20 - I'll put that piece of math into the appendix} 6 and 7 null panels to be selected in a Rorschach lineup.
 Ideally, we would generate several Rorschach lineups for this step, but for simplicity, we will work off of a single one-target lineup for this example; a corresponding Rorschach lineup is shown in \autoref{fig:example-plot}(b) but was not evaluated experimentally.}
 
