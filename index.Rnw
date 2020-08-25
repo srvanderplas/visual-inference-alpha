@@ -385,6 +385,7 @@ In most studies, a \svp{lineup} might be evaluated between 10 and 30 times; with
 $\alpha$ \svp{also} provides information about the number of panels in a lineup which are likely to attract participant interest. 
 It is useful to detour slightly from the discussion of visual inference to explore the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
 
+
 \subsection{Dirichlet Hyperparameter}\label{sec:alpha}
 % Stolen from heike/lineup-scenarios
 When $\alpha = 1$, the symmetric Dirichlet distribution is uniform on the $m-1$ dimensional simplex. 
@@ -471,6 +472,8 @@ ggplot() +
 
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
+
+
 
 \subsection{Hyperparameters for Lineup Scenarios}\label{sec:scenario-alpha}
 
