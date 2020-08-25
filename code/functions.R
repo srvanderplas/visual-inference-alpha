@@ -30,6 +30,19 @@ vis_p_value <- function(C, K, alpha = 1, m = 20){
   df$p
 }
 
+vis_p_value_orig <- function(C, K, m = 20){
+  single_p <- function(cc, kk, aa, mm) {
+    x <- cc:kk
+    sum(exp(lchoose(kk, x) - x*log(mm) + (kk-x)*log(1-1/mm)))
+  }
+  
+  df <- tibble(cc = C,
+               kk = K,
+               mm = m) %>%
+    unnest() %>%
+    mutate(p = purrr::pmap_dbl(., single_p))
+  df$p
+}
 
 
 sim_lineup_model <- function(alpha, m = 19, K = 22, N = 50) {

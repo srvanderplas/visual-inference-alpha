@@ -843,33 +843,6 @@ Estimation of $\alpha$ provides us with a way to screen for bad null plot genera
 \section{Example}
 <<example-setup, cache = T, include = F>>=
 options(digits = 3)
-vis_p_value <- function(C, K, alpha = 1, m = 20){
-  single_p <- function(cc, kk, aa, mm) {
-    x <- cc:kk
-    sum(exp(lchoose(kk, x) - lbeta(aa, (mm - 1) * aa) + lbeta(x + aa, kk - x + (mm - 1) * aa)))
-  }
-
-  df <- tibble(cc = C,
-               kk = K,
-               aa = alpha,
-               mm = m) %>%
-    unnest() %>%
-    mutate(p = purrr::pmap_dbl(., single_p))
-  df$p
-}
-vis_p_value_orig <- function(C, K, m = 20){
-  single_p <- function(cc, kk, aa, mm) {
-    x <- cc:kk
-    sum(exp(lchoose(kk, x) - x*log(mm) + (kk-x)*log(1-1/mm)))
-  }
-
-  df <- tibble(cc = C,
-               kk = K,
-               mm = m) %>%
-    unnest() %>%
-    mutate(p = purrr::pmap_dbl(., single_p))
-  df$p
-}
 
 
 exdat <- readr::read_csv("data/turk6_60_96_1_8.csv")
