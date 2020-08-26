@@ -173,10 +173,18 @@ p2 <- ggplot(lineup(null_permute('y1'), df, n=5), aes(x, y1)) +
 grid.arrange(p1, p2, ncol=1)
 @
 
+\subsection{Modeling Lineup Panel Selections}\label{sec:alpha}
+
 % ---- Make the argument for dirichlet distribution based on the task structure:
 % modeling of proportions/selection probs which sum to 1. ----------------------
+\svp{
+The lineup evaluation task boils down to a selection of one of $m$ panels in a lineup. 
+We model the probability of selecting panel $i$ as $\theta_i, i = 1, ..., m$, where $\bm\theta \sim Dirichlet(\bm\alpha)$. 
+The $m$-dimensional Dirichlet distribution generates $\bm\theta$ distributed on the $m-1$ simplex, that is, $\sum \theta_i = 1$. 
+When $\alpha_1 = \alpha_2 = ... = \alpha_m$, the distribution is a symmetric Dirichlet distribution. 
+Such a simplification might be used in a Rorschach lineup, where all of the $m$ panels are generated using the same mechanism.
+}
 
-\subsection{Dirichlet Hyperparameter}\label{sec:alpha}
 % Stolen from heike/lineup-scenarios
 When $\alpha = 1$, the symmetric Dirichlet distribution is uniform on the $m-1$ dimensional simplex.
 When $\alpha < 1$, the mass of the distribution is along the edges of the simplex, where most values of $\theta_i$ will be close to 0. When $\alpha>1$, the mass of the distribution is in the center of the simplex, with most of the $\theta_i$ having similar values.
@@ -218,10 +226,13 @@ ggplot(data=betas, aes(x=p, y=density)) +
 
 % End stolen from heike/lineup-scenarios
 
-\svp{Perceptually, the mixture model proposed in this paper mimics the tendency for us to focus in on a handful of the available panels of a lineup.
-By allowing $\theta$ to vary, we are building into our model the acknowledgement that not all randomly generated plots are equally visually ``interesting"; the less interesting plots tend to not receive equal amounts of attention during the lineup evaluation process.}
+% \svp{By utilizing a Dirichlet$(\bm\alpha)$ distribution to model the panel selection probability vector $\bm\theta$, we build into the model the acknowledgement that not all randomly generated plots are of equal visual interest, and thus, not all selection probabilities $\theta_i$ are equal.
+}
+
+% \svp{Perceptually, the mixture model proposed in this paper mimics the tendency for us to focus in on a handful of the available panels of a lineup.
+% By allowing $\theta$ to vary, we are building into our model the acknowledgement that not all randomly generated plots are equally visually ``interesting"; the less interesting plots tend to not receive equal amounts of attention during the lineup evaluation process.}
 % \svp{XXX can we cite that eye tracking study here? Does it back up that claim? XXX} \hh{XXX we've seen that phenomenon over and over again. but, yes, the eye-tracker study shows it, too.} \svp{XXX I know we've seen it over and over, but I'm hoping to provide some sort of concrete evidence as far as a citation might go... just backing up an otherwise unsubstantiated claim.}
-While graphical illustrations of the $m$-dimensional dirichlet distribution are more difficult \svp{when $m>3$}, we can use simulation to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention. \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$ \svp{in a $m=20$ panel lineup}.
+While graphical illustrations of the $m$-dimensional dirichlet distribution are more difficult \svp{when $m>3$}, we can use simulation to assess the meaning of $\alpha$ as it relates to lineup panel selection probabilities $\theta_i$. \autoref{fig:prior-predictive} shows simulated selection probabilities $\theta_i$, sorted such that the panel with the highest selection probability is first,  for several values of $\alpha$ \svp{in a $m=20$ panel lineup}.
 It is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
 \svp{XXX todo XXX reformat this picture so that it has a 3x3 grid of alpha values (theoretical) with selection probabilities $\theta_i$; add in a 3x1 grid of turk experiment selection probabilities to provide evidence that not all null panels are equally interesting.}
