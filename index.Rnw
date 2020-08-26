@@ -1129,5 +1129,6 @@ E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K
 Let $\bm\theta = (\theta_1, ... \theta_m)$ with $\bm\theta \sim $Dir$(\alpha)$ for some real-valued $\alpha > 0$. 
 The neutrality property of Dirichlet tells us that $\theta_m$ is independent of (normalized) random variable $\bm\theta^{-m} := (\frac{\theta_1}{1-\theta_m}, ..., \frac{\theta_{m-1}}{{1-\theta_m}})$.
 
+\cite{Connor:1969bt}
 \end{appendix}
 \end{document}
