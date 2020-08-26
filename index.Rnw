@@ -249,20 +249,8 @@ ggplot() +
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
 
-
-\subsection{Lineups as tests}\label{sec:tests}
-
-\dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. This is possible following the grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. This abstract plot definition, enables the null hypothesis to come from under the rug (implicit), be explicitly declared. For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables. The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
-
-\dc{XXX seems a little repetitive of the intro material?}
-\hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
-
-\hh{I believe a merge went wrong at this point. XXXX I re-included the previous items.}
-
-\hh{XXX I'm just writing out a couple of ideas that we discussed on Sunday}
-
-
-\hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
+\hh{XXX not sure that this is the right place for the next items, but it's the right section, i think}
+\hh{XXX Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
 \hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
 <<evidence-panel-sels, include = F>>=
 
@@ -304,16 +292,23 @@ studies_sorted <- studies_sum %>%
 @
 \hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
 
+
+\subsection{Lineups as tests}\label{sec:tests}
+
+\hh{XXX integrate this paragraph in the intro}
+\dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. This is possible following the grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. This abstract plot definition, enables the null hypothesis to come from under the rug (implicit), be explicitly declared. For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables. The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
+
+\dc{XXX seems a little repetitive of the intro material?}
+\hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
+
+\hh{XXX This still needs a home}
 \hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
 
+\hh{XXX up for grabs}
 \hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
 
-\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
-
-\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
 
 
-\hh{Depending on the scenario, different distributions hold under the null hypothesis. Should we include the proof for Binomial under Scenario 1 in the appendix?}
 
 \subsection{Lineup Administration}\label{sec:scenarios}
 % Types of lineups
@@ -393,6 +388,14 @@ p2 <- ggplot(l, aes(x, y1)) +
 grid.arrange(p2, p1, ncol=2)
 @
 
+\hh{XXXX}
+\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
+
+\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
+
+\hh{Definition of visual p value}
+
+\hh{Under scenario 1 this general approach simplifies to Binomial, see appendix?}
 
 \section{Lineup Model Specification}
 
