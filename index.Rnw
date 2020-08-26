@@ -249,75 +249,69 @@ grid.arrange(p2, p1, ncol=2)
 
 \subsection{Lineups as tests}\label{sec:tests}
 
-\hh{XXX We need explicit hypotheses - that's the point of lineups, to make implicit looking at plots into explicit visual inference.}
-
 \dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. This is possible following the grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. This abstract plot definition, enables the null hypothesis to come from under the rug (implicit), be explicitly declared. For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables. The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
 
 \dc{XXX seems a little repetitive of the intro material?}
+\hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
 
-\section{Lineup Model Specification}
+\hh{I believe a merge went wrong at this point. XXXX I re-included the previous items.}
 
-Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
-Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.
-\hh{Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
+\hh{XXX I'm just writing out a couple of ideas that we discussed on Sunday}
 
-\svp{The Multinomial $(K, \theta)$ distribution is } a natural model for \svp{the counts $c_i$}, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilit\svp{y that each panel $i=1, ..., m$ is selected}. 
-\svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}.
-\begin{align}\label{eqn:multinomial-pmf}
-f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
-\end{align}
 
-We model panel selection probabilities $\bm{\theta}$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
-As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. \svp{This is necessary because we do not know where a specific panel will be placed when the lineup is initially generated.}
-The density function of the symmetric Dirichlet distribution is given as
-\begin{align}\label{eqn:dirichlet-pdf}
-f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
-\end{align}
-\hh{where $\Gamma(.)$ is the Gamma function defined as }
-\begin{align*}
-\Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
-\end{align*}
-\hh{For integer values $n$ the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$.}
+\hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
+\hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
+<<evidence-panel-sels, include = F>>=
 
-With observed plot selections 
-$(c_1, ..., c_m)$ and assumed hyper parameter $\alpha > 0$, we specify a Beta-multinomial model as:
+studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
+studies_sorted <- studies_sum %>%
+  mutate(study = factor(study, levels = paste0("turk", c(4:7, 10:11, 13:14)))) %>%
+  group_by(study, pic_id, pic_name) %>%
+  arrange(desc(n)) %>%
+  filter(obs_plot_location != response_no) %>%
+  mutate(sorted_panel = row_number(), prop = n/sum(n)) %>%
+  ungroup()
+# 
+# ggplot(studies_sorted, aes(x = sorted_panel, y = prop*30, group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study)
+# 
+# studies_sorted %>%
+#   filter(study == "turk4") %>%
+#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study) + 
+#   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# studies_sorted %>%
+#   filter(study == "turk4", obs_plot_location != response_no) %>%
+#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study) + 
+#   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# # studies_sorted %>%
+# #   filter(study == "turk6") %>%
+# #   mutate(test_param2 = str_remove_all(test_param, "^turk6_|ref$|\\d{1,}"),
+# #          color = str_extract(str_remove_all(test_param, "turk6_"), "\\d{1,}")) %>%
+# #   ggplot(aes(x = sorted_panel, y = prop*30, group = pic_id, color = color)) + 
+# #   geom_line(alpha = .3) + facet_wrap(~test_param2) + ggtitle("turk6") + 
+# #   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# 
+# ## Still working through the rest of these...I w
 
-\begin{align}\begin{split}\label{eqn:full-model-specification}
-\bm{\theta} \mid \alpha &\sim Dirichlet(\bm\alpha)  \\
-\bm{c} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)\\
-\end{split}\end{align}
+@
+\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
 
-where $Multinomial(\bm\theta, K)$ \svp{is defined as in \autoref{eqn:multinomial-pmf}} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}. 
-\svp{The joint distribution of $\bf c$, $\bf \theta$ is then a Multinomial-Dirichlet mixture distribution.}
+\hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
 
-\svp{If we were interested in the value of $\bm\theta$ and wanted to take a Bayesian approach, we would use the conjugate relationship between the Multinomial and Dirichlet distributions to get a posterior distribution }
-% Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution
-of $\bm{\theta}$ given $c$ and $\alpha$ as  Dirichlet$(\bm{c + \alpha})$.
-\svp{However, in most cases, we are primarily interested in obtaining a visual p-value from this mixture model; this does not require that we conduct inference on $\bm\theta$. Rather, }
-\svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ. 
-Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.}
-\svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$. 
-}
+\hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
 
-% \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
-When evaluating lineups, we generally compare the number of target plot identifications with the aggregate number of null plot identifications \citep[see]{majumder2013validation}. 
-This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m$ is the index of the target panel in the lineup. For a total of $K$ evaluations, and $0 \le c_t \le K$ target plot evaluations, the above model simplifies to a Beta-Binomial Model:
+\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
 
-\begin{align}\begin{split}\label{eqn:marginal-model-specification}
-\theta_t \mid \alpha &\sim Beta(\alpha, (m-1)\alpha) \\
-C_t \mid \theta_t & \sim Binomial(\theta_t, K),\\
-\end{split}\end{align}
+\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
 
-with the distribution of $\theta_t$ given $c_t$ and $\alpha$ as Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
 
-Examining the parameters of either the full or marginal model specifications in \autoref{eqn:full-model-specification} and \autoref{eqn:marginal-model-specification}, $\alpha$ provides the equivalent of pseudo-observations for each plot; that is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup. 
-When $\alpha$ is small, these pseudo-observations have relatively little influence, but when $\alpha$ is large, the pseudo-observations can quickly dwarf any information provided by the data. 
-This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added. 
-In most studies, a \svp{lineup} might be evaluated between 10 and 30 times; with a $m=20$ \svp{panel} lineup, even $\alpha = 1$ can easily dominate the participant selection data.
+\hh{Depending on the scenario, different distributions hold under the null hypothesis. Should we include the proof for Binomial under Scenario 1 in the appendix?}
 
-% In addition to the pseudo-observation interpretation, 
-$\alpha$ \svp{also} provides information about the number of panels in a lineup which are likely to attract participant interest. 
-It is useful to detour slightly from the discussion of visual inference to explore the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
 
 \subsection{Dirichlet Hyperparameter}\label{sec:alpha}
 % Stolen from heike/lineup-scenarios
@@ -399,12 +393,76 @@ ggplot() +
   geom_path(aes(x = idx, y = jitter(sels, amount = .4), group = interaction(rep, alpha)), alpha = .05) +
   facet_wrap(~label, labeller = label_parsed, nrow = 2) +
   scale_x_continuous("Ordered panel number") +
-  scale_y_continuous("# panel was picked (in K=30 evaluations)")
 
 @
 
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
+
+\section{Lineup Model Specification}
+
+Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
+Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.
+\hh{Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
+
+\svp{The Multinomial $(K, \theta)$ distribution is } a natural model for \svp{the counts $c_i$}, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilit\svp{y that each panel $i=1, ..., m$ is selected}. 
+\svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}.
+\begin{align}\label{eqn:multinomial-pmf}
+f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
+\end{align}
+
+We model panel selection probabilities $\bm{\theta}$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
+As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. \svp{This is necessary because we do not know where a specific panel will be placed when the lineup is initially generated.}
+The density function of the symmetric Dirichlet distribution is given as
+\begin{align}\label{eqn:dirichlet-pdf}
+f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
+\end{align}
+\hh{where $\Gamma(.)$ is the Gamma function defined as }
+\begin{align*}
+\Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
+\end{align*}
+\hh{For integer values $n$ the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$.}
+
+With observed plot selections 
+$(c_1, ..., c_m)$ and assumed hyper parameter $\alpha > 0$, we specify a Beta-multinomial model as:
+
+\begin{align}\begin{split}\label{eqn:full-model-specification}
+\bm{\theta} \mid \alpha &\sim Dirichlet(\bm\alpha)  \\
+\bm{c} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)\\
+\end{split}\end{align}
+
+where $Multinomial(\bm\theta, K)$ \svp{is defined as in \autoref{eqn:multinomial-pmf}} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}. 
+\svp{The joint distribution of $\bf c$, $\bf \theta$ is then a Multinomial-Dirichlet mixture distribution.}
+
+\svp{If we were interested in the value of $\bm\theta$ and wanted to take a Bayesian approach, we would use the conjugate relationship between the Multinomial and Dirichlet distributions to get a posterior distribution }
+% Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution
+of $\bm{\theta}$ given $c$ and $\alpha$ as  Dirichlet$(\bm{c + \alpha})$.
+\svp{However, in most cases, we are primarily interested in obtaining a visual p-value from this mixture model; this does not require that we conduct inference on $\bm\theta$. Rather, }
+\svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ. 
+Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.}
+\svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$. 
+}
+
+% \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
+When evaluating lineups, we generally compare the number of target plot identifications with the aggregate number of null plot identifications \citep[see]{majumder2013validation}. 
+This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m$ is the index of the target panel in the lineup. For a total of $K$ evaluations, and $0 \le c_t \le K$ target plot evaluations, the above model simplifies to a Beta-Binomial Model:
+
+\begin{align}\begin{split}\label{eqn:marginal-model-specification}
+\theta_t \mid \alpha &\sim Beta(\alpha, (m-1)\alpha) \\
+C_t \mid \theta_t & \sim Binomial(\theta_t, K),\\
+\end{split}\end{align}
+
+with the distribution of $\theta_t$ given $c_t$ and $\alpha$ as Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
+
+Examining the parameters of either the full or marginal model specifications in \autoref{eqn:full-model-specification} and \autoref{eqn:marginal-model-specification}, $\alpha$ provides the equivalent of pseudo-observations for each plot; that is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup. 
+When $\alpha$ is small, these pseudo-observations have relatively little influence, but when $\alpha$ is large, the pseudo-observations can quickly dwarf any information provided by the data. 
+This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added. 
+In most studies, a \svp{lineup} might be evaluated between 10 and 30 times; with a $m=20$ \svp{panel} lineup, even $\alpha = 1$ can easily dominate the participant selection data.
+
+% In addition to the pseudo-observation interpretation, 
+$\alpha$ \svp{also} provides information about the number of panels in a lineup which are likely to attract participant interest. 
+It is useful to detour slightly from the discussion of visual inference to explore the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
+
 
 \subsection{Hyperparameters for Lineup Scenarios}\label{sec:scenario-alpha}
 
