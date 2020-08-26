@@ -257,28 +257,12 @@ grid.arrange(p2, p1, ncol=2)
 
 \section{Lineup Model Specification}
 
-\svp{Consider a lineup under} 
-% Let us assume that we have $K$ evaluations of a lineup under
-\hh{scenario 3, i.e.\ }
-\svp{the same lineup containing $m$ panels}%\hh{a  lineup consisting of the same $m$ panels},
-\svp{independently evaluated $K$ times.} % \hh{was shown to $K$ independent evaluators.}
-\svp{Define} % \hh{Let us assume that }
-\hh{$c = (c_1, ..., c_m)$} \svp{to be} %are 
-\svp{the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.}
-% \hh{the counts of that evaluation, where $c_i$ corresponds to panel $i$ being selected by $c_i$ of the $K$ evaluators. 
+Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
+Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.
 \hh{Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
-
-
-
-%We will begin with a generic $m$-panel lineup, with selection probabilities $\theta_i, i = 1, ..., m$ where $\sum_{i=1}^m \theta_i = 1$, that is, the participant will select one (and only one) panel from the lineup as the most different. 
-
-%Our lineup has been evaluated by $K$ individuals, with $c_i, i = 1, ..., m$ the selection count for each panel, and $K = \sum_{i=1}^m c_i$.
 
 \svp{The Multinomial $(K, \theta)$ distribution is } a natural model for \svp{the counts $c_i$}, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilit\svp{y that each panel $i=1, ..., m$ is selected}. 
 \svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}.
-%of each outcome $1, ..., m$, i.e.\  $\theta_i$ is the probability with which an evaluator chooses panel $i$. 
-%We will fix $K$, as that is controlled by the experimental design, and model $\bm{\theta}$.
-
 \begin{align}\label{eqn:multinomial-pmf}
 f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
 \end{align}
