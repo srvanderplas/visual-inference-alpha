@@ -33,7 +33,7 @@
 \setlength\parindent{0pt} % noindent for the whole document
 
 \begin{document}
-
+\tableofcontents
 \title{\dc{Statistical Significance Calculations for Several} Scenarios in Visual Inference\protect\thanks{This is an example for title footnote.}}
 
 \author[1]{Susan VanderPlas*}
@@ -99,20 +99,20 @@ source("code/functions.R")
 
 Graphics provide the opportunity to understand statistical data at an intuitive level: 
 %\dc{if the relationship between two variables is not adequately summarized by the numerical statistics} \svp{XXX Is that really the only use case for visual inference? As a backup if classic numerical inference fails?} 
-\dc{ we can gain more information by considering a scatter plot than the summary statistics, especially when the data departs from normality~\citep{anscombe:1972,matejka:2017}.}
+ we can gain more information  by looking at a scatter plot than what summary statistics tell us, especially when the data departs from normality~\citep{anscombe:1972,matejka:2017}.
 
-Statistical graphics \hh{allow us to} leverage the bandwidth of the visual system for implicit data analysis. \hh{B}ecause this analysis is implicit, we often assume \svp{these visual analyses} are not decisive in the same way that a hypothesis test is decisive.
-\svp{G}enerally, graphics do not come with a significance threshold, and in many cases we do not explicitly declare the hypothesis we might be testing before viewing the \dc{data plot}.\svp{XXX this is more general than lineups: we haven't introduced lineups yet, so we are talking about more generic charts.}
-However, there are 
-\dc{emerging} \svp{XXX visual inference is a decade old... if it hasn't emerged by now, what are we waiting for?} 
-formal protocols for \emph{visual inference}, \svp{using graphical displays to test hypotheses visually.} \svp{XXX this still seems a bit awkwardly worded} %through the} data visualization, \dc{loosely grouped into the label, visual inference}. %\svp{Too many uses of ``graphics" in a single paragraph}
+Statistical graphics allow us to leverage the bandwidth of the visual system for implicit data analysis. Because this analysis is implicit, we often assume these visual analyses are not decisive in the same way that a hypothesis test is decisive.
+Graphics generally do not come with a significance threshold, and in many cases we do not explicitly declare the hypothesis we might be testing before viewing the data plot.%\svp{XXX this is more general than lineups: we haven't introduced lineups yet, so we are talking about more generic charts.}
+However, %there are 
+%\dc{emerging} \svp{XXX visual inference is a decade old... if it hasn't emerged by now, what are we waiting for?} 
+formal protocols for \emph{visual inference} \hh{have been introduced in \citet{buja:2009} that allow us to}, \svp{use graphical displays to \hh{formally} test hypotheses visually.} %\svp{XXX this still seems a bit awkwardly worded} %through the} data visualization, \dc{loosely grouped into the label, visual inference}. %\svp{Too many uses of ``graphics" in a single paragraph}
 
 
-Visual inference \dc{builds from considering data plots} to \dc{be} visual statistics: charts are, after all, a quantity computed from values in a sample of data. 
+Visual inference builds from considering data plots to be visual statistics: charts are \hh{rendered}, after all, from \hh{quantities based on values} in a sample of data. 
 
-In order to test whether a chart shows a visually significant result, we can use the same \dc{machinery} used by randomization tests: 
-(1) construct a method to generate data consistent with the null hypothesis, such as using randomization or drawing samples from a model consistent with the null hypothesis, (2) generate many copies of the test statistic (in this case, the plot), and (3) see where the \dc{observed} statistic falls in the distribution of artificially generated quantities.
-\dc{The conceptual framework was described in \citet{buja:2009}), who introduced two protocols: a Rorschach and a lineup. Figure \ref{fig:typesoflineups} illustrates these.} In a Rorschach all plots are null plots, and the \hh{Rorschach's main} purpose is to assess the \hh{extent of visual} variation that occurs in data generated  by the null mechanism.
+In order to test whether a chart shows a visually significant result, we can use the same machinery used by randomization tests: 
+(1) construct a method to generate data consistent with the null hypothesis, such as using randomization or drawing samples from a model consistent with the null hypothesis, (2) generate many copies of the test statistic (in this case, the plot), and (3) see where the observed statistic falls in the distribution of artificially generated quantities.
+\dc{The conceptual framework was described in \citet{buja:2009}, who introduced two protocols: a Rorschach and a lineup. Figure \ref{fig:typesoflineups} illustrates these.} In a Rorschach all plots are null plots, and the \hh{Rorschach's main} purpose is to assess the extent of visual variation that occurs in data generated  by the null mechanism.
 
 An assembly of several null plots with a target (or data) plot is called a \emph{lineup}, \hh{named} after the \hh{law-enforcement} procedure  to line up a  suspect among a set of innocents  to check if a victim can identify the suspect as the  perpetrator of the crime. 
 \hh{In its visual version, } lineups are typically composed of $m-1$ ``null" plots (generated under the null hypothesis) and one data plot containing the \dc{observed} data. 
