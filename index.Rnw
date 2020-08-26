@@ -146,9 +146,6 @@ In this paper, we propose a \dc{new approach for computing $p$-values} using a D
 \svp{This model is more flexible than the binomial model used in \citet{majumder2013validation}, and better represents the perceptual and statistical dependencies present when lineups are evaluated by multiple people.}
 \svp{Leveraging this model, we propose a method for estimation of the model parameters and present a diagnostic procedure for null plot generation models.}
 
-
-% \dc{XXX Add comparison of binomial vs dirichlet p-values for same lineups later}
-
 <<typesoflineups, eval = T,echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=6, fig.cap = "Types of lineups. In a Rorschach, all plots are null plots, with a purpose of understanding patterns that may occur by chance. A one target lineup has one data plot, and the remaining are null plots.">>=
 library(nullabor)
 library(gridExtra)
@@ -176,6 +173,8 @@ p2 <- ggplot(lineup(null_permute('y1'), df, n=5), aes(x, y1)) +
 grid.arrange(p1, p2, ncol=1)
 @
 
+% ---- Make the argument for dirichlet distribution based on the task structure: 
+% modeling of proportions/selection probs which sum to 1. ----------------------
 
 \subsection{Dirichlet Hyperparameter}\label{sec:alpha}
 % Stolen from heike/lineup-scenarios
@@ -225,6 +224,7 @@ By allowing $\theta$ to vary, we are building into our model the acknowledgement
 While graphical illustrations of the $m$-dimensional dirichlet distribution are more difficult \svp{when $m>3$}, we can use simulation to assess the meaning of $\alpha$ as it relates to how many panels in a lineup attract participant attention. \autoref{fig:prior-predictive} shows simulated $c_i$ counts (sorted for visual clarity) for several values of $\alpha$ \svp{in a $m=20$ panel lineup}.
 It is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
+\svp{XXX todo XXX reformat this picture so that it has a 3x3 grid of alpha values (theoretical) with selection probabilities $\theta_i$; add in a 3x1 grid of turk experiment selection probabilities to provide evidence that not all null panels are equally interesting.}
 <<prior-predictive, echo = F, fig.cap = "Simulation of the number of panel picks $c_i$, sorted by  frequency, for different values of $\\alpha$ with $K=30$ evaluations. For low values of $\\alpha$, plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. In all 50 simulated lineups with $\\alpha=0.001$ only one of the panels was chosen. For $\\alpha = 1$ five different panels were each chosen at least two times, and ten different panels were chosen at least once. ", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
 # set.seed(5019230943) # HH: too large for my machine 
 set.seed(519223094)
@@ -264,24 +264,25 @@ ggplot() +
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
 
-<<<<<<< HEAD
-
-\subsection{Lineups as tests}\label{sec:tests}
-
-
-\dc{XXX seems a little repetitive of the intro material?}
-\hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
-
+% ---- Stuff left over from the lineups as hypothesis tests section ------------
+% This stuff is supposed to be mostly integrated into admininstration after the
+% scenarios are defined.
+% Goal of the administration section is to motivate the differences in the models
+% and make the point that Scenario 1 is a special case of Scenario 3 where there 
+% is no dependence; as a result, we don't have to bother modeling the selection
+% probabilities because they don't carry over between lineup evaluations.
 \hh{I believe a merge went wrong at this point. XXXX I re-included the previous items.}
 
-\hh{XXX I'm just writing out a couple of ideas that we discussed on Sunday}
-
-
 \hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
-=======
-\hh{XXX not sure that this is the right place for the next items, but it's the right section, i think}
-\hh{XXX Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
->>>>>>> 63e8db3002e8786cd1fc008efca64e472b7251e6
+
+\hh{XXX up for grabs}
+\hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
+
+\hh{XXX This still needs a home}
+\hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
+
+\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
+
 \hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
 <<evidence-panel-sels, include = F>>=
 
@@ -321,25 +322,8 @@ studies_sorted <- studies_sum %>%
 # ## Still working through the rest of these...I w
 
 @
-\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
 
-
-\subsection{Lineups as tests}\label{sec:tests}
-
-\hh{XXX integrate this paragraph in the intro}
-\dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. This is possible following the grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. This abstract plot definition, enables the null hypothesis to come from under the rug (implicit), be explicitly declared. For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables. The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
-
-\dc{XXX seems a little repetitive of the intro material?}
-\hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
-
-\hh{XXX This still needs a home}
-\hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
-
-\hh{XXX up for grabs}
-\hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
-
-
-
+% ------------------------------------------------------------------------------
 
 \subsection{Lineup Administration}\label{sec:scenarios}
 % Types of lineups
