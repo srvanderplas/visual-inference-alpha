@@ -156,7 +156,7 @@ p1 <- ggplot(rorschach(null_permute('y1'), df, n=5), aes(x, y1)) +
         axis.ticks = element_blank(), 
         axis.text = element_blank()) +
   xlab("") + ylab("") +
-  ggtitle("Rorschach")
+  ggtitle("a. Rorschach")
 p2 <- ggplot(lineup(null_permute('y1'), df, n=5), aes(x, y1)) +
   geom_point() +
   facet_wrap(~ .sample, ncol=5) +
@@ -164,7 +164,7 @@ p2 <- ggplot(lineup(null_permute('y1'), df, n=5), aes(x, y1)) +
         axis.ticks = element_blank(), 
         axis.text = element_blank()) +
   xlab("") + ylab("") +
-  ggtitle("One target lineup")
+  ggtitle("b. One target lineup")
 grid.arrange(p1, p2, ncol=1)
 @
 
@@ -173,7 +173,7 @@ grid.arrange(p1, p2, ncol=1)
 %\citet{buja:2009} introduced two types of lineups: Rorschach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data. 
 %\citet{vanderplas:2017} introduced the two-target lineups\svp{, which can be used to test the visual salience of two competing effects.}
 % Types of lineup evaluations
-In addition to different types of lineups, there are different \dc{ways that an analyst can run a lineup experiment.} These are detailed below and also illustrated in \autoref{fig:scenarios}.
+In addition to different types of lineups, there are different \dc{ways that an analyst can run a lineup experiment.} Three possibilities are detailed below and also illustrated in \autoref{fig:scenarios}.
 
 \begin{description}
 \item [Scenario 1] $K$ different lineups are shown to $K$ independent individuals. 
@@ -250,63 +250,11 @@ grid.arrange(p2, p1, ncol=2)
 
 \hh{XXX We need explicit hypotheses - that's the point of lineups, to make implicit looking at plots into explicit visual inference.}
 
-\hh{XXX I'm just writing out a couple of ideas that we discussed on Sunday}
+\dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. This is possible following the grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. This abstract plot definition, enables the null hypothesis to come from under the rug (implicit), be explicitly declared. For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables. The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
 
+\dc{XXX seems a little repetitive of the intro material?}
 
-\hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
-\hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
-<<evidence-panel-sels, include = F>>=
-
-studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
-studies_sorted <- studies_sum %>%
-  mutate(study = factor(study, levels = paste0("turk", c(4:7, 10:11, 13:14)))) %>%
-  group_by(study, pic_id, pic_name) %>%
-  arrange(desc(n)) %>%
-  filter(obs_plot_location != response_no) %>%
-  mutate(sorted_panel = row_number(), prop = n/sum(n)) %>%
-  ungroup()
-# 
-# ggplot(studies_sorted, aes(x = sorted_panel, y = prop*30, group = pic_id)) + 
-#   geom_line(alpha = .05) + facet_wrap(~study)
-# 
-# studies_sorted %>%
-#   filter(study == "turk4") %>%
-#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
-#   geom_line(alpha = .05) + facet_wrap(~study) + 
-#   guides(color = guide_legend(override.aes = list(alpha = 1)))
-# 
-# studies_sorted %>%
-#   filter(study == "turk4", obs_plot_location != response_no) %>%
-#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
-#   geom_line(alpha = .05) + facet_wrap(~study) + 
-#   guides(color = guide_legend(override.aes = list(alpha = 1)))
-# 
-# # studies_sorted %>%
-# #   filter(study == "turk6") %>%
-# #   mutate(test_param2 = str_remove_all(test_param, "^turk6_|ref$|\\d{1,}"),
-# #          color = str_extract(str_remove_all(test_param, "turk6_"), "\\d{1,}")) %>%
-# #   ggplot(aes(x = sorted_panel, y = prop*30, group = pic_id, color = color)) + 
-# #   geom_line(alpha = .3) + facet_wrap(~test_param2) + ggtitle("turk6") + 
-# #   guides(color = guide_legend(override.aes = list(alpha = 1)))
-# 
-# 
-# ## Still working through the rest of these...I w
-
-@
-\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
-
-\hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
-
-\hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
-
-\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
-
-\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
-
-
-\hh{Depending on the scenario, different distributions hold under the null hypothesis. Should we include the proof for Binomial under Scenario 1 in the appendix?}
-
-\section{Lineup Model Specification under Scenario 3}
+\section{Lineup Model Specification}
 
 \svp{Consider a lineup under} 
 % Let us assume that we have $K$ evaluations of a lineup under
@@ -318,6 +266,7 @@ studies_sorted <- studies_sum %>%
 \svp{the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.}
 % \hh{the counts of that evaluation, where $c_i$ corresponds to panel $i$ being selected by $c_i$ of the $K$ evaluators. 
 \hh{Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
+
 
 
 %We will begin with a generic $m$-panel lineup, with selection probabilities $\theta_i, i = 1, ..., m$ where $\sum_{i=1}^m \theta_i = 1$, that is, the participant will select one (and only one) panel from the lineup as the most different. 
@@ -384,7 +333,6 @@ In most studies, a \svp{lineup} might be evaluated between 10 and 30 times; with
 % In addition to the pseudo-observation interpretation, 
 $\alpha$ \svp{also} provides information about the number of panels in a lineup which are likely to attract participant interest. 
 It is useful to detour slightly from the discussion of visual inference to explore the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
-
 
 \subsection{Dirichlet Hyperparameter}\label{sec:alpha}
 % Stolen from heike/lineup-scenarios
@@ -473,8 +421,6 @@ ggplot() +
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
 
-
-
 \subsection{Hyperparameters for Lineup Scenarios}\label{sec:scenario-alpha}
 
 % Argument outline:
@@ -519,23 +465,20 @@ breaks <- c(10^seq(-3, 2, 1), 5*10^seq(-3, 1, 1)) %>% sort()
 minor.breaks <- c(2.5, 7.5) * rep(10^seq(-3, 1, 1), each = 2)
 labels <- sprintf("%.3f", breaks) %>% gsub("\\.?0{1,}$", "", .)
 
-breaks <- c(breaks, 150)
-labels <- c(labels, "∞")
-
 pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = K) %>%
   mutate(p = vis_p_value(C, K, alpha)) 
 pv2 <- tidyr::crossing(C = data_breaks, K = K) %>%
   mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F))
 
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
-  annotate("segment", x =150, xend = 150, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
-  annotate("text", x = 150, y = .8,
+  annotate("segment", x =115, xend = 115, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
+  annotate("text", x = 115, y = .8,
            label = "Binomial", vjust = 0, hjust = .75) +
   annotate("segment", x = 1, xend = 1, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
   annotate("text", x = 1, y = 0.8,
-           label = expression(paste("θ ~ Uniform on m-1 simplex")), vjust = 0, hjust = .5) +
+           label = expression(paste("θ ~ Unif on m-1 simplex")), vjust = 0, hjust = .5) +
   geom_line(size = 0.75) +
-  geom_point(aes(x = 150, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
+  geom_point(aes(x = 115, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
   scale_y_continuous("Visual p-value") +
   scale_x_log10(expression(alpha), breaks = breaks, labels = labels, minor_breaks = minor.breaks) +
   scale_color_manual(paste0("# Data Panel\nIdentifications\n(K =", K, ")"), values = color_pal) +
@@ -882,6 +825,33 @@ Estimation of $\alpha$ provides us with a way to screen for bad null plot genera
 \section{Example}
 <<example-setup, cache = T, include = F>>=
 options(digits = 3)
+vis_p_value <- function(C, K, alpha = 1, m = 20){
+  single_p <- function(cc, kk, aa, mm) {
+    x <- cc:kk
+    sum(exp(lchoose(kk, x) - lbeta(aa, (mm - 1) * aa) + lbeta(x + aa, kk - x + (mm - 1) * aa)))
+  }
+
+  df <- tibble(cc = C,
+               kk = K,
+               aa = alpha,
+               mm = m) %>%
+    unnest() %>%
+    mutate(p = purrr::pmap_dbl(., single_p))
+  df$p
+}
+vis_p_value_orig <- function(C, K, m = 20){
+  single_p <- function(cc, kk, aa, mm) {
+    x <- cc:kk
+    sum(exp(lchoose(kk, x) - x*log(mm) + (kk-x)*log(1-1/mm)))
+  }
+
+  df <- tibble(cc = C,
+               kk = K,
+               mm = m) %>%
+    unnest() %>%
+    mutate(p = purrr::pmap_dbl(., single_p))
+  df$p
+}
 
 
 exdat <- readr::read_csv("data/turk6_60_96_1_8.csv")
@@ -915,34 +885,24 @@ new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .07)
 Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual $p$-value \hh{on the order} of $10^-9$, %\Sexpr{old_vispval}
 which \hh{seems} extremely small given that there were more null plot selections than data plot selections.
 
-<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 5, fig.align="center", out.width = ".8\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. Selection counts from a lineup evaluation are provided in light grey for each panel which was selected at least once. Panel 8 shows the data plot.">>=
+<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 5, fig.align="center", out.width = ".8\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. Selection counts are provided in light grey in the lower right corner of each panel which was selected at least once.">>=
 ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) + 
+  geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, size = 10, data = exdf, color = "grey80") +
   geom_boxplot() + 
   facet_wrap(~.sample) + 
   theme_bw() + 
   theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
-  scale_fill_discrete(guide = "none") +
-#  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill="white", alpha = 0.003) +
-  annotate("rect", xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, fill="white", alpha = 0.5) +
-  geom_text(aes(x = 1.5, y = 0.830, label = n), nudge_x = 0, nudge_y = 0, hjust = .5, vjust = .5, inherit.aes = F, size = 20, data = exdf, color = "grey70", alpha =0.8) +
-  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill="black", alpha = 0.5, inherit.aes=FALSE, data = exdf %>% filter(.sample==8)) +
-  geom_text(aes(x = 1.5, y = 0.830, label = n), nudge_x = 0, nudge_y = 0, hjust = .5, vjust = .5, inherit.aes=FALSE,
-  data = exdf %>% filter(.sample==8),
-  size = 20, color = "grey90", alpha =0.7)
+  scale_fill_discrete(guide = "none") 
+  
 
-
-# ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) + 
-#   geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, size = 10, data = exdf, color = "grey80") +
-#   geom_boxplot() + 
-#   facet_wrap(~.sample) + 
-#   theme_bw() + 
-#   theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
-#   scale_fill_discrete(guide = "none") 
-#   
-
-
+#ggplot(exdat2, aes(x = group, y = vals, fill = factor(group))) + geom_boxplot() + 
+#  facet_wrap(~.sample) + 
+#  theme_bw() + 
+#  theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+#  scale_fill_discrete(guide = "none") #+ 
+  # geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, data = exdf, color = "grey40")
 @
-\svp{Under the Dirichlet-Multinomial model in \autoref{eqn:full-model-specification}, the first step \hh{is} to assess the expected number of null panels which  attract attention. 
+\svp{Under the \hh{Dirichlet model XXX we need a name or an equation for this XXX}, the first step \hh{is} to assess the expected number of null panels which  attract attention. 
 Using a threshold of $c=1$,  six of 19 null plots \hh{were} selected, so we might expect somewhere between \hh{XXX let's run the simulation for $K = 22$ and $m = 19$; XXX for $\alpha$ it doesn't matter whether we have dimension 19 or 20 - I'll put that piece of math into the appendix} 6 and 7 null panels to be selected in a Rorschach lineup.
 Ideally, we would generate several Rorschach lineups for this step, but for simplicity, we will work off of a single one-target lineup for this example; a corresponding Rorschach lineup is shown in \autoref{fig:example-plot}(b) but was not evaluated experimentally.}
 
