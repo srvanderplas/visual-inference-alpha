@@ -161,149 +161,6 @@ p2 <- ggplot(lineup(null_permute('y1'), df, n=5), aes(x, y1)) +
 grid.arrange(p1, p2, ncol=1)
 @
 
-\subsection{Lineup Administration}\label{sec:scenarios}
-% Types of lineups
-%\citet{buja:2009} introduced two types of lineups: Rorschach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data. 
-%\citet{vanderplas:2017} introduced the two-target lineups\svp{, which can be used to test the visual salience of two competing effects.}
-% Types of lineup evaluations
-In addition to different types of lineups, there are different \dc{ways that an analyst can run a lineup experiment.} Three possibilities are detailed below and also illustrated in \autoref{fig:scenarios}.
-
-\begin{description}
-\item [Scenario 1] $K$ different lineups are shown to $K$ independent individuals. 
-In this scenario, both the data and the null plots in each generated lineup are distinct from those in every other lineup. 
-This scenario is only practical when using purely simulated data (for both the data and null plots) or data large enough to allow for subsampling to generate $K$ different data plots. 
-Under \svp{Scenario 1}, we can consider the number of target plot selections $t$ out of $K$ total evaluations, where each lineup evaluation is a bernoulli trial; the total number of data plot evaluations can then be modeled as a Binomial distribution with selection probability $1/m$ (for a single target lineup) \citep{majumder2013validation}.
-
-\item [Scenario 2] $K$ different sets of null plots are shown to $K$ independent individuals; the same data plot is used in each lineup. 
-Alternately, $L$ sets of lineups are shown to $K > L$ individuals. 
-In Scenario 2, there are dependencies introduced by reuse of the data or the lineups, providing an intermediate case between the two extremes of Scenario 1 and Scenario 3.
-
-\item [Scenario 3] The same lineup is shown to $K$ independent individuals. 
-This scenario is the most common scenario in the lineup experiments which have been completed to date \citep{hofmann2012graphical,roychowdhury:2012,majumder2013validation,loyAreYouNormal2015,vanderplas:2017}. 
-In this scenario, lineup evaluations by independent viewers are not independent because the viewers are evaluating the same combination of 19 null plots and one data plot. 
-Any peculiar features which arise in a null plot may cause participants to select that null plot over the data plot; it is likely that where one individual makes this choice, others might as well. 
-Thus, in Scenario 3, which is the most common lineup experiment scenario, it is not reasonable to assume that all panels are equally likely to be selected under the null hypothesis.
-\end{description}
-
-Scenario 3 is the primary motivation for the model which we will develop in the next section: while we cannot consider the panels in each lineup as equally likely to be selected, we can model the individual selection probabilities using a hierarchical model.
-
-<<scenarios, eval = T, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Illustrations of scenarios 1 and 2. Left column shows what three different evaluators would see under scenario 1, and the right column shows what three different evaluators would see under scenario 2. In scenario 1, all nulls and data plots are different, while in scenario 2 only the nulls differ.  (Scenario 3 would have all three lineups the same.) The location of the data plot may vary from one evaluator to another.">>=
-set.seed(2020)
-df <- tibble(x=runif(50)) %>%
-  mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
-  mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
-                     (x-0.5) - 5 + rnorm(50)))
-l1 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "evaluator 1")
-l2 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "evaluator 2")
-l3 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "evaluator 3")
-l <- bind_rows(l1, l2, l3)
-p1 <- ggplot(l, aes(x, y1)) +
-  geom_point() +
-  facet_grid(subject ~ .sample) +
-  theme(aspect.ratio=1, 
-        axis.ticks = element_blank(), 
-        axis.text = element_blank()) +
-  xlab("") + ylab("") +
-  ggtitle("Scenario 2")
-
-df <- tibble(x=runif(50)) %>%
-  mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
-  mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
-                     (x-0.5) - 5 + rnorm(50)))
-l1 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "evaluator 1")
-df <- tibble(x=runif(50)) %>%
-  mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
-  mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
-                     (x-0.5) - 5 + rnorm(50)))
-l2 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "evaluator 2")
-df <- tibble(x=runif(50)) %>%
-  mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
-  mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
-                     (x-0.5) - 5 + rnorm(50)))
-l3 <- lineup(null_permute('y1'), df, n=5) %>%
-  mutate(subject = "evaluator 3")
-l <- bind_rows(l1, l2, l3)
-p2 <- ggplot(l, aes(x, y1)) +
-  geom_point() +
-  facet_grid(subject ~ .sample) +
-  theme(aspect.ratio=1, 
-        axis.ticks = element_blank(), 
-        axis.text = element_blank()) +
-  xlab("") + ylab("") +
-  ggtitle("Scenario 1")
-grid.arrange(p2, p1, ncol=2)
-@
-
-\subsection{Lineups as tests}\label{sec:tests}
-
-\dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. This is possible following the grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. This abstract plot definition, enables the null hypothesis to come from under the rug (implicit), be explicitly declared. For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables. The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
-
-\dc{XXX seems a little repetitive of the intro material?}
-\hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
-
-\hh{I believe a merge went wrong at this point. XXXX I re-included the previous items.}
-
-\hh{XXX I'm just writing out a couple of ideas that we discussed on Sunday}
-
-
-\hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
-\hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
-<<evidence-panel-sels, include = F>>=
-
-studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
-studies_sorted <- studies_sum %>%
-  mutate(study = factor(study, levels = paste0("turk", c(4:7, 10:11, 13:14)))) %>%
-  group_by(study, pic_id, pic_name) %>%
-  arrange(desc(n)) %>%
-  filter(obs_plot_location != response_no) %>%
-  mutate(sorted_panel = row_number(), prop = n/sum(n)) %>%
-  ungroup()
-# 
-# ggplot(studies_sorted, aes(x = sorted_panel, y = prop*30, group = pic_id)) + 
-#   geom_line(alpha = .05) + facet_wrap(~study)
-# 
-# studies_sorted %>%
-#   filter(study == "turk4") %>%
-#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
-#   geom_line(alpha = .05) + facet_wrap(~study) + 
-#   guides(color = guide_legend(override.aes = list(alpha = 1)))
-# 
-# studies_sorted %>%
-#   filter(study == "turk4", obs_plot_location != response_no) %>%
-#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
-#   geom_line(alpha = .05) + facet_wrap(~study) + 
-#   guides(color = guide_legend(override.aes = list(alpha = 1)))
-# 
-# # studies_sorted %>%
-# #   filter(study == "turk6") %>%
-# #   mutate(test_param2 = str_remove_all(test_param, "^turk6_|ref$|\\d{1,}"),
-# #          color = str_extract(str_remove_all(test_param, "turk6_"), "\\d{1,}")) %>%
-# #   ggplot(aes(x = sorted_panel, y = prop*30, group = pic_id, color = color)) + 
-# #   geom_line(alpha = .3) + facet_wrap(~test_param2) + ggtitle("turk6") + 
-# #   guides(color = guide_legend(override.aes = list(alpha = 1)))
-# 
-# 
-# ## Still working through the rest of these...I w
-
-@
-\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
-
-\hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
-
-\hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
-
-\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
-
-\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
-
-
-\hh{Depending on the scenario, different distributions hold under the null hypothesis. Should we include the proof for Binomial under Scenario 1 in the appendix?}
-
 
 \subsection{Dirichlet Hyperparameter}\label{sec:alpha}
 % Stolen from heike/lineup-scenarios
@@ -391,6 +248,151 @@ ggplot() +
 
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
+
+
+\subsection{Lineups as tests}\label{sec:tests}
+
+\dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. This is possible following the grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. This abstract plot definition, enables the null hypothesis to come from under the rug (implicit), be explicitly declared. For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables. The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
+
+\dc{XXX seems a little repetitive of the intro material?}
+\hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
+
+\hh{I believe a merge went wrong at this point. XXXX I re-included the previous items.}
+
+\hh{XXX I'm just writing out a couple of ideas that we discussed on Sunday}
+
+
+\hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
+\hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
+<<evidence-panel-sels, include = F>>=
+
+studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
+studies_sorted <- studies_sum %>%
+  mutate(study = factor(study, levels = paste0("turk", c(4:7, 10:11, 13:14)))) %>%
+  group_by(study, pic_id, pic_name) %>%
+  arrange(desc(n)) %>%
+  filter(obs_plot_location != response_no) %>%
+  mutate(sorted_panel = row_number(), prop = n/sum(n)) %>%
+  ungroup()
+# 
+# ggplot(studies_sorted, aes(x = sorted_panel, y = prop*30, group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study)
+# 
+# studies_sorted %>%
+#   filter(study == "turk4") %>%
+#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study) + 
+#   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# studies_sorted %>%
+#   filter(study == "turk4", obs_plot_location != response_no) %>%
+#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) + 
+#   geom_line(alpha = .05) + facet_wrap(~study) + 
+#   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# # studies_sorted %>%
+# #   filter(study == "turk6") %>%
+# #   mutate(test_param2 = str_remove_all(test_param, "^turk6_|ref$|\\d{1,}"),
+# #          color = str_extract(str_remove_all(test_param, "turk6_"), "\\d{1,}")) %>%
+# #   ggplot(aes(x = sorted_panel, y = prop*30, group = pic_id, color = color)) + 
+# #   geom_line(alpha = .3) + facet_wrap(~test_param2) + ggtitle("turk6") + 
+# #   guides(color = guide_legend(override.aes = list(alpha = 1)))
+# 
+# 
+# ## Still working through the rest of these...I w
+
+@
+\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
+
+\hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
+
+\hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
+
+\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
+
+\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
+
+
+\hh{Depending on the scenario, different distributions hold under the null hypothesis. Should we include the proof for Binomial under Scenario 1 in the appendix?}
+
+\subsection{Lineup Administration}\label{sec:scenarios}
+% Types of lineups
+%\citet{buja:2009} introduced two types of lineups: Rorschach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data. 
+%\citet{vanderplas:2017} introduced the two-target lineups\svp{, which can be used to test the visual salience of two competing effects.}
+% Types of lineup evaluations
+In addition to different types of lineups, there are different \dc{ways that an analyst can run a lineup experiment.} Three possibilities are detailed below and also illustrated in \autoref{fig:scenarios}.
+
+\begin{description}
+\item [Scenario 1] $K$ different lineups are shown to $K$ independent individuals. 
+In this scenario, both the data and the null plots in each generated lineup are distinct from those in every other lineup. 
+This scenario is only practical when using purely simulated data (for both the data and null plots) or data large enough to allow for subsampling to generate $K$ different data plots. 
+Under \svp{Scenario 1}, we can consider the number of target plot selections $t$ out of $K$ total evaluations, where each lineup evaluation is a bernoulli trial; the total number of data plot evaluations can then be modeled as a Binomial distribution with selection probability $1/m$ (for a single target lineup) \citep{majumder2013validation}.
+
+\item [Scenario 2] $K$ different sets of null plots are shown to $K$ independent individuals; the same data plot is used in each lineup. 
+Alternately, $L$ sets of lineups are shown to $K > L$ individuals. 
+In Scenario 2, there are dependencies introduced by reuse of the data or the lineups, providing an intermediate case between the two extremes of Scenario 1 and Scenario 3.
+
+\item [Scenario 3] The same lineup is shown to $K$ independent individuals. 
+This scenario is the most common scenario in the lineup experiments which have been completed to date \citep{hofmann2012graphical,roychowdhury:2012,majumder2013validation,loyAreYouNormal2015,vanderplas:2017}. 
+In this scenario, lineup evaluations by independent viewers are not independent because the viewers are evaluating the same combination of 19 null plots and one data plot. 
+Any peculiar features which arise in a null plot may cause participants to select that null plot over the data plot; it is likely that where one individual makes this choice, others might as well. 
+Thus, in Scenario 3, which is the most common lineup experiment scenario, it is not reasonable to assume that all panels are equally likely to be selected under the null hypothesis.
+\end{description}
+
+Scenario 3 is the primary motivation for the model which we will develop in the next section: while we cannot consider the panels in each lineup as equally likely to be selected, we can model the individual selection probabilities using a hierarchical model.
+
+<<scenarios, eval = T, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Illustrations of scenarios 1 and 2. Left column shows what three different evaluators would see under scenario 1, and the right column shows what three different evaluators would see under scenario 2. In scenario 1, all nulls and data plots are different, while in scenario 2 only the nulls differ.  (Scenario 3 would have all three lineups the same.) The location of the data plot may vary from one evaluator to another.">>=
+set.seed(2020)
+df <- tibble(x=runif(50)) %>%
+  mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
+  mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
+                     (x-0.5) - 5 + rnorm(50)))
+l1 <- lineup(null_permute('y1'), df, n=5) %>%
+  mutate(subject = "evaluator 1")
+l2 <- lineup(null_permute('y1'), df, n=5) %>%
+  mutate(subject = "evaluator 2")
+l3 <- lineup(null_permute('y1'), df, n=5) %>%
+  mutate(subject = "evaluator 3")
+l <- bind_rows(l1, l2, l3)
+p1 <- ggplot(l, aes(x, y1)) +
+  geom_point() +
+  facet_grid(subject ~ .sample) +
+  theme(aspect.ratio=1, 
+        axis.ticks = element_blank(), 
+        axis.text = element_blank()) +
+  xlab("") + ylab("") +
+  ggtitle("Scenario 2")
+
+df <- tibble(x=runif(50)) %>%
+  mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
+  mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
+                     (x-0.5) - 5 + rnorm(50)))
+l1 <- lineup(null_permute('y1'), df, n=5) %>%
+  mutate(subject = "evaluator 1")
+df <- tibble(x=runif(50)) %>%
+  mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
+  mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
+                     (x-0.5) - 5 + rnorm(50)))
+l2 <- lineup(null_permute('y1'), df, n=5) %>%
+  mutate(subject = "evaluator 2")
+df <- tibble(x=runif(50)) %>%
+  mutate(y1 = -4*(x-0.5) + rnorm(50)) %>%
+  mutate(y2 = ifelse(x<0.5, (x-0.5) + 5 + rnorm(50), 
+                     (x-0.5) - 5 + rnorm(50)))
+l3 <- lineup(null_permute('y1'), df, n=5) %>%
+  mutate(subject = "evaluator 3")
+l <- bind_rows(l1, l2, l3)
+p2 <- ggplot(l, aes(x, y1)) +
+  geom_point() +
+  facet_grid(subject ~ .sample) +
+  theme(aspect.ratio=1, 
+        axis.ticks = element_blank(), 
+        axis.text = element_blank()) +
+  xlab("") + ylab("") +
+  ggtitle("Scenario 1")
+grid.arrange(p2, p1, ncol=2)
+@
+
 
 \section{Lineup Model Specification}
 
