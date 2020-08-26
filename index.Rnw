@@ -392,7 +392,8 @@ prior_pred %>%
 ggplot() +
   geom_path(aes(x = idx, y = jitter(sels, amount = .4), group = interaction(rep, alpha)), alpha = .05) +
   facet_wrap(~label, labeller = label_parsed, nrow = 2) +
-  scale_x_continuous("Ordered panel number") +
+  scale_x_continuous("Ordered panel number")+
+  scale_y_continuous("# panel was picked (in K=30 evaluations)")
 
 @
 
