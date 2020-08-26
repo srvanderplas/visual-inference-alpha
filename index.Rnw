@@ -141,6 +141,8 @@ Under this formulation, a single evaluation of a lineup in which the data panel 
 \svp{In most visual inference experiments, each lineup is evaluated by multiple individuals, and the aggregated results are used to generate a visual p-value using the method described in \citet{majumder2013validation}.}
 \dc{This approach is simple, and a reasonably good approximation for assessing the significance of structure in a plot, but it fails to account for} \svp{variations in the design of visual inference experiments with multiple observers.}
 
+% svp: not sure if you want to introduce P(C >= c_t) here, or later.
+
 In this paper, we propose a \dc{new approach for computing $p$-values} using a Dirichlet-multinomial distribution to model the probabilities of selecting each panel \svp{and the} observed participant selections.
 % This framework for analysis of visual inference data has been in use as part of the \texttt{vinference} package~\citep{vinference} \citep{loyAreYouNormal2015,loy2016variations,vanderplas:2017}, but has not been formally described in any publication.
 \svp{This model is more flexible than the binomial model used in \citet{majumder2013validation}, and better represents the perceptual and statistical dependencies present when lineups are evaluated by multiple people.}
@@ -236,42 +238,57 @@ While graphical illustrations of the $m$-dimensional dirichlet distribution are 
 It is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
 \svp{XXX todo XXX reformat this picture so that it has a 3x3 grid of alpha values (theoretical) with selection probabilities $\theta_i$; add in a 3x1 grid of turk experiment selection probabilities to provide evidence that not all null panels are equally interesting.}
-<<prior-predictive, echo = F, fig.cap = "Simulation of the number of panel picks $c_i$, sorted by  frequency, for different values of $\\alpha$ with $K=30$ evaluations. For low values of $\\alpha$, plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. In all 50 simulated lineups with $\\alpha=0.001$ only one of the panels was chosen. For $\\alpha = 1$ five different panels were each chosen at least two times, and ten different panels were chosen at least once. ", fig.width = 8, fig.height = 4, out.width = "\\textwidth" >>=
+<<prior-predictive, echo = F, fig.cap = "Simulation of the panel selection probabilities $\\theta_i$, sorted, for different values of $\\alpha$ (left). In the right column, panel selection probabilities estimated from lineups used in past visual inference experiments; these probabilities are calculated from lineups with finite evaluations, so the calculated probabilities are not continuous. For low values of $\\alpha$, plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. The included selection probabilities from previous studies show that not all panels in each lineup are selected, even when evaluated multiple times; it is also clear that the selection probabilities are more concentrated in the turk4 study, where in some lineups only one panel was selected; in the turk14 study, at least 4 panels were selected in every lineup.", fig.width = 8, fig.height = 6, out.width = "\\textwidth" >>=
 # set.seed(5019230943) # HH: too large for my machine
 set.seed(519223094)
 
-sim_lineup_model <- function(alpha, m = 20, K = 30, N = 50) {
-  theta <- gtools::rdirichlet(1, rep(alpha, m))
-  sels <- rmultinom(N, size = K, prob = theta)
-  sels
-}
-
-alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20, 1000)
-
-prior_pred <- tibble(alpha = alphas,
-                     plot_sels = purrr::map(alpha, sim_lineup_model, N = 100)) %>%
+alphas <- c(.001, .02, .05, .1, .5, 1, 2, 5, 20)
+# Simulate for different values of alpha
+prior_sim <- tibble(alpha = alphas,
+                     sel_prob = purrr::map(alpha,~ gtools::rdirichlet(100, rep(., 19)))) %>%
   mutate(
-    sel_ordered = purrr::map(plot_sels, ~apply(., 2, sort, decreasing = T)),
-    sel_ordered_long = purrr::map(
-      sel_ordered,
+    sel_prob_ord = purrr::map(sel_prob, ~apply(., 1, sort, decreasing = T)),
+    sel_prob_long = purrr::map(
+      sel_prob_ord,
       ~tibble(idx = rep(1:nrow(.x), times = ncol(.x)),
               rep = rep(1:ncol(.x), each = nrow(.x)),
-              sels = as.vector(.x, mode = "numeric")))
+              prob = as.vector(.x, mode = "numeric")))
   ) %>%
-  select(-plot_sels, -sel_ordered) %>%
-  unnest(cols = c(sel_ordered_long)) %>%
+  select(-sel_prob, -sel_prob_ord) %>%
+  unnest(cols = c(sel_prob_long)) %>%
   arrange(alpha) %>%
   mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
 
-prior_pred %>%
+# Calculate thetas for different turk studies
+studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
+studies_sorted <- studies_sum %>%
+  mutate(study = factor(study, levels = paste0("turk", c(4:7, 10:11, 13:14)))) %>%
+  filter(study %in% paste0("turk", c(4, 10, 14))) %>%
+  group_by(study, pic_id, pic_name) %>%
+  arrange(desc(n)) %>%
+  filter(obs_plot_location != response_no) %>%
+  mutate(sorted_panel = row_number(), prop = n/sum(n)) %>%
+  ungroup()
+
+theoretical_distribution_plot <- prior_sim %>%
 ggplot() +
-  geom_path(aes(x = idx, y = jitter(sels, amount = .4), group = interaction(rep, alpha)), alpha = .05) +
-  facet_wrap(~label, labeller = label_parsed, nrow = 2) +
-  scale_x_continuous("Ordered panel number")+
-  scale_y_continuous("# panel was picked (in K=30 evaluations)")
+  geom_path(aes(x = idx, y = prob, group = interaction(rep, alpha)), alpha = .05) +
+  facet_wrap(~label, labeller = label_parsed, nrow = 3) +
+  scale_x_continuous(expression(paste("Panels, ordered by selection probability ", theta[i]))) +
+  scale_y_continuous(expression(paste("Panel selection probability ", theta[i]))) + 
+  ggtitle("Dirichlet simulations")
 
+turk_studies_plot <- studies_sorted %>%
+  ggplot(aes(x = sorted_panel, y = prop, group = pic_id)) +
+  geom_path(alpha = .05) + facet_wrap(~study, nrow = 3) +
+  # scale_x_continuous(expression(paste("Panels, ordered by observed selection probability ", theta[i]))) +
+  scale_x_continuous("") + 
+  scale_y_continuous(expression(paste("Panel selection probability ", theta[i]))) + 
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank()) + 
+  ggtitle("Vis inference studies")
+
+gridExtra::grid.arrange(theoretical_distribution_plot, turk_studies_plot, widths = c(3, 1))
 @
-
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
 
@@ -295,44 +312,6 @@ ggplot() +
 \hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
 
 \hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
-<<evidence-panel-sels, include = F>>=
-
-studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
-studies_sorted <- studies_sum %>%
-  mutate(study = factor(study, levels = paste0("turk", c(4:7, 10:11, 13:14)))) %>%
-  group_by(study, pic_id, pic_name) %>%
-  arrange(desc(n)) %>%
-  filter(obs_plot_location != response_no) %>%
-  mutate(sorted_panel = row_number(), prop = n/sum(n)) %>%
-  ungroup()
-#
-# ggplot(studies_sorted, aes(x = sorted_panel, y = prop*30, group = pic_id)) +
-#   geom_line(alpha = .05) + facet_wrap(~study)
-#
-# studies_sorted %>%
-#   filter(study == "turk4") %>%
-#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) +
-#   geom_line(alpha = .05) + facet_wrap(~study) +
-#   guides(color = guide_legend(override.aes = list(alpha = 1)))
-#
-# studies_sorted %>%
-#   filter(study == "turk4", obs_plot_location != response_no) %>%
-#   ggplot(aes(x = sorted_panel, y = prop*30, color = factor(test_param), group = pic_id)) +
-#   geom_line(alpha = .05) + facet_wrap(~study) +
-#   guides(color = guide_legend(override.aes = list(alpha = 1)))
-#
-# # studies_sorted %>%
-# #   filter(study == "turk6") %>%
-# #   mutate(test_param2 = str_remove_all(test_param, "^turk6_|ref$|\\d{1,}"),
-# #          color = str_extract(str_remove_all(test_param, "turk6_"), "\\d{1,}")) %>%
-# #   ggplot(aes(x = sorted_panel, y = prop*30, group = pic_id, color = color)) +
-# #   geom_line(alpha = .3) + facet_wrap(~test_param2) + ggtitle("turk6") +
-# #   guides(color = guide_legend(override.aes = list(alpha = 1)))
-#
-#
-# ## Still working through the rest of these...I w
-
-@
 
 % ------------------------------------------------------------------------------
 
