@@ -113,33 +113,41 @@ In a Rorschach \svp{lineup}, all plots are null plots; the purpose is to assess 
 % \dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. 
 % This is possible following the 
 \dc{grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. 
-This abstract plot definition \svp{allows us to explicitly declare the null hypothesis by specifying the relationship between the variables and the spatial elements of the plot.} 
+This abstract plot definition \svp{allows us to declare a hypothesis XXX model? not quite to hypothesis stage yet with a single plot? XXX by specifying the relationship between the variables and the spatial elements of the plot.}
 % to come from under the rug (implicit), be explicitly declared. 
-For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables.
+For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b \svp{map} variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables.
 
-With numerical statistics, there is a natural ordering to the computed numerical quantities. 
-With plots, we must run each statistic through another process: evaluation by the visual system, or a facsimile thereof, in order to evaluate significance. 
+% ---- Lineups as tests --------------------------------------------------------
+\svp{If charts are visual statistics, then it is only natural to consider using these visual statistics to conduct hypothesis tests. }
+\svp{In the scatterplot example above,} the null hypothesis is that there is no association between the two variables and the \svp{corresponding} alternative \svp{hypothesis is} that there is association. 
+\svp{Conducting a test using the observed data plot requires that we compare the data plot to a reference distribution.} % XXX rephrased for consistent mood (subjunctive/declarative) relative to the previous few lines.
+% To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. 
+\svp{Any null generating mechanism, such as randomization or sampling from a known distribution, may be used to generate the data for the null panels in the lineup.}
+% A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. 
+
+\svp{In a numerical statistical test, the summary statistics are naturally ordered, and the test statistic is compared to quantities consistent with the null hypothesis; often, a p-value is used to assess the probability that the observed statistic would arise by chance under the null hypothesis.}
+\svp{When conducting visual inference, the statistics have no such natural ordering; instead, our statistics must be evaluated by human participants.}
+Typically, graphical tests utilize a service like Amazon Mechanical Turk~\citep{turk} to acquire \svp{evaluations of lineups.} % Better to not specify which scenario we're typically operating under just yet.
+%multiple evaluations of the same lineup.
 %\footnote{Cite Giora's Deep Learning work, \url{http://giorasimchoni.com/deep_visual_inference.html}}) 
-% \svp{XXX add some analogy to functions of data as inputs to a statistical test?}
-During this evaluation process, the user selects one or more plots from the lineup which are ``different" in some way. This choice  \dc{may or may not} be based on a feature under investigation by the test.
-% TODO: explain different lineup scenarios here? Not sure if this is the best place for it, or if it's necessary at all
+\svp{An extreme visual test statistic is one which is easily distinguishable from other null plots in the lineup; that is, if the data panel is identified when the lineup is evaluated, we would reject the null hypothesis.}
+\svp{Thus, lineups have the features of a \emph{statistical test}.}
+\svp{One notable difference between visual and numerical statistical tests is that visual tests are more XXX comprehensive? XXX: individuals are asked to select one or more plots from the lineup which are ``different", but typically, the specific type of difference is left unspecified.}
+\svp{As a result, a visual test might evaluate several simultaneous characteristics of a plot, where the equivalent numerical assessment may involve multiple tests using different test statistics.}
+\svp{Occasionally, because there is some inductive reasoning required of the participant, the feature used to select the ``different" panel is not the feature under investigation by the experimenter.}
 
-Typically, graphical tests utilize a service like Amazon Mechanical Turk~\citep{turk} to acquire multiple evaluations of the same lineup.
-If multiple individuals select the plot generated from the data rather than the null plots, this counts as evidence that the visual statistic (the data plot) is indeed different from the null plots rendered from data generated by the null mechanism \dc{as described in \citet{majumder2013validation}}.
+\svp{Typically, lineups consist of $m = 20$ panels, $m_0 = 19$ of which are generated from the null distribution. 
+Under this formulation, a single evaluation of a lineup in which the data panel is selected would have a visual p-value of $p\leq 0.05$.}
+\svp{In most visual inference experiments, each lineup is evaluated by multiple individuals, and the aggregated results are used to generate a visual p-value using the method described in \citet{majumder2013validation}.}
+\dc{This approach is simple, and a reasonably good approximation for assessing the significance of structure in a plot, but it fails to account for} \svp{variations in the design of visual inference experiments with multiple observers.}
 
-% TODO: add lineup here
-
-\svp{\citet{majumder2013validation} also} \dc{proposed an approach for calculating a $p$-value from the results of lineup evaluations of multiple subjects that uses the binomial distribution.} \dc{This approach is simple, and a reasonably good approximation for assessing the significance of structure in a plot, but it fails to account for different ways of applying a lineup protocol for multiple observers.}
-% While visual inference was initially developed to mimic frequentist hypothesis tests, using lineups of 20 plots with one data plot so that the probability of selecting the data plot randomly is $p=0.05$, visual inference itself does not demand use of frequentist techniques. 
 In this paper, we propose a \dc{new approach for computing $p$-values} using a Dirichlet-multinomial distribution to model the probabilities of selecting each panel \svp{and the} observed participant selections. 
 % This framework for analysis of visual inference data has been in use as part of the \texttt{vinference} package~\citep{vinference} \citep{loyAreYouNormal2015,loy2016variations,vanderplas:2017}, but has not been formally described in any publication. 
-% Here, we provide the mathematical foundation for the multinomial-dirichlet model used in the analysis of visual inference experiments, exploring the implications of the model and proposing a modification which better describes the perceptual process of lineup evaluation.
-\svp{This model is more flexible than the binomial model used in \citet{majumder2013validation}, and better represents the perceptual process of lineup evaluation.}
-% This expanded framework facilitates the use of visual diagnostics which highlight issues with null plot generation methods.
-\svp{Leveraging the model, we discuss the correspondance between the model and the perceptual process and propose a method for estimation of the hyperparameters and a diagnostic procedure for null plot generation models.}
-% We discuss the Dirichlet multinomial framework, its advantages for modeling the perceptual process, and propose a method designed to estimate the hyperparameters and assess the lineup's suitability for inference.}
+\svp{This model is more flexible than the binomial model used in \citet{majumder2013validation}, and better represents the perceptual and statistical dependencies present when lineups are evaluated by multiple people.}
+\svp{Leveraging this model, we propose a method for estimation of the model parameters and present a diagnostic procedure for null plot generation models.}
 
-\dc{XXX Add comparison of binomial vs dirichlet p-values for same lineups later}
+
+% \dc{XXX Add comparison of binomial vs dirichlet p-values for same lineups later}
 
 <<typesoflineups, eval = T,echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=6, fig.cap = "Types of lineups. In a Rorschach, all plots are null plots, with a purpose of understanding patterns that may occur by chance. A one target lineup has one data plot, and the remaining are null plots.">>=
 library(nullabor)
@@ -256,10 +264,10 @@ ggplot() +
 
 \svp{From figures \ref{fig:simplex} and \ref{fig:prior-predictive}, it is evident that $\alpha$ provides some information about how many panels are likely to attract participant attention.}
 
+<<<<<<< HEAD
 
 \subsection{Lineups as tests}\label{sec:tests}
 
- The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
 
 \dc{XXX seems a little repetitive of the intro material?}
 \hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
@@ -270,6 +278,10 @@ ggplot() +
 
 
 \hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
+=======
+\hh{XXX not sure that this is the right place for the next items, but it's the right section, i think}
+\hh{XXX Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
+>>>>>>> 63e8db3002e8786cd1fc008efca64e472b7251e6
 \hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
 <<evidence-panel-sels, include = F>>=
 
@@ -311,16 +323,23 @@ studies_sorted <- studies_sum %>%
 @
 \hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
 
+
+\subsection{Lineups as tests}\label{sec:tests}
+
+\hh{XXX integrate this paragraph in the intro}
+\dc{Lineups provide inferential machinery for data plots. To make this possible the plot needs to be considered to be a statistic, a functional mapping of the variables into a summary. This is possible following the grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot. This abstract plot definition, enables the null hypothesis to come from under the rug (implicit), be explicitly declared. For examine, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b, are defined as mapping variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables. The null hypothesis is then explicitly that there is no association between the two variables, and the alternative being, that there is association. To conduct a test, using the observed data plot, requires a comparison with its sampling distribution. A null generating mechanism can be used to make draws from the sampling distribution, resulting in null plots. When the lineup is evaluated by a visual system, at this point by a human, if the data plot is recognisable hiding among the nulls, it has to be considered extreme, and unlikely to have arisen if the null hypothesis was assumed to be true. Thus, if the data plot is selected from the lineup it corresponds to a rejection of the null hypothesis. The *lineup is a statistical test*, and the missing piece is to associate a $p$-value with the result.}
+
+\dc{XXX seems a little repetitive of the intro material?}
+\hh{XXX I like the additional points - but yes, we need to start working on shortening things, so we need to take out repetitions }
+
+\hh{XXX This still needs a home}
 \hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
 
+\hh{XXX up for grabs}
 \hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
 
-\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
-
-\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
 
 
-\hh{Depending on the scenario, different distributions hold under the null hypothesis. Should we include the proof for Binomial under Scenario 1 in the appendix?}
 
 \subsection{Lineup Administration}\label{sec:scenarios}
 % Types of lineups
@@ -400,6 +419,14 @@ p2 <- ggplot(l, aes(x, y1)) +
 grid.arrange(p2, p1, ncol=2)
 @
 
+\hh{XXXX}
+\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
+
+\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
+
+\hh{Definition of visual p value}
+
+\hh{Under scenario 1 this general approach simplifies to Binomial, see appendix?}
 
 \section{Lineup Model Specification}
 
@@ -1133,5 +1160,6 @@ E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K
 Let $\bm\theta = (\theta_1, ... \theta_m)$ with $\bm\theta \sim $Dir$(\alpha)$ for some real-valued $\alpha > 0$. 
 The neutrality property of Dirichlet tells us that $\theta_m$ is independent of (normalized) random variable $\bm\theta^{-m} := (\frac{\theta_1}{1-\theta_m}, ..., \frac{\theta_{m-1}}{{1-\theta_m}})$.
 
+\cite{Connor:1969bt}
 \end{appendix}
 \end{document}
