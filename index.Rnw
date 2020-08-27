@@ -558,10 +558,11 @@ B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b 
 \end{align*}
 The derivation is in Appendix~\ref{app:pvalue}.
 
-\dc{The visual $p$-value calculation} \svp{using \autoref{eqn:beta-binomial} is dependent on the hyperparameter $\alpha$.}
-\svp{We know from past studies \citep{loy2016variations,vanderplas:2017} \dc{XXX should you reference all the studies, because every one has had this phenomenon} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.}\footnote{
-\svp{In fact, it would make very little sense to use a Rorschach lineup under Scenario 1; with no shared information between different evaluations, there would be no reasonable way to aggregate the results.}}. \dc{XXX I don't think you need the footnote. And you could even drop the last part of the sentence, even if all nulls}
-\svp{Combining this observation with} \autoref{fig:prior-predictive}, \svp{ we would expect that} $\alpha \ll 1$.
+\dc{The visual $p$-value calculation} using \autoref{eqn:beta-binomial} is dependent on the \svp{value of} $\alpha$.
+We know from past studies \citep{loy2016variations,vanderplas:2017} \dc{XXX should you reference all the studies, because every one has had this phenomenon} \svp{XXX sure, go for it} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.
+% \footnote{
+% \svp{In fact, it would make very little sense to use a Rorschach lineup under Scenario 1; with no shared information between different evaluations, there would be no reasonable way to aggregate the results.}}. \dc{XXX I don't think you need the footnote. And you could even drop the last part of the sentence, even if all nulls}
+Combining this observation with \autoref{fig:prior-predictive}, we would expect that $\alpha \ll 1$.
 
 The value of \svp{$\alpha$ would be expected to vary \dc{based on various factors}: the null generating model, type of plot, and other aesthetic choices,  all of which could affect the visual distinctiveness of the null and actual data.}
 In order to calculate visual p-values \svp{for lineups evaluated under Scenario 3}, we must match the \svp{underlying} data generation method and visual evaluation processes with an appropriate value of $\alpha$.
