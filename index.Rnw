@@ -298,9 +298,9 @@ gridExtra::grid.arrange(theoretical_distribution_plot, turk_studies_plot, widths
 % and make the point that Scenario 1 is a special case of Scenario 3 where there
 % is no dependence; as a result, we don't have to bother modeling the selection
 % probabilities because they don't carry over between lineup evaluations.
-\hh{I believe a merge went wrong at this point. XXXX I re-included the previous items.}
+%\hh{I believe a merge went wrong at this point. XXXX I re-included the previous items.}
 
-\hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
+%\hh{Main assumption of the paper:  the probability that participants select  null plots from a lineup follows a Dirichlet distribution. Likely $\alpha < 1$ because some null plots are more interesting than others and attract more selections than one would expect under a uniform distribution (or even pick probabilities of $1/m$) }
 
 \hh{XXX up for grabs}
 \hh{Note aside: $c/K$ is the direct ML estimate for $\theta_i$. Obviously, only $K+1$ different levels are occurring in a lineup, with lots of this values being 0, which makes a direct ML estimate of $\bm\theta$ a poor approach to estimating $\alpha$ reliably.}
@@ -308,9 +308,9 @@ gridExtra::grid.arrange(theoretical_distribution_plot, turk_studies_plot, widths
 \hh{XXX This still needs a home}
 \hh{We should probably define `interesting' as  $c$-interesting: A lineup panel is $c/K$ interesting if at least $c$ out of $K$ participants select the panel as the most different. This gives us an objective way to let evaluators determine what is interesting.}
 
-\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
+%\hh{Our (unverified and probably unverifiable) assumption is further that the exact value of $\alpha$ is determined by the null generation process as well as the type of chart  we use to display the data and the null plots.}
 
-\hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
+%\hh{XXX Do we need to show some evidence for that? We have tons of data to back this statement up from our turk studies.}
 
 % ------------------------------------------------------------------------------
 
@@ -345,9 +345,9 @@ Thus, in Scenario 3, which is the most common lineup experiment scenario, it is 
 
 \hh{{\bf Alternative hypothesis:} the data plot is not consistent with plots rendered from the null generating model, i.e.\ based on the number of data plot selections $c_t$ the data plot is found to be interesting by participants.}
 
-\hh{Let $C_t$ be the random variable capturing the number of data (target) selections, $0 \le C_t \le K$. The {\bm visual $p$-value} is defined as the probability that we see at least $c_t$ evaluations in $K$ independent lineup evaluations:  }
+\hh{Let $C_t$ be the random variable capturing the number of data (target) selections, $0 \le C_t \le K$. The {\emph visual $p$-value} is defined as the probability that we see at least $c_t$ evaluations in $K$ independent lineup evaluations:  }
 \begin{equation}\label{pvalue}
-\text{visual } p-\txt{value} = P(C_t \ge c_t)
+\text{visual } p-\text{value} = P(C_t \ge c_t)
 \end{equation}
 
 \hh{The exact distribution of $C_t$ depends on the scenario applied when administering the test.}
@@ -413,8 +413,9 @@ $\bm \theta \sim$ Dir$(\bm\alpha)$ for constant values of $\alpha_i = \alpha > 0
 }
 
 Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
-Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, \dc{where}\svp{XXX is the where, ... where, ... construction awkward to anyone else?}
-$0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. (This assumes that evaluators must make a selection, and if they make more than one selection, their count is weighted to sum to 1. The derivations below accommodate fractional counts.)
+Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, where %}\svp{XXX is the where, ... where, ... construction awkward to anyone else?}\hh{I don't care whether it's where or with, either one does the job}
+$0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. 
+The assumption is that each evaluator has to make a selection. \hh{In practice, evaluators get to make several selections -- these choices are incorporated into counts as fractions adding to 1. In case an evaluator makes no choice, all panel counts are increased by 1/m. For notational convenience, we will make the assumption that all $c_i$ are integer counts. The results are immediately applicable to non-integer number of selections, however.}
 
 The Multinomial $(K, \theta)$ distribution, with probability mass function given as:
 
