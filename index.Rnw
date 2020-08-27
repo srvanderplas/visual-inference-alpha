@@ -598,15 +598,13 @@ Under Scenario 3, one consequence of our tendency to consider the same subset of
 This problem is even more pronounced when $\alpha$ values are small \svp{and only one or two null panels attracts participant interest}.
 As a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where lineup experiments typically operate.
 
-\svp{In order to avoid the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.
+In order to avoid the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.
 We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.
-In this section, we describe both methods, as well as an alternate use of the estimated $\alpha$ value to screen for problems in the null plot generation method.}
+In this section, we describe both methods, as well as an alternate use of the estimated $\alpha$ value to screen for problems in the null plot generation method.
+Both the visual and numeric methods for estimating $\alpha$ leverage the expected number of ``interesting" panels in a lineup.
 
-
-\svp{Both the visual and numeric methods for estimating $\alpha$ leverage the expected number of ``interesting" panels in a lineup.}
-
-\svp{Let us first define the random variable $Z_c$, the number of panels selected more than $c$ times in $K$ evaluations of a $m$-panel lineup.}
-\svp{The expected number of panels selected more than $c$ times, $E[Z_c]$, is provided in \autoref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \autoref{eqn:full-model-specification} is provided in \autoref{app:expected}.}
+Let us first define the random variable $Z_c$, the number of panels selected more than $c$ times in $K$ evaluations of a $m$-panel lineup.}
+The expected number of panels selected more than $c$ times, $E[Z_c]$, is provided in \autoref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \autoref{eqn:full-model-specification} is provided in \autoref{app:expected}.
 
 \begin{equation}\label{eqn:ev-panel}
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
@@ -614,11 +612,12 @@ E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K
 
 \subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
 
-\svp{There have been several explorations of the use of visual statistics \citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992} as a supplement or an alternative to statistical inference.
+There have been several explorations of the use of visual statistics \citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992} as a supplement or an alternative to statistical inference.
 % There are also studies which supplement available data with visual estimates \citep{hankin1988estimating}, incorporating both objective and subjective measurements into the same statistical model.
 Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not because the visual system is inaccurate or misleading.
-Instead, estimates derived visually tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.}
-\svp{In this application, we expect that visual estimation of $\alpha$ based on the expected number of ``interesting" panels will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates.}
+Instead, estimates derived visually tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.
+In this application, we expect that visual estimation of $\alpha$ based on the expected number of ``interesting" panels will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates.
+\svp{XXX not sure we need this paragraph anymore...}
 
 \svp{In a lineup experiment, we typically compare the selections of the data panel relative to the \emph{aggregate} selections of null panels, using the marginal Beta-Binomial model.
 While this makes the calculations much simpler, because there is no need to keep track of the locations and selections of individual null plots, it does throw away some information; namely, the distribution of participant interest in the null panels.
