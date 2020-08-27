@@ -920,7 +920,7 @@ turk6df <- filter(studies_sum, study == "turk6") %>%
   group_by(pic_name) %>%
   mutate(n_tot = sum(n)) %>%
   filter(n >= 2/n_tot*36 & response_no != obs_plot_location) %>%
-  summarize(n_tot = n_tot, n = n())
+  summarize(n_tot = unique(n_tot), n = n())
 
 intercept <- mean(turk6df$n/turk6df$n_tot*36)
 
