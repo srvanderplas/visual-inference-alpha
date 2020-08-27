@@ -407,16 +407,18 @@ Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup cont
 Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, \dc{where}\svp{XXX is the where, ... where, ... construction awkward to anyone else?}
 $0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. (This assumes that evaluators must make a selection, and if they make more than one selection, their count is weighted to sum to 1. The derivations below accommodate fractional counts.)
 
-\svp{The Multinomial $(K, \theta)$ distribution}, \dc{with probability mass function given as:} 
+The Multinomial $(K, \theta)$ distribution, with probability mass function given as:
 
 \begin{align}\label{eqn:multinomial-pmf}
 f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
 \end{align}
 
-\noindent is a natural model for \svp{the counts $c_i$}, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilit\svp{y that each panel $i=1, ..., m$ is selected}.
-%\svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}. 
-\dc{The} panel selection probabilities $\bm{\theta}$ can be modelled using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
-As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. \svp{This is necessary because we do not know where a specific panel will be placed when the lineup is initially generated.}
+\noindent is a natural model for the counts $c_i$, where $K$ describes the number of evaluations and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probability that each panel $i=1, ..., m$ is selected.
+% add a  transition/ref back to the alpha section for clarity
+\svp{As discussed in \autoref{sec:alpha}}, the panel selection probabilities $\bm{\theta}$ can be modelled using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
+% Simplifying the phrasing here a bit
+\svp{We do not know where a specific panel will be placed when the lineup is initially generated, so we use a} symmetric  Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. 
+
 The density function of the symmetric Dirichlet distribution is given as
 \begin{align}\label{eqn:dirichlet-pdf}
 f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
