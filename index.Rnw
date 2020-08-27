@@ -427,7 +427,7 @@ f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alp
 \begin{align*}
 \Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
 \end{align*}
-\hh{(Note that, the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$ for integer values of $n$.)}
+(Note that the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$ for integer values of $n$.)
 
 \dc{Thus,} for the observed plot selections
 $(c_1, ..., c_m)$, and assumimg hyperparameter $\alpha > 0$, we specify a Beta-Multinomial model (call this model BM) as:
