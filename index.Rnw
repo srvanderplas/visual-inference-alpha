@@ -451,25 +451,27 @@ If the lineup contains a target plot, that target plot should be overwhelmingly 
 % \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
 
 
-% \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
-\dc{This approach differs from the method in} \citet{majumder2013validation}, where the number of target plot identifications were compared with the aggregate number of null plot identifications. 
-However, that approach can be considered to be equivalent to the marginal distribution of $c_i$, which is a special case of model BM.%, where $i \in 1, ..., m$ is the index of the target panel in the lineup. 
-For a total of $K$ evaluations, and $0 \le c_i \le K$ target plot evaluations, the mondel BM simplifies to a Beta-Binomial model:
+This approach differs from the method in \citet{majumder2013validation}, where the number of target plot identifications were compared with the aggregate number of null plot identifications. 
+However, that approach can be considered to be equivalent to \svp{a special case of} the marginal distribution of $c_i$. 
+For a total of $K$ evaluations, and $0 \le c_i \le K$ target plot evaluations, the marginal model simplifies to a Beta-Binomial (\svp{BB, in later discussions}):
 
 \begin{align}\begin{split}\label{eqn:marginal-model-specification}
 \theta_t \mid \alpha &\sim Beta(\alpha, (m-1)\alpha) \\
 C_i \mid \theta_i & \sim Binomial(\theta_i, K),\\
 \end{split}\end{align}
 
-with the distribution of $\theta_i$ given $c_i$ and $\alpha$ as Beta$(c_i + \alpha, K - c_i + (m-1)\alpha)$.\dc{XXX Changed t to i, should be same as previous equations, I think}
+with the distribution of $\theta_i$ given $c_i$ and $\alpha$ as Beta$(c_i + \alpha, K - c_i + (m-1)\alpha)$. \svp{Here, $i$ is the index of the target plot, with null panel selections considered in aggregate.}
 
-Examining the parameters of either the full (Eq. \ref{eqn:full-model-specification}) or marginal model (Eq. \ref{eqn:marginal-model-specification}) specifications, tells us that $\alpha$ provides the equivalent of pseudo-observations for each plot. That is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup.
+Examining the parameters of either the full (Eq. \ref{eqn:full-model-specification}) or marginal model (Eq. \ref{eqn:marginal-model-specification}) specifications tells us that $\alpha$ provides the equivalent of pseudo-observations for each plot. That is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup.
 When $\alpha$ is small, these pseudo-observations have relatively little influence, but when $\alpha$ is large, the pseudo-observations can quickly dwarf any information provided by the data.
-This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added.\dc{XXX can we think of this as noise dominating signal?}
-A \svp{lineup} might be evaluated between 10 and 30 times, and with a $m=20$ \svp{panel} lineup, even $\alpha = 1$ can easily dominate the participant selection data.
+This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added. %\dc{XXX can we think of this as noise dominating signal?}
+A lineup might be evaluated between 10 and 30 times, and with a $m=20$ panel lineup, even $\alpha = 1$ can easily dominate any signal present in the the participant selection data.
 
 % In addition to the pseudo-observation interpretation,
-\dc{The parameter} $\alpha$ \dc{can} \svp{also} \dc{be considered to be possessing the} information about the number of panels in a lineup {\it which are likely} to attract participant interest.
+% A few more adjustments, since we already covered the dirichlet/panel selection thing in the introduction, we don't really have to get too specific here.
+\svp{As discussed in \autoref{sec:alpha}, the value of $\alpha$ also determines how many panels will have a relatively high selection probability $\theta_i$ (and how many panels will have $\theta_i\approx 0$). 
+This means that $\alpha$ also determines how many panels in a lineup are likely to attract participant interest.}
+% The parameter $\alpha$ \dc{can} \svp{also} \dc{be considered to be possessing the} information about the number of panels in a lineup {\it which are likely} to attract participant interest.
 %It is useful to detour slightly from the discussion of visual inference to 
 \dc{The next section explores} the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
 
