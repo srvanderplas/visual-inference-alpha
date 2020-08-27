@@ -440,14 +440,16 @@ $(c_1, ..., c_m)$, and assumimg hyperparameter $\alpha > 0$, we specify the full
 The joint distribution of $\bf c$, $\bf \theta$ is then a Dirichlet-Multinomial mixture distribution.
 \dc{We will refer to this as {\bf model DM}, for brevity in later explanations.}
 
-\svp{If we were interested in the value of $\bm\theta$ and wanted to take a Bayesian approach, we would use the conjugate relationship between the Multinomial and Dirichlet distributions to get a posterior distribution }
-% Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution
-of $\bm{\theta}$ given $c$ and $\alpha$ as Dirichlet$(\bm{c + \alpha})$.
-\svp{However,} \dc{the primary purpose is to obtain} \svp{a visual p-value from this mixture model,} \dc{which} \svp{does not require that we conduct inference on $\bm\theta$. Rather, }
-\svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ.}
+If we were interested in the value of $\bm\theta$ and wanted to take a Bayesian approach, we would use the conjugate relationship between the Multinomial and Dirichlet distributions to get a posterior distribution of $\bm{\theta}$ given $c$ and $\alpha$ as Dirichlet$(\bm{c + \alpha})$.
+However, the primary purpose is to obtain a visual p-value from this mixture model, which does not require that we conduct inference on $\bm\theta$. 
 
-\svp{Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.}
-\svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$.}
+% New paragraph to transition, and try to minimize the "rests on the assumption" bit
+Rather, \svp{if we assume that the Dirichlet distribution is symmetric, corresponding to the belief that} while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ, we can conduct a test to determine whether the observed counts are consistent with a single Dirichlet parameter $\alpha$.
+Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.
+If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$. 
+% \svp{The alternative hypothesis for this test would be that $\alpha * (1)_{m\times 1}$ is not sufficient to model the observed counts; that is, we need $\bm\alpha = (\alpha_1, ..., \alpha_m)$ where at least one $\alpha_i\neq\alpha_j$.}
+% \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
+
 
 % \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
 \dc{This approach differs from the method in} \citet{majumder2013validation}, where the number of target plot identifications were compared with the aggregate number of null plot identifications. 
