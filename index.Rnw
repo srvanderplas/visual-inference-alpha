@@ -547,7 +547,10 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
 \svp{Under Scenario 3, however, each participant sees the same lineup, with the same data plot(s) and null plots.
 In this scenario, we have enough information that we can model the $\theta_i$ across different lineup evaluations.
 Because the perceptual mechanisms which determine visual interest are shared across participants, and the same null plots and data plot(s) are used, we must allow $\theta_i$ to vary.
-The Dirichlet-Multinomial model \dc{do you mean BM model? you haven't previously defined DM model.} provides this flexibility through the introduction of the hyperparameter $\alpha$.} The general formula for calculating a visual $p$-value under \svp{the Beta-Binomial model appropriate for use in Scenario 3} is:
+The Dirichlet-Multinomial mixture model (\autoref{eqn:full-model-specification})
+%\dc{do you mean BM model? you haven't previously defined DM model.} 
+provides this flexibility through the introduction of the hyperparameter $\alpha$.} 
+The general formula for calculating a visual $p$-value under \svp{the Beta-Binomial model appropriate for use in Scenario 3} is:
 \begin{align}\label{eqn:beta-binomial}
 p\text{-value} = P(C\geq c_i) = \sum_{x = c_i}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
 \end{align}
