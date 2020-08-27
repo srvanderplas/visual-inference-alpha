@@ -510,20 +510,23 @@ breaks <- c(10^seq(-3, 2, 1), 5*10^seq(-3, 1, 1)) %>% sort()
 minor.breaks <- c(2.5, 7.5) * rep(10^seq(-3, 1, 1), each = 2)
 labels <- sprintf("%.3f", breaks) %>% gsub("\\.?0{1,}$", "", .)
 
+breaks <- c(breaks, 150)	
+labels <- c(labels, "∞")
+
 pv <- tidyr::crossing(alpha = alphas, C = data_breaks, K = K) %>%
   mutate(p = vis_p_value(C, K, alpha))
 pv2 <- tidyr::crossing(C = data_breaks, K = K) %>%
   mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F))
 
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
-  annotate("segment", x =115, xend = 115, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
-  annotate("text", x = 115, y = .8,
+  annotate("segment", x =150, xend = 150, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
+  annotate("text", x = 150, y = .8,
            label = "Binomial", vjust = 0, hjust = .75) +
   annotate("segment", x = 1, xend = 1, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
   annotate("text", x = 1, y = 0.8,
-           label = expression(paste("θ ~ Unif on m-1 simplex")), vjust = 0, hjust = .5) +
+           label = expression(paste("θ ~ Uniform on m-1 simplex")), vjust = 0, hjust = .5) +
   geom_line(size = 0.75) +
-  geom_point(aes(x = 115, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
+  geom_point(aes(x = 150, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
   scale_y_continuous("Visual p-value") +
   scale_x_log10(expression(alpha), breaks = breaks, labels = labels, minor_breaks = minor.breaks) +
   scale_color_manual(paste0("# Data Panel\nIdentifications\n(K =", K, ")"), values = color_pal) +
@@ -928,22 +931,30 @@ new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .07)
 Under the model proposed in \citet{majumder2013validation}, this plot would produce a visual $p$-value \hh{on the order} of $10^-9$, %\Sexpr{old_vispval}
 which \hh{seems} extremely small given that there were more null plot selections than data plot selections.
 
-<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 5, fig.align="center", out.width = ".8\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. Selection counts are provided in light grey in the lower right corner of each panel which was selected at least once.">>=
-ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) +
-  geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, size = 10, data = exdf, color = "grey80") +
-  geom_boxplot() +
-  facet_wrap(~.sample) +
-  theme_bw() +
-  theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) +
-  scale_fill_discrete(guide = "none")
+<<example-plot, dependson = "example-setup", echo = F, fig.width = 5, fig.height = 5, fig.align="center", out.width = ".8\\textwidth", fig.cap = "A lineup designed to test the utility of boxplots for detecting distributional differences. Selection counts are provided in light grey on top of each panel which was selected at least once. The data panel is highlighted in dark grey (panel 8).">>=
+ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) + 
+  geom_boxplot() + 
+  facet_wrap(~.sample) + 
+  theme_bw() + 
+  theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) + 
+  scale_fill_discrete(guide = "none") +
+#  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill="white", alpha = 0.003) +
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, fill="white", alpha = 0.5) +
+  geom_text(aes(x = 1.5, y = 0.830, label = n), nudge_x = 0, nudge_y = 0, hjust = .5, vjust = .5, inherit.aes = F, size = 20, data = exdf, color = "grey70", alpha =0.8) +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf), fill="black", alpha = 0.5, inherit.aes=FALSE, data = exdf %>% filter(.sample==8)) +
+  geom_text(aes(x = 1.5, y = 0.830, label = n), nudge_x = 0, nudge_y = 0, hjust = .5, vjust = .5, inherit.aes=FALSE,
+  data = exdf %>% filter(.sample==8),
+  size = 20, color = "grey90", alpha =0.7)
+
+# ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) +
+#   geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, size = 10, data = exdf, color = "grey80") +
+#   geom_boxplot() +
+#   facet_wrap(~.sample) +
+#   theme_bw() +
+#   theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) +
+#   scale_fill_discrete(guide = "none")
 
 
-#ggplot(exdat2, aes(x = group, y = vals, fill = factor(group))) + geom_boxplot() +
-#  facet_wrap(~.sample) +
-#  theme_bw() +
-#  theme(axis.text = element_blank(), axis.title = element_blank(), axis.ticks = element_blank()) +
-#  scale_fill_discrete(guide = "none") #+
-  # geom_text(aes(x = Inf, y = -Inf, label = n), nudge_x = -1, nudge_y = 1, hjust = 1.2, vjust = -0.2, inherit.aes = F, data = exdf, color = "grey40")
 @
 \svp{Under the \hh{Dirichlet model XXX we need a name or an equation for this XXX}, the first step \hh{is} to assess the expected number of null panels which  attract attention.
 Using a threshold of $c=1$,  six of 19 null plots \hh{were} selected, so we might expect somewhere between \hh{XXX let's run the simulation for $K = 22$ and $m = 19$; XXX for $\alpha$ it doesn't matter whether we have dimension 19 or 20 - I'll put that piece of math into the appendix} 6 and 7 null panels to be selected in a Rorschach lineup.
