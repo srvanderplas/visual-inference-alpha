@@ -404,8 +404,8 @@ grid.arrange(p2, p1, ncol=2)
 \section{\dc{Significance Calculation} Model Specification}
 
 Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
-Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, \dc{where}
-\hh{$0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. } \dc{(This assumes that evaluators must make a selection, and if they make more than one selection, their count is weighted to sum to 1. The derivations below accommodate fractional counts.)}
+Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, \dc{where}\svp{XXX is the where, ... where, ... construction awkward to anyone else?}
+$0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. (This assumes that evaluators must make a selection, and if they make more than one selection, their count is weighted to sum to 1. The derivations below accommodate fractional counts.)
 
 \svp{The Multinomial $(K, \theta)$ distribution}, \dc{with probability mass function given as:} 
 
