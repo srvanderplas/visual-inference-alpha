@@ -595,7 +595,7 @@ Clearly, the choice of $\alpha$ is critical.
 
 While it is generally possible to estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these maximum likelihood approaches fail because of the large number of observed zeroes.
 Under Scenario 3, one consequence of our tendency to consider the same subset of interesting null panels is that many less interesting null panels have no participant selections.
-This problem is even more pronounced when $\alpha$ values are small \svp{and only one or two null panels attracts participant interest}.
+This problem is even more pronounced when $\alpha$ values are small and only one or two null panels attracts participant interest.
 As a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where lineup experiments typically operate.
 
 In order to avoid the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.
@@ -757,7 +757,7 @@ ggplot() +
 @
 
 Let us start with a simulation using the Dirichlet-multinomial model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations.
-The heuristic we propose for \svp{ad-hoc} estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
+The heuristic we propose for ad-hoc estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
 
 \begin{enumerate}
 \item Using a visual display with both simulated values and the expected value for the situation ($c = 1, m_0 = 19, K_0 = 30$), such as that shown in \autoref{fig:alpha-sim-curve}, determine ranges of interesting null panel counts which correspond to about 4 levels of null panel selection activity. In \autoref{fig:alpha-sim-curve}, these levels are 2-3, 4-5, 6-7, and 8+ panels with more than $c=1$ selection.
@@ -772,7 +772,7 @@ If only one null panel is selected more than $c$ times, and there are a reasonab
 Use of a range instead of the single point estimate is intended to account for some of the variability resulting from the use of a single lineup with non-deterministic $K_0$ null panel evaluations.
 In a simulation, it is easy to increase $N$ until the results no longer change; this is expensive and much more time consuming when using human evaluations and setting $K$ instead of $K_0$ in the experimental design.
 
-\item Select an $\hat\alpha$ value corresponding to the selected band. \svp{For instance, if our selected lineup contained 3 interesting null panels}, we might use $\hat\alpha = 0.075$, as it approximately corresponds to $Z_c = 3$; we should compare to $\alpha = 0.02$ and $\alpha=0.1$ (the approximate outer range of $\alpha$ for our band) to get a sense of the sensitivity of our p-value to $\alpha$.
+\item Select an $\hat\alpha$ value corresponding to the selected band. For instance, if our selected lineup contained 3 interesting null panels, we might use $\hat\alpha = 0.075$, as it approximately corresponds to $Z_c = 3$; we should compare to $\alpha = 0.02$ and $\alpha=0.1$ (the approximate outer range of $\alpha$ for our band) to get a sense of the sensitivity of our p-value to $\alpha$.
 
 \item A plot such as the one shown in \autoref{fig:vis-p-val-sensitivity-initial2} may be helpful when assessing the sensitivity of the visual p-value to different values of $\alpha$ in each band. \autoref{fig:vis-p-val-sensitivity-initial2} is a segmented version of \autoref{fig:vis-p-val-sensitivity-initial}; each panel corresponds to the bands of interesting panel counts selected in step 1.
 
