@@ -429,16 +429,16 @@ f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alp
 \end{align*}
 (Note that the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$ for integer values of $n$.)
 
-\dc{Thus,} for the observed plot selections
-$(c_1, ..., c_m)$, and assumimg hyperparameter $\alpha > 0$, we specify a Beta-Multinomial model (call this model BM) as:
+Thus, for the observed plot selections
+$(c_1, ..., c_m)$, and assumimg hyperparameter $\alpha > 0$, we specify the full model as:
 
 \begin{align}\begin{split}\label{eqn:full-model-specification}
 \bm{\theta} \mid \alpha &\sim Dirichlet(\bm\alpha)  \\
 \bm{c} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)\\
 \end{split}\end{align}
 
-%where $Multinomial(\bm\theta, K)$ \svp{is defined as in \autoref{eqn:multinomial-pmf}} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}.
-\svp{The joint distribution of $\bf c$, $\bf \theta$ is then a Multinomial-Dirichlet mixture distribution.} %\dc{We will refer to this as {\bf model MD}, for brevity in later explanations.}
+The joint distribution of $\bf c$, $\bf \theta$ is then a Dirichlet-Multinomial mixture distribution.
+\dc{We will refer to this as {\bf model DM}, for brevity in later explanations.}
 
 \svp{If we were interested in the value of $\bm\theta$ and wanted to take a Bayesian approach, we would use the conjugate relationship between the Multinomial and Dirichlet distributions to get a posterior distribution }
 % Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution
