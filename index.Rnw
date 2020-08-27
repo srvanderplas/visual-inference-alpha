@@ -1137,5 +1137,6 @@ The Dirichlet distribution is neutral with respect to all possible partitions of
 This means that  $\theta_m$ is independent of the (normalized) random variable $\bm\theta^{-m} := (\frac{\theta_1}{1-\theta_m}, ..., \frac{\theta_{m-1}}{{1-\theta_m}})$. 
 Further, this implies that the conditional distribution $\bm\theta^{-m} \mid \theta_m \sim $ Dir$(\alpha)$.
 
+In the context of lineups this means that given the same null model generation we can assume for the probabilities to select a panel from a Rorschach lineup and the probabilities to select a panel corresponding to a null plot from a lineup Dirichlet distributions with the same parameter $\alpha > 0$. 
 \end{appendix}
 \end{document}
