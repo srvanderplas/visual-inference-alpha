@@ -7,7 +7,7 @@
 \usepackage{bm}
 \usepackage{multirow}
 \usepackage{hyperref}
-%\usepackage{endfloat} % Figures to the end of the document
+\usepackage{endfloat} % Figures to the end of the document
 
 \usepackage{anyfontsize}% remove font warnings
 \usepackage{subcaption}  % an alternative package for sub figures
@@ -319,7 +319,7 @@ gridExtra::grid.arrange(theoretical_distribution_plot, turk_studies_plot, widths
 %\citet{buja:2009} introduced two types of lineups: Rorschach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data.
 %\citet{vanderplas:2017} introduced the two-target lineups\svp{, which can be used to test the visual salience of two competing effects.}
 % Types of lineup evaluations
-In addition to different types of lineups, there are different \dc{ways that an analyst can run a lineup experiment.} Three possibilities are detailed below and also illustrated in \autoref{fig:scenarios}.
+In addition to different types of lineups, there are different ways that an analyst can run a lineup experiment. Three possibilities are detailed below and also illustrated in \autoref{fig:scenarios}.
 
 \begin{description}
 \item [Scenario 1] $K$ different lineups are shown to $K$ independent individuals.
@@ -338,6 +338,19 @@ Any peculiar features which arise in a null plot may cause participants to selec
 Thus, in Scenario 3, which is the most common lineup experiment scenario, it is not reasonable to assume that all panels are equally likely to be selected under the null hypothesis.
 \end{description}
 
+\hh{Regardless of the scenario, we can formulate lineups as a hypothesis test in the following manner:}
+
+\hh{{\bf Null hypothesis:} the data plot is consistent with plots rendered from the null generating model. The probability for picking the data panel is (in distribution) the same as picking a null panel.
+}
+
+\hh{{\bf Alternative hypothesis:} the data plot is not consistent with plots rendered from the null generating model, i.e.\ based on the number of data plot selections $c_t$ the data plot is found to be interesting by participants.}
+
+\hh{Let $C_t$ be the random variable capturing the number of data (target) selections, $0 \le C_t \le K$. The {\bm visual $p$-value} is defined as the probability that we see at least $c_t$ evaluations in $K$ independent lineup evaluations:  }
+\begin{equation}\label{pvalue}
+\text{visual } p-\txt{value} = P(C_t \ge c_t)
+\end{equation}
+
+\hh{The exact distribution of $C_t$ depends on the scenario applied when administering the test.}
 Scenario 3 is the primary motivation for the model which we will develop in the next section: while we cannot consider the panels in each lineup as equally likely to be selected, we can model the individual selection probabilities using a hierarchical model.
 
 <<scenarios, eval = T, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Illustrations of scenarios 1 and 2. Left column shows what three different evaluators would see under scenario 1, and the right column shows what three different evaluators would see under scenario 2. In scenario 1, all nulls and data plots are different, while in scenario 2 only the nulls differ.  (Scenario 3 would have all three lineups the same.) The location of the data plot may vary from one evaluator to another.">>=
@@ -392,16 +405,12 @@ p2 <- ggplot(l, aes(x, y1)) +
 grid.arrange(p2, p1, ncol=2)
 @
 
-\hh{XXXX}
-\hh{Null hypothesis: the data plot does not stand out from the null plots in the sense that not `enough' viewers select the data plot as the most different from a lineup.}
-
-\hh{Alternative hypothesis: the data plot does stand out from the null plots.}
-
-\hh{Definition of visual p value}
-
-\hh{Under scenario 1 this general approach simplifies to Binomial, see appendix?}
 
 \section{\dc{Significance Calculation} Model Specification}
+
+\hh{XXX explicit null hypothesis under scenario 3 is: under the null hypothesis the distribution for selecting any plot from a lineup is given as
+$\bm \theta \sim$ Dir$(\bm\alpha)$ for constant values of $\alpha_i = \alpha > 0$ for all panels $i = 1, ..., m$. 
+}
 
 Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
 Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, \dc{where}\svp{XXX is the where, ... where, ... construction awkward to anyone else?}
@@ -584,10 +593,10 @@ Clearly, the choice of $\alpha$ is critical.
 
 \section{Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:est-alpha}
 
-\hh{While it is generally possible to estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these maximum likelihood approaches fail because of the large number of observed zeroes.}
-\svp{Under Scenario 3, one consequence of our tendency to consider the same subset of interesting null panels is that many less interesting null panels have no participant selections.}
+While it is generally possible to estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these maximum likelihood approaches fail because of the large number of observed zeroes.
+Under Scenario 3, one consequence of our tendency to consider the same subset of interesting null panels is that many less interesting null panels have no participant selections.
 This problem is even more pronounced when $\alpha$ values are small \svp{and only one or two null panels attracts participant interest}.
-\svp{As a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where lineup experiments typically operate.}
+As a result, methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where lineup experiments typically operate.
 
 \svp{In order to avoid the issues with maximum likelihood estimation, in this paper, we propose a method for \emph{visual} estimation of alpha which is not hampered by the prevalence of 0-count values.
 We also propose a formal method for estimating $\alpha$ based on the results of Rorschach lineup based testing.
@@ -905,6 +914,9 @@ exdf_nullcount <- sum(filter(exdf, .sample != obs_plot_location)$n)
 total_n <- exdf_targetcount+exdf_nullcount
 old_vispval <- vis_p_value_orig(exdf_targetcount, total_n)
 new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .174)
+
+new_vispval_low <- vis_p_value(exdf_targetcount, total_n, alpha = .115)
+new_vispval_high <- vis_p_value(exdf_targetcount, total_n, alpha = .251)
 @
 Using the mixture model proposed here, computed visual $p$-values will be more moderate than those computed using the approach proposed in \citet{majumder2013validation}.
 As an example consider the lineup from a past experiment as shown in \autoref{fig:example-plot}. The responses from an evaluations were somewhat ambiguous: the data plot in panel 8 was selected most frequently by participants (14 times), but in total, null plots were selected more frequently than the target plot (22 times). In particular, the null plot in panel 4 attracted ten selections.
@@ -1027,7 +1039,8 @@ ggplot() +
 
 
 %We divide the range of the expectation into bands covering 2-3 panels: 2-4, 5-7, 7-9, and 10+ panels. Our lineups tend to have between 6 and 7 null plots selected, so a reasonable choice for $\alpha$ is $0.25$, which is in the middle of the 5-7 band in \autoref{fig:example-alpha-curve}.
-Under the Beta-Binomial mixture model the visual $p$-value for the data shown in lineup in \autoref{fig:example-plot} is \Sexpr{round(new_vispval,2)} based on $\hat{\alpha} = 0.174$; while this is still significant at the 0.05 level, it is not nearly as small as the $p$-value computed under the Binomial model.
+Under the Beta-Binomial mixture model the visual $p$-value for the data shown in lineup in \autoref{fig:example-plot} is \Sexpr{round(new_vispval,2)} based on $\hat{\alpha} = 0.174$ corresponding to six interesting null plots. For a range of 5-7 interesting null plots we have estimates for $\alpha$ between 0.1 and 0.25, corresponding to $p$-values between  $\Sexpr{round(new_vispval_high,2)}$ and  $\Sexpr{round(new_vispval_low,2)}$.
+All of these values are still significant at the 0.05 level, however these values are not nearly as small as the $p$-value computed under the Binomial model.
 When we consider the actual results of the experimental evaluation of \autoref{fig:example-plot}, the $p$-value computed using the mixture model is much more plausible: the data plot is  the most favored of all of the panels in the lineup, but it is not overwhelmingly significant; at least one other panel is almost as popular, and overall, null panels were still selected more frequently than the data panel.
 This suggests that $p$-values generated using the Beta-Binomial mixture model are better calibrated than those generated by the Binomial model: by accounting for the underlying perceptual processes, we can produce a more accurate method for conducting visual inference.
 
