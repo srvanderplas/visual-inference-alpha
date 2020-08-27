@@ -402,19 +402,21 @@ grid.arrange(p2, p1, ncol=2)
 
 \hh{Under scenario 1 this general approach simplifies to Binomial, see appendix?}
 
-\section{Lineup Model Specification}
+\section{\dc{Significance Calculation} Model Specification}
 
 Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
-Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$.
-\hh{Obviously, $0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. }
+Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, \dc{where}
+\hh{$0 \le c_i \le K$ for all $1 \le i \le K$ and $\sum_i c_i = K$. } \dc{(This assumes that evaluators must make a selection, and if they make more than one selection, their count is weighted to sum to 1. The derivations below accommodate fractional counts.)}
 
-\svp{The Multinomial $(K, \theta)$ distribution is } a natural model for \svp{the counts $c_i$}, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilit\svp{y that each panel $i=1, ..., m$ is selected}.
-\svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}.
+\svp{The Multinomial $(K, \theta)$ distribution}, \dc{with probability mass function given as:} 
+
 \begin{align}\label{eqn:multinomial-pmf}
 f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^{c_i}
 \end{align}
 
-We model panel selection probabilities $\bm{\theta}$ using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
+\noindent is a natural model for \svp{the counts $c_i$}, where $K$ describes the number of \hh{evaluations} and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probabilit\svp{y that each panel $i=1, ..., m$ is selected}.
+%\svp{Its probability mass function is shown in \autoref{eqn:multinomial-pmf}}. 
+\dc{The} panel selection probabilities $\bm{\theta}$ can be modelled using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
 As the position of the panels within the lineup are random, we can use a symmetric Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. \svp{This is necessary because we do not know where a specific panel will be placed when the lineup is initially generated.}
 The density function of the symmetric Dirichlet distribution is given as
 \begin{align}\label{eqn:dirichlet-pdf}
@@ -424,50 +426,52 @@ f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alp
 \begin{align*}
 \Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
 \end{align*}
-\hh{For integer values $n$ the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$.}
+\hh{(Note that, the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$ for integer values of $n$.)}
 
-With observed plot selections
-$(c_1, ..., c_m)$ and assumed hyper parameter $\alpha > 0$, we specify a Beta-multinomial model as:
+\dc{Thus,} for the observed plot selections
+$(c_1, ..., c_m)$, and assumimg hyperparameter $\alpha > 0$, we specify a Beta-Multinomial model (call this model BM) as:
 
 \begin{align}\begin{split}\label{eqn:full-model-specification}
 \bm{\theta} \mid \alpha &\sim Dirichlet(\bm\alpha)  \\
 \bm{c} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)\\
 \end{split}\end{align}
 
-where $Multinomial(\bm\theta, K)$ \svp{is defined as in \autoref{eqn:multinomial-pmf}} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}.
-\svp{The joint distribution of $\bf c$, $\bf \theta$ is then a Multinomial-Dirichlet mixture distribution.}
+%where $Multinomial(\bm\theta, K)$ \svp{is defined as in \autoref{eqn:multinomial-pmf}} and $Dirichlet(\bm\alpha)$ is defined as in \autoref{eqn:dirichlet-pdf}.
+\svp{The joint distribution of $\bf c$, $\bf \theta$ is then a Multinomial-Dirichlet mixture distribution.} %\dc{We will refer to this as {\bf model MD}, for brevity in later explanations.}
 
 \svp{If we were interested in the value of $\bm\theta$ and wanted to take a Bayesian approach, we would use the conjugate relationship between the Multinomial and Dirichlet distributions to get a posterior distribution }
 % Using the conjugate relationship between the Dirichlet and Multinomial distributions, we then get the posterior distribution
-of $\bm{\theta}$ given $c$ and $\alpha$ as  Dirichlet$(\bm{c + \alpha})$.
-\svp{However, in most cases, we are primarily interested in obtaining a visual p-value from this mixture model; this does not require that we conduct inference on $\bm\theta$. Rather, }
-\svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ.
-Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.}
-\svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$.
-}
+of $\bm{\theta}$ given $c$ and $\alpha$ as Dirichlet$(\bm{c + \alpha})$.
+\svp{However,} \dc{the primary purpose is to obtain} \svp{a visual p-value from this mixture model,} \dc{which} \svp{does not require that we conduct inference on $\bm\theta$. Rather, }
+\svp{the use of this model in evaluating lineups with one or more target plots rests on the assumption that the Dirichlet distribution is symmetric; that is, while not all panels are equally likely to be selected, there is no a priori belief that the panels systematically differ.}
+
+\svp{Restated in hypothesis testing terms, our null hypothesis is that $\bm\alpha = \alpha * (1)_{m\times 1}$.}
+\svp{If the lineup contains a target plot, that target plot should be overwhelmingly selected, producing counts which are not likely to occur under the assumption of symmetry in $\bm\alpha$.}
 
 % \hh{XXX We also need to describe how the model specification relates to a lineup test. Because what is written out are only the null models. }
-When evaluating lineups, we generally compare the number of target plot identifications with the aggregate number of null plot identifications \citep[see]{majumder2013validation}.
-This is equivalent to the marginal distribution of $c_t$, where $t \in 1, ..., m$ is the index of the target panel in the lineup. For a total of $K$ evaluations, and $0 \le c_t \le K$ target plot evaluations, the above model simplifies to a Beta-Binomial Model:
+\dc{This approach differs from the method in} \citet{majumder2013validation}, where the number of target plot identifications were compared with the aggregate number of null plot identifications. 
+However, that approach can be considered to be equivalent to the marginal distribution of $c_i$, which is a special case of model BM.%, where $i \in 1, ..., m$ is the index of the target panel in the lineup. 
+For a total of $K$ evaluations, and $0 \le c_i \le K$ target plot evaluations, the mondel BM simplifies to a Beta-Binomial model:
 
 \begin{align}\begin{split}\label{eqn:marginal-model-specification}
 \theta_t \mid \alpha &\sim Beta(\alpha, (m-1)\alpha) \\
-C_t \mid \theta_t & \sim Binomial(\theta_t, K),\\
+C_i \mid \theta_i & \sim Binomial(\theta_i, K),\\
 \end{split}\end{align}
 
-with the distribution of $\theta_t$ given $c_t$ and $\alpha$ as Beta$(c_t + \alpha, K - c_t + (m-1)\alpha)$.
+with the distribution of $\theta_i$ given $c_i$ and $\alpha$ as Beta$(c_i + \alpha, K - c_i + (m-1)\alpha)$.\dc{XXX Changed t to i, should be same as previous equations, I think}
 
-Examining the parameters of either the full or marginal model specifications in \autoref{eqn:full-model-specification} and \autoref{eqn:marginal-model-specification}, $\alpha$ provides the equivalent of pseudo-observations for each plot; that is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup.
+Examining the parameters of either the full (Eq. \ref{eqn:full-model-specification}) or marginal model (Eq. \ref{eqn:marginal-model-specification}) specifications, tells us that $\alpha$ provides the equivalent of pseudo-observations for each plot. That is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup.
 When $\alpha$ is small, these pseudo-observations have relatively little influence, but when $\alpha$ is large, the pseudo-observations can quickly dwarf any information provided by the data.
-This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added.
-In most studies, a \svp{lineup} might be evaluated between 10 and 30 times; with a $m=20$ \svp{panel} lineup, even $\alpha = 1$ can easily dominate the participant selection data.
+This is particularly true for the marginal Beta-Binomial model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added.\dc{XXX can we think of this as noise dominating signal?}
+A \svp{lineup} might be evaluated between 10 and 30 times, and with a $m=20$ \svp{panel} lineup, even $\alpha = 1$ can easily dominate the participant selection data.
 
 % In addition to the pseudo-observation interpretation,
-$\alpha$ \svp{also} provides information about the number of panels in a lineup which are likely to attract participant interest.
-It is useful to detour slightly from the discussion of visual inference to explore the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
+\dc{The parameter} $\alpha$ \dc{can} \svp{also} \dc{be considered to be possessing the} information about the number of panels in a lineup {\it which are likely} to attract participant interest.
+%It is useful to detour slightly from the discussion of visual inference to 
+\dc{The next section explores} the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
 
 
-\subsection{Hyperparameters for Lineup Scenarios}\label{sec:scenario-alpha}
+\subsection{\dc{Effect of} $\alpha$ on Lineup Scenarios}\label{sec:scenario-alpha}
 
 % Argument outline:
 % 1. alpha provides information about how many panels attract participant attention
@@ -482,20 +486,19 @@ It is useful to detour slightly from the discussion of visual inference to explo
 \svp{The lineup protocol may provide participants with some information about the hypothesis under investigation, using a question such as ``Which panel has the strongest trend?", but more often, we ask generic questions such as ``Which panel is the most different".}
 The ability to identify stimuli as being different from one another is a fundamental part of cognition: the abstractions that allow us to use the terms `same' and `different' are fundamental to human intelligence~\citep{mingWhenThingsAre2017}.
 \svp{When presented with a lineup and a generic prompt, the contrast between the visually interesting and uninteresting panel(s) help us to scaffold a mental representation of "same" and "different", ideally corresponding to the measure that is under investigation.}
-When a lineup contains null plots with interesting visual features, there is the possibility that participants (who are not provided with the null and alternative hypotheses) may form a hypothesis that is not under investigation, focusing \svp{instead} on the randomly generated but visually interesting feature \citep[for an example, see][]{vanderplas:2017}.
-\svp{In this situation, the participant falls prey to a Type III error; that is, the right answer to the wrong question\citep{kimball1957errors}}.
+When a lineup contains null plots with interesting visual features, there is the possibility that participants (who are not provided with the null and alternative hypotheses) may form a hypothesis that is not under investigation, focusing \svp{instead} on the randomly generated but visually interesting feature \citep[e.g ][]{vanderplas:2017}.
+\svp{In this situation, the participant falls prey to a Type III error; that is, the right answer to the wrong question~\citep{kimball1957errors}}. \dc{XXX Can we also have a Type IV wrong answer to the wrong question? Thinking that a null is picked because of some feature not of interest.}
 \svp{When the possibility of a Type III error is combined with the lineup administration scenario, however, there are implications for our understanding of the meaning of $\alpha$.}
 
 \svp{Under Scenario 1, each participant sees an entirely different lineup: the data plot(s) and null plots are exchanged between each participant evaluation.
-Thus while there may be differences in the visual interest of each panel in any one lineup, these differences do not carry over to the next lineup.
+Thus, while there may be differences in the visual interest of each panel in any one lineup, these differences do not carry over to the next lineup.
 While all panels in a single generated lineup may not be equally likely to be selected, we do not have any information or ability to quantify these differences.
 In fact, in Scenario 1, it does not make sense to track any information beyond whether or not the data panel was selected: each evaluation is in effect a separate, independent Bernoulli trial.}
-
 \svp{Our selection of $\alpha$ under this scenario goes beyond what might be considered a noninformative $\alpha=1$ (corresponding to uniformly distributed $\theta_i$ over the $m-1$ simplex).
 Instead, because we are averaging over all panels which could be generated by the data and null models (as both the data plot and the null plots are exchanged every time), we can claim that every plot is strictly equally likely to be selected under $H_0$. In the Beta-Binomial mixture model, this corresponds to infinite $\alpha$.
 As shown in \autoref{fig:vis-p-val-sensitivity-initial}, when $\alpha \rightarrow\infty$, the Beta-Binomial model converges asymptotically to the Binomial model (with $\theta = 1/m$) proposed in \citet{majumder2013validation}.}
 
-<<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the marginal beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
+<<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the marginal beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial p-values converge to the binomial model p-value. XXXCan take out the dot Binomial value... from the top of the plot - i find it distracting as though its an actual data point.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
 # data_breaks <- c(1:5, 6, 8, 10, 15, 20)
 data_breaks <- c(1, 2, 3, 5, 7, 10, 15, 20, 25, 30)
@@ -536,24 +539,22 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
 \svp{Under Scenario 3, however, each participant sees the same lineup, with the same data plot(s) and null plots.
 In this scenario, we have enough information that we can model the $\theta_i$ across different lineup evaluations.
 Because the perceptual mechanisms which determine visual interest are shared across participants, and the same null plots and data plot(s) are used, we must allow $\theta_i$ to vary.
-The Dirichlet-Multinomial model provides this flexibility through the introduction of the hyperparameter $\alpha$.}
-
-The general formula for calculating a visual $p$-value under \svp{the Beta-Binomial model appropriate for use in Scenario 3} is:
+The Dirichlet-Multinomial model \dc{do you mean BM model? you haven't previously defined DM model.} provides this flexibility through the introduction of the hyperparameter $\alpha$.} The general formula for calculating a visual $p$-value under \svp{the Beta-Binomial model appropriate for use in Scenario 3} is:
 \begin{align}\label{eqn:beta-binomial}
-p\text{-value} = P(C\geq c_t) = \sum_{x = c_t}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
+p\text{-value} = P(C\geq c_i) = \sum_{x = c_i}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
 \end{align}
-where $c_t$ is the number of times the data panel was picked in $K$  evaluations of the lineup. \hh{$B(., .)$ is the Beta function defined as:}
+where $c_i$ is the number of times the data panel was picked in $K$  evaluations of the lineup. \hh{$B(., .)$ is the Beta function defined as:}
 \begin{align*}
 B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b > 0.
 \end{align*}
-A derivation of this mass function is provided in Appendix~\ref{app:pvalue}.
+The derivation is in Appendix~\ref{app:pvalue}.
 
-\svp{Using \autoref{eqn:beta-binomial}, we can still calculate a visual p-value, but this p-value is dependent on the hyperparameter $\alpha$.}
-\svp{We know from past studies \citep{loy2016variations,vanderplas:2017} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots}\footnote{
-\svp{In fact, it would make very little sense to use a Rorschach lineup under Scenario 1; with no shared information between different evaluations, there would be no reasonable way to aggregate the results.}}.
+\dc{The visual $p$-value calculation} \svp{using \autoref{eqn:beta-binomial}, is dependent on the hyperparameter $\alpha$.}
+\svp{We know from past studies \citep{loy2016variations,vanderplas:2017} \dc{XXX should you reference all the studies, because every one has had this phenomenon} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.}\footnote{
+\svp{In fact, it would make very little sense to use a Rorschach lineup under Scenario 1; with no shared information between different evaluations, there would be no reasonable way to aggregate the results.}}. \dc{XXX I don't think you need the footnote. And you could even drop the last part of the sentence, even if all nulls}
 \svp{Combining this observation with} \autoref{fig:prior-predictive}, \svp{ we would expect that} $\alpha \ll 1$.
 
-\svp{$\alpha$ would be expected to vary based on the null generating model, type of plot, and other aesthetic choices: all of these factors would affect the visual distinctiveness of the null and actual data.}
+The value of \svp{$\alpha$ would be expected to vary \dc{based on various factors}: the null generating model, type of plot, and other aesthetic choices,  all of which could affect the visual distinctiveness of the null and actual data.}
 In order to calculate visual p-values \svp{for lineups evaluated under Scenario 3}, we must match the \svp{underlying} data generation method and visual evaluation processes with an appropriate value of $\alpha$.
 
 %
