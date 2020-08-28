@@ -417,11 +417,6 @@ Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ ev
 $0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. 
 The assumption is that each evaluator has to make a selection. \hh{In practice, evaluators get to make several selections -- these choices are incorporated into counts as fractions adding to 1. In case an evaluator makes no choice, all panel counts are increased by 1/m. For notational convenience, we will make the assumption that all $c_i$ are integer counts. The results are immediately applicable to non-integer number of selections, however.}
 
-\begin{definition}{$c$-interesting}\label{interesting}\newline
-We define lineup panel $i$ to be $c$-interesting, if $c$ or more participants selected the panel as the most different. 
-\end{definition}
-\hh{This definition gives us an objective way to let evaluators determine what is interesting.}
-The threshold $c$ does not have to be an integer value.
 
 The Multinomial $(K, \theta)$ distribution, with probability mass function given as:
 
@@ -610,7 +605,13 @@ and also} a \dc{numerical} method for estimating $\alpha$ based on the results o
 \dc{A small aside is that} the estimated $\alpha$ value \dc{can be used} to screen for problems in the null plot generation method.
 Both the visual and numeric methods for estimating $\alpha$, leverage the expected number of "interesting" panels in a lineup.
 
-\dc{First} define the random variable $Z_c$, the number of panels selected more than $c$ times in $K$ evaluations of a $m$-panel lineup.
+\begin{definition}{$c$-interesting}\label{interesting}\newline
+We define lineup panel $i$ to be $c$-interesting if $c$ or more participants selected the panel as the most different. 
+\end{definition}
+\hh{This definition gives us an objective way to let evaluators determine what is interesting.}
+The threshold $c$ does not have to be an integer value.
+
+\svp{Using this definition,} we \svp{also} define the random variable $Z_c$, the number of panels which \svp{are $c$-interesting} in $K$ evaluations of a $m$-panel lineup.
 The expected number of panels selected more than $c$ times, $E[Z_c]$, is provided in \autoref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \autoref{eqn:full-model-specification} is provided in \autoref{app:expected}.
 
 \begin{equation}\label{eqn:ev-panel}
