@@ -84,8 +84,8 @@ source("code/functions.R")
 \section{Introduction}
 
 % ---- Gentle introduction/ power of graphics ----------------------------------
-Graphics provide the opportunity to understand statistical data at an intuitive level: 
- we can gain more information  by looking at a scatter plot than what summary statistics tell us, especially when the data departs from normality~\citep{anscombe:1972,matejka:2017}.
+Graphics provide the opportunity to understand statistical data at \dc{a (visual) sensory level. They are also important for data analysis because
+ at a scatter plot can communicate more than what summary statistics can speak}~\citep{anscombe:1972,matejka:2017}.
  \svp{XXX This feels a bit too abrupt for the first sentence... XXX}
 
 % ---- Graphics and hypothesis testing -----------------------------------------
