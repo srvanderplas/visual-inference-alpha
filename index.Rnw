@@ -417,6 +417,14 @@ Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ ev
 $0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. 
 The assumption is that each evaluator has to make a selection. \hh{In practice, evaluators get to make several selections -- these choices are incorporated into counts as fractions adding to 1. In case an evaluator makes no choice, all panel counts are increased by 1/m. For notational convenience, we will make the assumption that all $c_i$ are integer counts. The results are immediately applicable to non-integer number of selections, however.}
 
+<<<<<<< HEAD
+=======
+\begin{definition}{$c$-interesting}\label{dfn:interesting}\newline
+We define lineup panel $i$ to be $c$-interesting, if $c$ or more participants selected the panel as the most different. 
+\end{definition}
+\hh{This definition gives us an objective way to let evaluators determine what is interesting.}
+The threshold $c$ does not have to be an integer value.
+>>>>>>> 333.1
 
 The Multinomial $(K, \theta)$ distribution, with probability mass function given as:
 
@@ -632,9 +640,6 @@ Th\svp{e proposed} estimation methods are predicated on utilizing that discarded
 \svp{We will first discuss the visual and numerical methods for estimation of $\alpha$ from lineup evaluations, and then discuss one consequence of these methods for improved lineup diagnostics.}
 
 \subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
-
-% \hh{XXX suggestions for simplifying: 
-% (1) let's define $c$-interestingness beforehand; (2) let's move all doubt about the number of null plot selections to the back and deal with them in one go. (3) let's give each one of the list items a header summarizing it. }
 
 There have been several explorations of the use of visual statistics as a supplement or an alternative to statistical inference~\citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992}.
 Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not because the visual system is inaccurate or misleading.
