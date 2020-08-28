@@ -953,7 +953,7 @@ Under the DM model in \autoref{eqn:full-model-specification}, the first step is 
 
 <<example-alpha-curve, fig.cap = "Number of expected panels with more than one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}.", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
 
-interest_threshold <- 0
+interest_threshold <- 1
 alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
 # Get theoretical function
