@@ -649,10 +649,10 @@ In this case, estimation of $\alpha$ will depend on creation of a Rorschach line
 This process is described in more detail in \autoref{sec:rorschach-est-alpha}.
 % Having this Rorschach lineup evaluated separately will provide an estimate of $\alpha$ which is unaffected by the data plot; then, a p-value for the data lineup can be computed using the $\alpha$ estimated from the Rorschach lineup.
 
-As it is rare for the data plot to be the only panel to attract participant attention, however, we can usually recover information about $\alpha$ from the null panels in the same lineup.
-This is a more efficient use of participant time, as we do not have to ask them to evaluate two separate lineups in order to determine the visual $p$-value for a plot.
+As it is rare for the data plot to be the only panel to attract participant attention, we can usually recover information about $\alpha$ from the null panels in the same lineup.
+This is a more efficient use of participant time \svp{and experimenter resources}, as we do not have to ask \svp{participants} to evaluate two separate lineups in order to determine the visual $p$-value for a plot.
 Using null panel selections hinges on a property of the Dirichlet distribution: when one category is removed from consideration, the remaining categories still maintain a reduced-dimension Dirichlet distribution with the same parameter $\alpha$.
-A proof of this property is provided in the Appendix XXXX - is it worth it? \dc{Can we cite something instead? it must be somewhere in the lit?}
+A \svp{discussion} of this property \svp{and its application to visual inference} is provided in Appendix \autoref{neutrality}.% - is it worth it? \dc{Can we cite something instead? it must be somewhere in the lit?}
 
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
