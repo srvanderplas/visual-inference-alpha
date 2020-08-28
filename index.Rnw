@@ -633,8 +633,9 @@ Th\svp{e proposed} estimation methods are predicated on utilizing that discarded
 
 \subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
 
-\hh{XXX suggestions for simplifying: 
-(1) let's define $c$-interestingness beforehand; (2) let's move all doubt about the number of null plot selections to the back and deal with them in one go. (3) let's give each one of the list items a header summarizing it. }
+% \hh{XXX suggestions for simplifying: 
+% (1) let's define $c$-interestingness beforehand; (2) let's move all doubt about the number of null plot selections to the back and deal with them in one go. (3) let's give each one of the list items a header summarizing it. }
+
 There have been several explorations of the use of visual statistics as a supplement or an alternative to statistical inference~\citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992}.
 Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not because the visual system is inaccurate or misleading.
 Instead, estimates derived visually tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.
