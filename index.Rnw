@@ -638,15 +638,17 @@ Visual estimates of correlation and linear regression are known to differ system
 Instead, estimates derived visually tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.
 In this application, we expect that visual estimation of $\alpha$ based on the expected number of "interesting" panels will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates.
 
+\autoref{fig:prior-predictive} \dc{illustrates} that $\alpha$ is directly related to the number of panels which are selected as interesting by participants.
 \hh{The estimation of $\alpha$ is based on the relationship between $\alpha$ and the number of expected $c$-interesting panels as developed in the previous section. }
-\hh{\autoref{fig:prior-predictive} illustrates this relationship for the example of $K=30$ evaluations of 19 null panels. . 
-The blue line corresponds to the expected number of 1-interesting null panels $Z_1$ given in \autoref{eqn:ev-panel}.
+\hh{\autoref{fig:alpha-sim-curve} illustrates this relationship for the example of $K=30$ evaluations of 19 null panels: 
+the blue line corresponds to the expected number of 1-interesting null panels $Z_1$ given in \autoref{eqn:ev-panel}.
 Each point in the figure is based on 10 simulations of a lineup of size $(K, m)$.
 }
+This provides some variability around how many times each panel was selected, but the number of panels which attract participant attention is fairly consistent across multiple simulations.
 
-\autoref{fig:prior-predictive} \dc{illustrates} that $\alpha$ is directly related to the number of panels which are selected as interesting by participants.
-There is some variability around how many times each panel was selected, but the number of panels which attract participant attention is fairly consistent across multiple simulations.
-We propose estimating $\alpha$ visually \dc{using} the number of \svp{$c$-interesting} null panels \svp{in an $m$-panel lineup evaluated $K$ times}. \svp{A natural threshold for sufficient participant interest is $c = K/m$}; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
+We propose estimating $\alpha$ visually \dc{using} the number of \svp{$c$-interesting} null panels \svp{in an $m$-panel lineup evaluated $K$ times}. 
+
+\svp{A natural threshold for sufficient participant interest is $c = K/m$}; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
 Using null panel selections hinges on a property of the Dirichlet distribution: when one category is removed from consideration, the remaining categories still maintain a reduced-dimension Dirichlet distribution with the same parameter $\alpha$.
 A \svp{discussion} of this property \svp{and its application to visual inference} is provided in Appendix~\autoref{neutrality}.% - is it worth it? \dc{Can we cite something instead? it must be somewhere in the lit?}
 
