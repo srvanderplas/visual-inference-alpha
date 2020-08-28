@@ -840,7 +840,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 In \autoref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance at the $p=0.05$ level.
 Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for nonsignificance and significance.
 In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options.
-The inexpensive, conservative approach is to declare any inconclusive results to be nonsignificant, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
+The inexpensive, conservative approach is to declare any inconclusive results to be \dc{non-significant}, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
 Alternately, the experimenter could use the method described in \autoref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
 
 
@@ -848,33 +848,35 @@ By estimating $\alpha$, we produce visual $p$-values which are calibrated based 
 In most cases, we get the improved calibration for free, because we can obtain this information from the null panels in one or two target lineups.
 Occasionally, either because the signal in the data plot is too strong, or because the visual estimation method for $\alpha$ produces a range of $p$-values which are inconclusive given the number of target plot selections, we may need to invest additional effort in order to generate a precise $\hat\alpha$ estimate numerically.
 
+\dc{XXX I feel like this section could be made a little more precise. There are a lot of ifs and maybes and what-ifs, which are interesting, but maybe more distracting than important for the reader to know.}
+
 \subsection{Numerical Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:rorschach-est-alpha}
 
-If the visual method of $\alpha$ estimation is inconclusive, or there are insufficient null panel selections to estimate $\alpha$ visually, \autoref{eqn:differentPanels} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each.
+%If the visual method of $\alpha$ estimation is inconclusive, or there are insufficient null panel selections to estimate $\alpha$ visually,
+\autoref{eqn:differentPanels} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each.
 To ensure validity of the estimated $\alpha$, the Rorschach lineups should use the same null data generating mechanism used in the standard lineup.
 Then, the average number of different panels selected by more than $c$ participants can be calculated from the secondary study data; numerical optimization can be used to obtain $\hat\alpha$ from this information.
-Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \autoref{eqn:differentPanels} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$; this is also apparent on the left side of \autoref{fig:alpha-sim-curve}.
-When the estimated $\hat\alpha$ is extremely small, this is a signal that there is a problem with the null plot generation method; this case is described in more detail below.
+(Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \autoref{eqn:differentPanels} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$; this is also apparent on the left side of \autoref{fig:alpha-sim-curve}.
+When the estimated $\hat\alpha$ is extremely small, this is a signal that there is a problem with the null plot generation method; this case is described in more detail below.)
 
 The numerical estimation approach does require each Rorschach lineup to have the same number of null plot evaluations, so that the experimentally determined average number of interesting panels is consistent and the same reference distribution can be used.
 In contrast to the reference distribution used in \autoref{sec:vis-estimation-alpha}, the reference distribution in this approach is one with $m$ null panels.
 The previous approach used $m_0$ null panels because when the data plot is excluded from the lineup, there are only $m_0$ null plots remaining.
 In a Rorschach lineup, however, there are $m$ null panels which may be selected by participants.
 
-Studies using visual inference may be relatively small (that is, with few participant lineup evaluations), which would make a formal secondary study to precisely determine $\hat\alpha$ cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:differentPanels}.
+Studies using visual inference may be relatively small (that is, with few participant lineup evaluations), which would make a formal secondary study to precisely determine $\hat\alpha$ cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:differentPanels}. \dc{XXX I don't think this  paragraph is necessary. The experimenter can decide whether they have the money or not.}
 
 \subsection{Screening null generation methods}\label{sec:bad-null}
-When only one null plot in a Rorschach lineup is visually interesting, we encounter two problems.
-First, we cannot estimate $\hat\alpha$ with any real precision (visually or numerically), because many different $\alpha$ values below $\alpha\approx 0.025$ could give rise to a situation where only one panel is visually interesting.
-Second, if there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels. The number of interesting panels in the data plot would depend on whether the interesting null plot is the null replaced by a data plot.
+When only one null plot in a Rorschach lineup is visually interesting, we encounter two problems: \dc{(1) $\hat\alpha$ cannot be estimated with precision (visually or numerically), because many different $\alpha$ values below $\alpha\approx 0.025$ could give rise to a situation where only one panel is visually interesting; (2) any one-target lineup may be confounded if the data plot replaces the interesting null plot.} %If there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels, so the number of interesting panels in the data plot would depend on whether the interesting null plot is the null replaced by a data plot.
 If the interesting null is replaced by the data plot, we would expect that the count values would look similar to those produced when evaluating the Rorschach lineup, but even if it is not, the distribution of counts might not differ enough to show statistical significance.
-The lineup hypothesis testing method is predicated on the ability to visually distinguish a Rorschach lineup from a lineup with a data target, but a method which sporadically generates overwhelmingly interesting null plots provides insufficient grounds for rejection of the null hypothesis.
+The lineup hypothesis testing method is predicated on the ability to visually distinguish a Rorschach lineup from a lineup with a data target, \dc{so} a method \dc{that} sporadically generates overwhelmingly interesting null plots provides insufficient grounds for rejection of the null hypothesis.
 
-An extremely low $\hat\alpha$ value (estimated visually or numerically) would indicate a null plot generation method which should be reassessed because it generates plots which attract highly variable amounts of visual interest from participants.
-One example of such a null plot generating method would be the method described in \citet{vanderplas:2017}, which occasionally generated null plots which were missing important visual signals (such as a cluster consisting of one or two points, and a corresponding missing bounding ellipse).
-Estimation of $\alpha$ provides us with a way to screen for bad null plot generation methods in addition to providing us with more accurate estimates of visual $p$-values.
+\dc{Another interpretation of an extremely low $\hat\alpha$ value is to cast  suspicion on the null generating process. Null generating methods shouldn't inadvertently generate highly variable numbers of interesting nulls, rather one eexpects them to be uniformly dull.}
+%An extremely low $\hat\alpha$ value (estimated visually or numerically) would indicate a null plot generation method which should be reassessed because it generates plots which attract highly variable amounts of visual interest from participants.
+\dc{An example is} described in \citet{vanderplas:2017}, \dc{where the generated null plots occasionally lacked important features critical to the study that made them inadvertently visually different.} %important visual signals (such as a cluster consisting of one or two points, and a corresponding missing bounding ellipse).
+Estimation of $\alpha$ provides us with a way to screen for bad null plot generation methods, in addition to providing us with more accurate estimates of visual $p$-values.
 
-We can see from \autoref{fig:vis-p-value-sensitivity-initial} that the proposed method will generate $p$-values which are more moderate than the simpler Binomial model that does not involve the extra step of estimating $\alpha$. In the next section, we explore the practical implications of this method by examining actual lineups which were tested experimentally and the visual $p$-values calculated using each method.
+We can see from \autoref{fig:vis-p-value-sensitivity-initial} \dc{XXX what's happening here} that the proposed method will generate $p$-values which are more moderate than the simpler Binomial model that does not involve the extra step of estimating $\alpha$. In the next section, we explore the practical implications of this method by examining actual lineups which were tested experimentally and the visual $p$-values calculated using each method.
 
 \section{Example}
 <<example-setup, cache = T, include = F>>=
