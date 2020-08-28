@@ -620,6 +620,17 @@ The expected number of panels selected more than $c$ times, $E[Z_c]$, is provide
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
 \end{equation}
 
+\svp{Note that $c$-interestingness and $Z_c$ both depend on the experimental conditions - the number of times a lineup is evaluated, and the number of panels in the lineup. 
+While it would be reasonable to normalize the definition of $c$-interesting by $K$ or $m$, this would imply that we can compare across different scenarios.
+Unfortunately, because we are usually dealing with relatively small values of $K$ and $m$, even when we normalize counts, we still have a set of discrete quantities.}
+
+
+In a lineup experiment, we typically compare the selections of the data panel relative to the \emph{aggregate} selections of null panels, using the marginal \dc{BB} model.
+While this makes the calculations much simpler, because there is no need to keep track of the locations and selections of individual null plots, it does throw away some information; namely, the distribution of participant interest in the null panels.
+Th\svp{e proposed} estimation methods are predicated on utilizing that discarded information to estimate $\alpha$. % This paragraph actually applies to both methods.
+
+\svp{We will first discuss the visual and numerical methods for estimation of $\alpha$ from lineup evaluations, and then discuss one consequence of these methods for improved lineup diagnostics.}
+
 \subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
 
 \hh{XXX suggestions for simplifying: 
