@@ -594,16 +594,18 @@ Clearly, the choice of $\alpha$ is critical.
 
 \section{Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:est-alpha}
 
-While it is generally possible to \dc{use maximum likelihood to} estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these approaches fail because of the large number of observed zeroes. \dc{Zeroes are the consequence of the tendency for participants to selecting a small subset of interesting null panels, leaving many null panels with no selections, espcially under scenario 3.}
+While it is generally possible to \dc{use maximum likelihood to} estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these approaches fail because of the large number of observed zeroes. 
+\svp{When participants select only a small subset of interesting null panels, there are naturally many panels which have no selections.}
+% \dc{Zeroes are the consequence of the tendency for participants to selecting a small subset of interesting null panels, leaving many null panels with no selections, espcially under scenario 3.}
 %Under Scenario 3, one consequence of our tendency to consider the same subset of interesting null panels is that many less interesting null panels have no participant selections.
 \dc{The many zeroes} are even more pronounced when $\alpha$ values are small and only one or two null panels attracts participant interest.
 \dc{The consequence is that these methods for} estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where lineup experiments typically operate.
 
-\dc{Instead, we} propose a method for \emph{visual} estimation of $\alpha$ \dc{accommodating a prevalence of zero-count values,
-and also} a \dc{numerical} method for estimating $\alpha$ based on the results of Rorschach lineup based testing. \dc{These are described here.}
+\dc{Instead,}\svp{in this section} \dc{we} propose a method for \emph{visual} estimation of $\alpha$ \svp{which accommodates} \dc{zero-count values,
+and} a \dc{numerical} method for estimating $\alpha$ based on the results of Rorschach lineup based testing. %\dc{These are described here.}
 %In this section, we describe both methods, 
-\dc{A small aside is that} the estimated $\alpha$ value \dc{can be used} to screen for problems in the null plot generation method.
-Both the visual and numeric methods for estimating $\alpha$, leverage the expected number of "interesting" panels in a lineup.
+% \dc{A small aside is that} the estimated $\alpha$ value \dc{can be used} to screen for problems in the null plot generation method.
+Both the visual and numeric methods for estimating $\alpha$ leverage the expected number of "interesting" panels in a lineup.
 
 \begin{definition}{$c$-interesting}\label{interesting}\newline
 We define lineup panel $i$ to be $c$-interesting if $c$ or more participants selected the panel as the most different. 
