@@ -418,15 +418,6 @@ Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ ev
 $0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. 
 The assumption is that each evaluator has to make a selection. \hh{In practice, evaluators get to make several selections -- these choices are incorporated into counts as fractions adding to 1. In case an evaluator makes no choice, all panel counts are increased by 1/m. For notational convenience, we will make the assumption that all $c_i$ are integer counts. The results are immediately applicable to non-integer number of selections, however.}
 
-<<<<<<< HEAD
-=======
-\begin{definition}{$c$-interesting}\label{dfn:interesting}\newline
-We define lineup panel $i$ to be $c$-interesting, if $c$ or more participants selected the panel as the most different. 
-\end{definition}
-\hh{This definition gives us an objective way to let evaluators determine what is interesting.}
-The threshold $c$ does not have to be an integer value.
->>>>>>> 333.1
-
 The Multinomial $(K, \theta)$ distribution, with probability mass function given as:
 
 \begin{align}\label{eqn:multinomial-pmf}
