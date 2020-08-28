@@ -765,7 +765,11 @@ ggplot() +
 
 @
 
-\dc{An examination of the visual estimation process is conducted using a} simulation from the DM model in \autoref{eqn:full-model-specification}, and assuming that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations.
+\svp{The proposed}
+\dc{
+%An examination of this 
+visual estimation process is conducted using a} simulation from the DM model in \autoref{eqn:full-model-specification}.
+\svp{Furthermore, we will assume for this demonstration} that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations.
 The heuristic we propose for ad-hoc estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
 
 \begin{enumerate}
