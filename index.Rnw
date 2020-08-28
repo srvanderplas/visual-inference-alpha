@@ -643,7 +643,7 @@ In this application, we expect that visual estimation of $\alpha$ based on the e
 
 \autoref{fig:prior-predictive} \dc{illustrates} that $\alpha$ is directly related to the number of panels which are selected as interesting by participants.
 There is some variability around how many times each panel was selected, but the number of panels which attract participant attention is fairly consistent across multiple simulations.
-We propose estimating $\alpha$ visually \dc{using} the number of null panels \dc{that} \svp{are $c$-interesting, for a $m$-panel lineup evaluated $K$ times}. \svp{A natural threshold for sufficient participant interest is $c = K/m$}; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
+We propose estimating $\alpha$ visually \dc{using} the number of \svp{$c$-interesting} null panels \svp{in an $m$-panel lineup evaluated $K$ times}. \svp{A natural threshold for sufficient participant interest is $c = K/m$}; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
 
 In the case where a tested lineup has selections which overwhelmingly favor the data plot, we have a problem: the lineup is likely significant (based on the overwhelming evidence that the data plot attracts the most visual interest), but we cannot estimate $\alpha$ because there are insufficient null panel selections.
 In this case, estimation of $\alpha$ will depend on creation of a Rorschach lineup (that is, a lineup consisting entirely of plots generated under the null hypothesis).
