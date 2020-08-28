@@ -408,7 +408,8 @@ grid.arrange(p2, p1, ncol=2)
 
 \section{\dc{Significance Calculation} Model Specification}
 
-\hh{XXX explicit null hypothesis under scenario 3 is: under the null hypothesis the distribution for selecting any plot from a lineup is given as
+
+\hh{In scenario 3 the distribution for selecting any plot from a lineup assuming the null hypothesis is true is given as
 $\bm \theta \sim$ Dir$(\bm\alpha)$ for constant values of $\alpha_i = \alpha > 0$ for all panels $i = 1, ..., m$. 
 }
 
@@ -613,12 +614,14 @@ E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=c+1}^K \binom{K
 
 \subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
 
+\hh{XXX suggestions for simplifying: 
+(1) let's define $c$-interestingness beforehand; (2) let's move all doubt about the number of null plot selections to the back and deal with them in one go. (3) let's give each one of the list items a header summarizing it. }
 There have been several explorations of the use of visual statistics as a supplement or an alternative to statistical inference~\citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992}.
 % There are also studies which supplement available data with visual estimates \citep{hankin1988estimating}, incorporating both objective and subjective measurements into the same statistical model.
 Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not because the visual system is inaccurate or misleading.
 Instead, estimates derived visually tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.
 In this application, we expect that visual estimation of $\alpha$ based on the expected number of "interesting" panels will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates.
-\svp{XXX not sure we need this paragraph anymore...}\dc{I like it}
+\svp{XXX not sure we need this paragraph anymore...}\dc{I like it}\hh{me too}
 
 In a lineup experiment, we typically compare the selections of the data panel relative to the \emph{aggregate} selections of null panels, using the marginal \dc{BB} model.
 While this makes the calculations much simpler, because there is no need to keep track of the locations and selections of individual null plots, it does throw away some information; namely, the distribution of participant interest in the null panels.
