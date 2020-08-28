@@ -351,6 +351,7 @@ Thus, in Scenario 3, which is the most common lineup experiment scenario, it is 
 
 \hh{The exact distribution of $C_t$ depends on the scenario applied when administering the test.}
 Scenario 3 is the primary motivation for the model which we will develop in the next section: while we cannot consider the panels in each lineup as equally likely to be selected, we can model the individual selection probabilities using a hierarchical model.
+\svp{A model for Scenario 2 would need to account for specific dependencies between the lineups; because there are many possible implementations of Scenario 2, we will leave explicit model development for those different scenarios to another paper.}
 
 <<scenarios, eval = T, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Illustrations of scenarios 1 and 2. Left column shows what three different evaluators would see under scenario 1, and the right column shows what three different evaluators would see under scenario 2. In scenario 1, all nulls and data plots are different, while in scenario 2 only the nulls differ.  (Scenario 3 would have all three lineups the same.) The location of the data plot may vary from one evaluator to another.">>=
 set.seed(2020)
