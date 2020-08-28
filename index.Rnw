@@ -652,11 +652,11 @@ A \svp{discussion} of this property \svp{and its application to visual inference
 
 <<alpha-sim-curve, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\autoref{eqn:ev-panel}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 set.seed(2501072)
-interest_threshold <- 1
+interest_threshold <- 2
 alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
 
 number_panels <- function(alpha, c=1, m = 20, K=30) {
-  x <- (floor(c) + 1):K
+  x <- ceiling(c):K
   summation <- choose(K, x) * beta(x + alpha, K - x + (m - 1)*alpha)
 
   m/beta(alpha, (m - 1)*alpha)*sum(summation)
@@ -670,7 +670,7 @@ sim_interesting_panels <- function(c = m/K, N_points = 5, m = 19, K = 30, point_
                                       N = N_points*point_avg_sims, K = K),
                interesting_panels = purrr::map(
                  plot_sels,
-                 ~tibble(n_interesting = colSums(.x > c),
+                 ~tibble(n_interesting = colSums(.x >= c),
                          rep = 1:ncol(.x) - 1))
   ) %>% unnest(interesting_panels)
 
