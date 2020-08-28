@@ -772,29 +772,23 @@ visual estimation process is conducted using a} simulation from the DM model in 
 \svp{Furthermore, we will assume for this demonstration} that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations.
 The heuristic we propose for ad-hoc estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
 
-\begin{enumerate}
-\item \dc{Cut null panel selection activity into four levels as shown in \autoref{fig:alpha-sim-curve}}, using a visual display with both simulated values and the expected value for the situation ($c = 1, m_0 = 19, K_0 = 30$). %, determine ranges of interesting null panel counts which correspond to about \dc{four} levels of null panel selection activity. 
-These levels are 2-3, 4-5, 6-7, and 8+ panels with more than $c=1$ selection.
-% Simulate, for each potential value of $\alpha$, the number of panels selected by a number of participants exceeding an interest threshold $c$. In \autoref{fig:alpha-sim-curve}, $K_0/m_0 = 30/19$, so $c \approx 1.58$).
-% It may be helpful to average the results of several simulations together to reduce the variability and make the underlying trend more visible.
-% \hh{The simulation captures the variability around the expected number of `interesting' panels}\svp{.}
+\begin{description}
+\item [Divide \dc{null panel selection activity into four levels}] \dc{as shown in \autoref{fig:alpha-sim-curve}}, using a visual display with both simulated values and the expected value \svp{computed using \autoref{eqn:ev-panel}. Note that $Z_c=1$ should be treated as a separate level.} 
+\svp{For a $20$ panel lineup with $K_0=30$ null panel selections,} these levels are 2-3, 4-5, 6-7, and 8+ panels.
 
 {\it Aside:} If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \autoref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
 
-\item Using the simulated selected panel counts, \dc{on the vertical axis locate} the band which is most consistent with the number of null panels selected \dc{with} more than $c$ times in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
+\item [\svp{Locate the y-axis range corresponding to the observed data}] Using the simulated selected panel counts, \dc{on the vertical axis locate} the band which is most consistent with the number of null panels selected \dc{with} more than $c$ times in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
 
 Use of a range instead of the single point estimate is intended to account for some of the variability resulting from the use of a single lineup with non-deterministic $K_0$ null panel evaluations.
 In a simulation, it is easy to increase $N$ until the results no longer change; this is expensive and much more time consuming when using human evaluations and setting $K$ instead of $K_0$ in the experimental design.
 
-\item Select an $\hat\alpha$ value corresponding to the selected band. For instance, if our selected lineup contained 3 interesting null panels, we might use $\hat\alpha = 0.075$, as it approximately corresponds to $Z_c = 3$; we should compare to $\alpha = 0.02$ and $\alpha=0.1$ (the approximate outer range of $\alpha$ for our band) to get a sense of the sensitivity of our $p$-value to $\alpha$.
+\item [Select an $\hat\alpha$ value corresponding to the selected band.] \svp{Using the chosen $\hat\alpha$ value, calculate a visual p-value using \autoref{eqn:beta-binomial}. Assess the sensitivity of this p-value calculation to the choice of $\alpha$ values within the selected band.} A plot such as the one shown in \autoref{fig:vis-p-val-sensitivity-initial2} may be helpful when assessing the sensitivity of the visual $p$-value to different values of $\alpha$ in each band. \autoref{fig:vis-p-val-sensitivity-initial2} is a segmented version of \autoref{fig:vis-p-val-sensitivity-initial}; each panel corresponds to the bands of interesting panel counts selected in step 1. Locate the relevant panel of the plot, and, using the number of target panel selections, determine whether the visual $p$-value calculation is conclusive for every $\alpha$ in the panel. 
 
-\item A plot such as the one shown in \autoref{fig:vis-p-val-sensitivity-initial2} may be helpful when assessing the sensitivity of the visual $p$-value to different values of $\alpha$ in each band. \autoref{fig:vis-p-val-sensitivity-initial2} is a segmented version of \autoref{fig:vis-p-val-sensitivity-initial}; each panel corresponds to the bands of interesting panel counts selected in step 1.
+%If it is, then it is safe to draw a strong conclusion; if not, it may be useful to use a secondary experiment to more precisely estimate $\hat\alpha$, as discussed in \autoref{sec:rorschach-est-alpha}.
 
-Locate the relevant panel of the plot, and, using the number of target panel selections, determine whether the visual $p$-value calculation is conclusive for every $\alpha$ in the panel. If it is, then it is safe to draw a strong conclusion; if not, it may be useful to use a secondary experiment to more precisely estimate $\hat\alpha$, as discussed in \autoref{sec:rorschach-est-alpha}.
-
-In this case, we have 10 target selections ($K = 40, K_0 = 30$), and 3 null plots of 19 which were selected more than once. This corresponds to a visual $p$-value that will not be significant for any range of $\alpha$ in our selected band, so we do not need to run any secondary experiments to more precisely estimate $\alpha$.
-
-\end{enumerate}
+For instance, if our selected lineup contained 3 interesting null panels, $\hat\alpha = 0.075$ approximately corresponds to $Z_c = 3$; we should compare to $\alpha = 0.01$ and $\alpha=0.09$ (the approximate outer range of $\alpha$ for our band) to get a sense of the sensitivity of our $p$-value to $\alpha$. \svp{Examinining the second panel of \autoref{fig:vis-p-val-sensitivity-initial2}, which corresponds to 3 interesting null panels, we see that p-values will significant at the 0.05 level when the number of data panel selections is at least 20; if there are fewer than 15 data panel selections, then p-values will not be significant at the 0.05 level. In our example, } we have 10 target selections ($K = 40, K_0 = 30$), \svp{corresponding} to a visual $p$-value that will not be significant for any range of $\alpha$ in our selected band.
+\end{description}
 
 <<vis-p-val-sensitivity-initial2, fig.cap = "Sensitivity of visual $p$-value to selection of $\\alpha$ under the beta-binomial model, for a $m=20$ panel lineup with $K=40$ evaluations. Data picks which result in ambiguous results under the discretized bands of $\\alpha$ values are highlighted in red. At any particular $\\alpha$ level, there are only a few values which result in an inconclusive results.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
