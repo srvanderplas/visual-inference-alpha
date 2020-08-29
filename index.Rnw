@@ -694,8 +694,8 @@ visual estimation process is conducted using a} simulation from the DM model in 
 \svp{Furthermore, we will assume for this demonstration} that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations.
 
 \begin{description}
-\item[\hh{Identify the number of $c$-interesting null panels in the lineup of interest.}] \hh{Consider \Cref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_o$,  and the corresponding number of null panel selections, $K_o$. }
-\hh{XXX should we provide an R function?}
+\item[\hh{Identify the number of $c$-interesting null panels in the lineup of interest.}] \hh{Consider \Cref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_0$,  and the corresponding number of null panel selections, $K_0$. } \svp{The \texttt{alpha\_from\_data\_lineup()} function in the \texttt{vinference} package (available at https://github.com/heike/vinference) can be used to create this plot given values of $c$, $m_0$, and $K_0$.}
+% \hh{XXX should we provide an R function?}
 
 {\it Aside:} \hh{this should be discussed in full, but not here - maybe in the discussion? } If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \Cref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
 
@@ -783,7 +783,7 @@ This is a more efficient use of participant time \svp{and experimenter resources
 \subsection{Estimation using Rorschach lineups}\label{sec:rorschach-est-alpha}
 
 \Cref{eqn:ev-panel} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each.
-This estimation method would proceed as follows:
+This estimation method \svp{requires the following steps}:
 \begin{description}
 \item [Experimentally evaluate $L$ $m$-panel Rorschach lineups $K$ times each.] To ensure validity of the estimated $\alpha$, the Rorschach lineups should use the same null data generating mechanism used in the standard lineup. It is also important that $K$ be the same for each lineup which is evaluated, as \Cref{eqn:ev-panel} depends on $K$.
 
@@ -791,6 +791,8 @@ This estimation method would proceed as follows:
 
 \item [Numerically determine $\hat\alpha$ using $\overline Z_c$ and \Cref{eqn:ev-panel}.]The reference distribution is one with $m=m_0$ null panels, because of the use of Rorschach lineups, in contrast to the reference distribution in \Cref{sec:vis-estimation-alpha}. 
 \end{description}
+
+\svp{The \texttt{alpha\_from\_null\_lineup()} function in the \texttt{vinference} package (available at https://github.com/heike/vinference) can be used to estimate $\hat\alpha$ given values of $\overline Z_c$, $c$, $m_0$, and $K_0$.}
 
 Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \Cref{eqn:ev-panel} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$; this is also apparent on the left side of \Cref{fig:alpha-sim-curve}. When the estimated $\hat\alpha$ is extremely small, this is a signal that there is a problem with the null plot generation method; this case is described in more detail in \Cref{sec:bad-null}.
 
