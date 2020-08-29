@@ -631,7 +631,7 @@ Th\svp{e proposed} estimation methods are predicated on utilizing that discarded
 \svp{We will first discuss the visual and numerical methods for estimation of $\alpha$ from lineup evaluations, and then discuss one consequence of these methods for improved lineup diagnostics.}
 
 %\subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
-\section{Estimation using null choices in a one target lineup}\label{sec:vis-estimation-alpha}
+\subsection{Estimation using null choices in a one target lineup}\label{sec:vis-estimation-alpha}
 
 There have been several explorations of the use of visual statistics as a supplement or an alternative to statistical inference~\citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992}.
 Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not because the visual system is inaccurate or misleading.
