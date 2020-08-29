@@ -1102,7 +1102,10 @@ As a result, by describing the calculation of p-values for Scenario 3, this pape
 \section*{Author Biography}
 
 \begin{biography}{%\includegraphics[width=60pt,height=70pt,draft]{empty}
-}{\textbf{Author Name.} This is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text this is sample author biography text.}
+}{\textbf{Susan VanderPlas} is an Assistant Professor in the Department of Statistics, at the University of Nebraska-Lincoln. She received her PhD from the Department of Statistics at Iowa State University in 2015.
+\textbf{Christian R\"ottger} is an Assistant Teaching Professor in the Department of Mathematics, at the Iowa State University. He received his PhD in Mathematics from the University of East Anglia in 2000.
+\textbf{Dianne Cook} is Professor of Business Analytics in the Department of Econometrics and Business Statistics at Monash University in 1993. She received her PhD in Statistics from Rutgers University in 1993.
+\textbf{Heike Hofmann} is a Professor in the Department of Statistics at Iowa State University. She received her PhD from the University of Augsburg in 2000.}
 \end{biography}
 
 \begin{appendix}
