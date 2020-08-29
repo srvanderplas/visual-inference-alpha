@@ -778,7 +778,7 @@ visual estimation process is conducted using a} simulation from the DM model in 
 %The heuristic we propose for ad-hoc estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
 
 \begin{description}
-\item[\hh{Identify the number $c$-interesting null panels in the lineup of interest.}] \hh{Consider \autoref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number  $m_o$ of null panels and their corresponding number $K_o$ of null panel selections. }
+\item[\hh{Identify the number of $c$-interesting null panels in the lineup of interest.}] \hh{Consider \autoref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number  $m_o$ of null panels and their corresponding number $K_o$ of null panel selections. }
 \hh{XXX should we provide an R function?}
 %\item [Divide \dc{null panel selection activity into four levels}] \dc{as shown in \autoref{fig:alpha-sim-curve}}, using a visual display with both simulated values and the expected value \svp{computed using \autoref{eqn:ev-panel}.} 
 %Note that $Z_c=1$ should be treated as a separate level.} % \hh{I'm not sure why this needs to be treated separately?}
