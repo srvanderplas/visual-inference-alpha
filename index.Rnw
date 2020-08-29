@@ -86,7 +86,6 @@ source("code/functions.R")
 % ---- Gentle introduction/ power of graphics ----------------------------------
 Graphics provide the opportunity to understand statistical data at \dc{a (visual) sensory level. They are also important for data analysis because
  at a scatter plot can communicate more than what summary statistics can speak}~\citep{anscombe:1972,matejka:2017}.
- \svp{XXX This feels a bit too abrupt for the first sentence... XXX}
 
 % ---- Graphics and hypothesis testing -----------------------------------------
 Statistical graphics allow us to leverage the bandwidth of the visual system for implicit data analysis. Because this analysis is implicit, we often assume these visual analyses are not decisive in the same way that a hypothesis test is decisive.
@@ -631,7 +630,8 @@ Th\svp{e proposed} estimation methods are predicated on utilizing that discarded
 
 \svp{We will first discuss the visual and numerical methods for estimation of $\alpha$ from lineup evaluations, and then discuss one consequence of these methods for improved lineup diagnostics.}
 
-\subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
+%\subsection{Visual Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:vis-estimation-alpha}
+\section{Estimation using null choices in a one target lineup}\label{sec:vis-estimation-alpha}
 
 There have been several explorations of the use of visual statistics as a supplement or an alternative to statistical inference~\citep{mostellerEyeFittingStraight1981, correllRegressionEyeEstimating2017, LAWRENCE1989172, meyerEstimatingCorrelationsScatterplots1992}.
 Visual estimates of correlation and linear regression are known to differ systematically from the numerical estimates, but not because the visual system is inaccurate or misleading.
@@ -872,7 +872,8 @@ This is a more efficient use of participant time \svp{and experimenter resources
 
 \dc{XXX I feel like this section could be made a little more precise. There are a lot of ifs and maybes and what-ifs, which are interesting, but maybe more distracting than important for the reader to know.}
 
-\subsection{Numerical Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:rorschach-est-alpha}
+%\subsection{Numerical Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:rorschach-est-alpha}
+\subsection{Estimation using additional Rorschachs}\label{sec:rorschach-est-alpha}
 
 %If the visual method of $\alpha$ estimation is inconclusive, or there are insufficient null panel selections to estimate $\alpha$ visually,
 \autoref{eqn:ev-panel} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each.
@@ -892,15 +893,15 @@ Note that if on average only one null panel is selected, the estimated $\hat\alp
 
 % Studies using visual inference may be relatively small (that is, with few participant lineup evaluations), which would make a formal secondary study to precisely determine $\hat\alpha$ cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:ev-panel}. \dc{XXX I don't think this  paragraph is necessary. The experimenter can decide whether they have the money or not.}
 
-\subsection{Screening null generation methods}\label{sec:bad-null}
-When only one null plot in a Rorschach lineup is visually interesting, we encounter two problems: \dc{(1) $\hat\alpha$ cannot be estimated with precision (visually or numerically), because many different $\alpha$ values below $\alpha\approx 0.025$ could give rise to a situation where only one panel is visually interesting; (2) any one-target lineup may be confounded if the data plot replaces the interesting null plot.} %If there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels, so the number of interesting panels in the data plot would depend on whether the interesting null plot is the null replaced by a data plot.
+\subsection{Detecting inadequate null generation methods}\label{sec:bad-null}
+When only one null plot in a Rorschach lineup is visually interesting, we encounter two problems: \dc{(1) $\hat\alpha$ cannot be estimated with precision, because many different $\alpha$ values below $\alpha\approx 0.025$ could give rise to a situation where only one panel is visually interesting; (2) any one-target lineup may be confounded if the data plot replaces the interesting null plot.} %If there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels, so the number of interesting panels in the data plot would depend on whether the interesting null plot is the null replaced by a data plot.
 If the interesting null is replaced by the data plot, we would expect that the count values would look similar to those produced when evaluating the Rorschach lineup, but even if it is not, the distribution of counts might not differ enough to show statistical significance.
 The lineup hypothesis testing method is predicated on the ability to visually distinguish a Rorschach lineup from a lineup with a data target, \dc{so} a method \dc{that} sporadically generates overwhelmingly interesting null plots provides insufficient grounds for rejection of the null hypothesis.
 
 \dc{Another interpretation of an extremely low $\hat\alpha$ value is to cast  suspicion on the null generating process. Null generating methods shouldn't inadvertently generate highly variable numbers of interesting nulls; rather one expects them to be uniformly dull.}
 %An extremely low $\hat\alpha$ value (estimated visually or numerically) would indicate a null plot generation method which should be reassessed because it generates plots which attract highly variable amounts of visual interest from participants.
 \dc{An example is} described in \citet{vanderplas:2017}, \dc{where the generated null plots occasionally lacked important features critical to the study that made them inadvertently visually different.} %important visual signals (such as a cluster consisting of one or two points, and a corresponding missing bounding ellipse).
-Estimation of $\alpha$ provides us with a way to screen for bad null plot generation methods, in addition to providing us with more accurate estimates of visual $p$-values.
+Estimation of $\alpha$ provides us with a way to screen for bad null plot generation methods, in addition to providing more accurate estimates of visual $p$-values.
 
 We can see from \autoref{fig:vis-p-val-sensitivity-initial} that the proposed method will generate $p$-values which are more moderate than the simpler Binomial model that does not involve the extra step of estimating $\alpha$. In the next section, we explore the practical implications of this method by examining actual lineups which were tested experimentally and the visual $p$-values calculated using each method. \svp{XXX If we've already said that the Binomial model is only for Scenario 1, then do we need to compare the two p-values? XXX}
 
