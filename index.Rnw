@@ -399,7 +399,7 @@ $(c_1, ..., c_m)$, and assuming parameter $\alpha > 0$, we specify the full mode
 
 \begin{align}\begin{split}\label{eqn:full-model-specification}
 \bm{\theta} \mid \alpha &\sim Dirichlet(\bm\alpha)  \\
-\bm{c} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)\\
+\bm{c} \mid \bm{\theta} & \sim Multinomial(\bm\theta, K)
 \end{split}\end{align}
 
 The joint distribution of $\bf c$, $\bf \theta$ is then a Dirichlet-Multinomial mixture distribution.
@@ -419,7 +419,7 @@ For a total of $K$ evaluations, and $0 \le c_i \le K$ target plot evaluations, t
 
 \begin{align}\begin{split}\label{eqn:marginal-model-specification}
 \theta_t \mid \alpha &\sim Beta(\alpha, (m-1)\alpha) \\
-C_i \mid \theta_i & \sim Binomial(\theta_i, K),\\
+C_i \mid \theta_i & \sim Binomial(\theta_i, K),
 \end{split}\end{align}
 
 with the distribution of $\theta_i$ given $c_i$ and $\alpha$ as Beta$(c_i + \alpha, K - c_i + (m-1)\alpha)$. \svp{Here, $i$ is the index of the target plot, with null panel selections considered in aggregate.}
@@ -435,7 +435,7 @@ This means that $\alpha$ also determines how many panels in a lineup are likely 
 \dc{The next section explores} the impact and interpretation(s) of $\alpha$ in the context of statistical lineups.
 
 
-\subsection{\dc{Effect of} $\alpha$ on Lineup Scenarios}\label{sec:scenario-alpha}
+\subsection{\dc{Effect of} \texorpdfstring{$\alpha$}{alpha} on Lineup Scenarios}\label{sec:scenario-alpha}
 
 % Argument outline:
 % 1. alpha provides information about how many panels attract participant attention
@@ -766,7 +766,7 @@ In \Cref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the vi
 Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for non-significance and significance.
 In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options.
 The inexpensive, conservative approach is to declare any inconclusive results to be \dc{non-significant}, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
-Alternately, the experimenter could use the method described in \Cref{sec:Rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
+Alternately, the experimenter could use the method described in \Cref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
 
 
 By estimating $\alpha$, we produce visual $p$-values calibrated based on the specific null plot generation method.
@@ -995,22 +995,28 @@ As a result, by describing the calculation of $p$-values for Scenario 3, this pa
 \bibliography{references}%
 
 
-\section*{Author Biography}
+% \section*{Author Biography}
+% 
+% \begin{biography}{
+% \includegraphics[width=60pt,height=70pt,draft]{example-image-a}
+% }{\textbf{Susan Vanderplas} is an Assistant Professor in the Department of Statistics, at the University of Nebraska-Lincoln. She received her PhD from the Department of Statistics at Iowa State University in 2015.}\end{biography}
+% 
+% \begin{biography}{\includegraphics[width=60pt,height=70pt,draft]{example-image-a}
+% }{\textbf{Christian R\"ottger} is an Assistant Teaching Professor in the Department of Mathematics, at the Iowa State University. He received his PhD in Mathematics from the University of East Anglia in 2000.}\end{biography}
+% 
+% \begin{biography}{\includegraphics[width=60pt,height=70pt,draft]{example-image-a}
+% }{\textbf{Dianne Cook} is Professor of Business Analytics in the Department of Econometrics and Business Statistics at Monash University. She received her PhD in Statistics from Rutgers University in 1993.}\end{biography}
+% 
+% \begin{biography}{\includegraphics[width=60pt,height=70pt,draft]{example-image-a}
+% }{\textbf{Heike Hofmann} is a Professor in the Department of Statistics at Iowa State University. She received her PhD from the University of Augsburg in 2000.}
+% \end{biography}
 
-\begin{biography}{%\includegraphics[width=60pt,height=70pt,draft]{empty}
-}{\textbf{Susan Vanderplas} is an Assistant Professor in the Department of Statistics, at the University of Nebraska-Lincoln. She received her PhD from the Department of Statistics at Iowa State University in 2015.
-\textbf{Christian R\"ottger} is an Assistant Teaching Professor in the Department of Mathematics, at the Iowa State University. He received his PhD in Mathematics from the University of East Anglia in 2000.
-\textbf{Dianne Cook} is Professor of Business Analytics in the Department of Econometrics and Business Statistics at Monash University. She received her PhD in Statistics from Rutgers University in 1993.
-\textbf{Heike Hofmann} is a Professor in the Department of Statistics at Iowa State University. She received her PhD from the University of Augsburg in 2000.}
-\end{biography}
-
-\begin{appendix}
-\section{Visual $p$-value distribution}\label{app:pvalue}
+\appendix
+\section{Visual \texorpdfstring{$p$}{p}-value distribution}\label{app:pvalue}
 Assume, we have a lineup of size $m$ with $K$ evaluations resulting in $c_t$ target plot evaluations. We defined the \dc{BB} model in \Cref{eqn:marginal-model-specification} leading to densities given as:
 
 \begin{align*}
-f(\theta \mid \alpha) & = \svp{\frac{1}{B\left(\alpha, (m-1)\alpha\right)}}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
-\\
+f(\theta \mid \alpha) & = \svp{\frac{1}{B\left(\alpha, (m-1)\alpha\right)}}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\[1em]
 P(C = c_t  \mid K, \theta) & =  \binom{K}{c_t}\theta^{c_t}(1-\theta)^{K-c_t}
 \end{align*}
 % By Bayes Theorem, if $A_1 = C + \alpha$ and $A_2 = K - C + (m-1)\alpha$,
@@ -1038,11 +1044,11 @@ P(C = c) &=& \int_0^1 P(C = c \mid \theta) f(\theta) d\theta
 \hh{Now we use that $C \mid \theta \sim$ Binom$_{\theta, K}$ and $\theta \sim$ Beta$_{\alpha, (m-1)\alpha}$:}
 
 \begin{eqnarray*}
-P(C = c) &=&  \int_0^1 {K \choose c} \theta^c (1-\theta)^{K - c} \cdot
+P(C = c) &=&  \int_0^1 {\binom{K}{c}} \theta^c (1-\theta)^{K - c} \cdot
 \frac{1}{B(\alpha, (m-1)\alpha)} \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha-1} d\theta = \\
-&=& {K \choose c} \frac{1}{B(\alpha, (m-1)\alpha)} \underbrace{\int_0^1
+&=& {\binom{K}{c}} \frac{1}{B(\alpha, (m-1)\alpha)} \underbrace{\int_0^1
  \theta^{c + \alpha - 1}(1-\theta)^{K-c + (m-1)\alpha-1} d\theta}_{\text{Beta function}} =\\
- &=& {K \choose c} \frac{B(c+\alpha, K-c + (m-1)\alpha)}{B(\alpha, (m-1)\alpha)}.
+ &=& {\binom{K}{c}} \frac{B(c+\alpha, K-c + (m-1)\alpha)}{B(\alpha, (m-1)\alpha)}.
 \end{eqnarray*}
 
 
@@ -1080,5 +1086,4 @@ This means that  $\theta_m$ is independent of the (normalized) random variable $
 Further, this implies that the conditional distribution $\bm\theta^{-m} \mid \theta_m \sim $ Dir$(\alpha)$.
 
 In the context of lineups this means that given the same null model generation we can assume for the probabilities to select a panel from a Rorschach lineup and the probabilities to select a panel corresponding to a null plot from a lineup Dirichlet distributions with the same parameter $\alpha > 0$. 
-\end{appendix}
 \end{document}
