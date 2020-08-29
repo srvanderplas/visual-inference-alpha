@@ -861,7 +861,7 @@ This process is described in more detail in \autoref{sec:rorschach-est-alpha}.
 As it is rare for the data plot to be the only panel to attract participant attention, we can usually recover information about $\alpha$ from the null panels in the same lineup.
 This is a more efficient use of participant time \svp{and experimenter resources}, as we do not have to ask \svp{participants} to evaluate two separate lineups in order to determine the visual $p$-value for a plot.
 
-\dc{XXX I feel like this section could be made a little more precise. There are a lot of ifs and maybes and what-ifs, which are interesting, but maybe more distracting than important for the reader to know.}
+% \dc{XXX I feel like this section could be made a little more precise. There are a lot of ifs and maybes and what-ifs, which are interesting, but maybe more distracting than important for the reader to know.}
 
 %\subsection{Numerical Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:rorschach-est-alpha}
 \subsection{Estimation using Rorschach lineups}\label{sec:rorschach-est-alpha}
