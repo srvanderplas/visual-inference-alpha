@@ -1068,31 +1068,29 @@ This suggests that $p$-values generated using the \dc{BB} mixture model are bett
 \section{Discussion}
 
 % \svp{Multinomial-Dirichlet model produces more plausible $p$-values}
-\svp{In this paper, we have described three scenarios for visual inference experiments, and developed a model for visual inference under Scenario 3. This model is a more general case of the model proposed in \citet{majumder2013validation}, but provides p-values that account for dependencies in successive evaluations of the same lineup by different participants under scenario 3.}
-\svp{As a consequence of the Dirichlet-Multinomial (DM) model proposed for scenario 3, we must calibrate our model using a parameter $\alpha$ which describes the number of null panels in a lineup which are visually interesting. 
-Using expected quantities which are easily observable, we describe two methods for estimation of $\alpha$: a visual method for use on lineups which contain data panels, and a numerical method for use on Rorschach lineups.}
-\svp{The p-values derived from the proposed DM model are more conservative than those produced by the Binomial model which is more appropriate for Scenario 1, but the use of $\hat\alpha$ estimated from the null plot generation method has another benefit: we calibrate the p-value to the lineups by accounting for the \emph{difficulty of the lineup evaluation under the null hypothesis}.}
+In this paper, we have described three scenarios for visual inference experiments, and developed a model for visual inference, \dc{that is effective even under Scenario 3, where dependencies complicate probability calculations}. This model is a more general case of the model proposed in \citet{majumder2013validation}, but provides p-values that account for dependencies in successive evaluations of the same lineup by different participants.
+\dc{The proposed} Dirichlet-Multinomial (DM) model \dc{must be calibrated} using a parameter $\alpha$ which describes the number of null panels, in a lineup, which are visually interesting. 
+Using expected quantities which are easily observable, we describe two methods for estimation of $\alpha$: a visual method for use on lineups which contain data panels, and a numerical method for use on Rorschach lineups.
+The $p$-values derived from the proposed DM model are more conservative than those produced by Majumder's Binomial model. \dc{Even though the latter is appropriate for Scenario 1, with the new model the use of $\hat\alpha$, estimated from the null plot generation method, provides an additional benefit}: we calibrate the $p$-value to the lineups by accounting for the \emph{difficulty of the lineup evaluation under the null hypothesis}.
 
 % \svp{Visual estimation of $\alpha$ via simulation allows us to use the multinomial-dirichlet model to obtain $p$-values which are reasonable and which account for the difficulty of the lineup and null plot generation method}
-\svp{Visual inference leverages the strength of the perceptual system to test hypotheses, but the advantages of this approach are accompanied by added complexity: we cannot easily describe the null distribution or determine its parameters from the experimental design, even though we know that the difficulty level of a visual inference task changes with the null plot generation method.
-Because we use participants to evaluate each test statistic, it is only reasonable that we use an evaluation method for those test statistics which is also a function of participant responses.
-The visual and quantitative estimation methods proposed in this paper allow us to determine the appropriate null distribution for a specific lineup experiment, with minimal cost to experimenters or participants.
-By controlling for the perceptual difficulty of a task using quantitative parameters, we can produce visual p-values which account for the task demands while still providing an assessment of the significance of the test statistic. 
-}
+Visual inference leverages the strength of the perceptual system to test hypotheses, \dc{for a broad range of problems that can't be addressed with traditional tests.} \dc{This comes with a cost}: we cannot easily describe the null distribution or determine its parameters from the experimental design.%, even though we know that the difficulty level of a visual inference task changes with the null plot generation method.
+%Because we use participants to evaluate each test statistic, it is only reasonable that we use an evaluation method for those test statistics which is also a function of participant responses. XXX I can't make sense of this, so commented out
+\dc{An exciting contribution} of the visual and quantitative estimation methods proposed in this paper \dc{is that they} allow us to determine the appropriate null distribution for a specific lineup experiment, with minimal cost to experimenters or participants.
+By controlling for the perceptual difficulty of a task using quantitative parameters, we can produce visual $p$-values which account for the \dc{demands of the} task  while still providing an assessment of the significance of the test statistic. 
+
 
 % \svp{
 % In addition to the significant advantages of calibrating p-values to experimental parameters, the $\alpha$ estimation methods proposed here provide a way to identify null plot generation methods which may produce anomalous experimental results.
 % If an estimated $\alpha$ is too low, it becomes difficult to distinguish between a Rorschach lineup and a lineup where the data panel is the only interesting panel. }
-\svp{Visual estimation of $\alpha$ also allows us to screen out lineup generation methods which are problematic: if a null plot generation method produces 1 interesting plot out of a 20-plot Rorschach lineup, it is functionally impossible to distinguish a data plot which has a large signal from a null plot which also has a large signal. 
+Visual estimation of $\alpha$ also allows us to screen out lineup generation methods which are problematic: if a null plot generation method produces \dc{one} interesting plot out of a \dc{size $m=20$} Rorschach lineup, it is functionally impossible to distinguish a data plot which has a large signal from a null plot which also has a large signal. 
 Extremely small $\alpha$ values serve as a signal that the null plot generation method is not visually appropriate because it sporadically (not consistently) generates visual features that are likely to catch the attention of participants (possibly for the wrong reasons).
 We can guard against these anomalies by assessing $\alpha$ using a Rorschach pilot study, identifying any problems with the null plot generation method before the full study is conducted.
-}
 
-\svp{
-With methods for calculating p-values for visual inference studies conducted under Scenario 1 or Scenario 3, we can now approach the variety of study designs which might fall under Scenario 2 as described in this paper. 
+With methods for calculating $p$-values for visual inference studies conducted under Scenario 1 or Scenario 3, we can now approach the variety of study designs which might fall under Scenario 2 as described in this paper. 
 Scenario 2 is an intermediate option between the two extremes of no dependence between successive lineup evaluations and complete dependence between successive lineup evaluations. 
-As a result, by describing the calculation of p-values for Scenario 3, this paper lays a foundation for a comprehensive assessment of the visual p-values of different lineups under intermediate scenarios. 
-}
+As a result, by describing the calculation of $p$-values for Scenario 3, this paper lays a foundation for a comprehensive assessment of the visual $p$-values of different lineups under intermediate scenarios, \dc{too}. 
+
 
 
 
