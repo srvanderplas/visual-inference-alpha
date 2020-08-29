@@ -405,9 +405,7 @@ grid.arrange(p2, p1, ncol=2)
 
 \hh{In scenario 3 the distribution for selecting any plot from a lineup assuming the null hypothesis is true is given as
 $\bm \theta \sim$ Dir$(\bm\alpha)$ for constant values of $\alpha_i = \alpha > 0$ for all panels $i = 1, ..., m$. 
-}
-
-Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
+} Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
 Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, where %}\svp{XXX is the where, ... where, ... construction awkward to anyone else?}\hh{I don't care whether it's where or with, either one does the job}
 $0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. 
 The assumption is that each evaluator has to make a selection. \hh{In practice, evaluators get to make several selections -- these choices are incorporated into counts as fractions adding to 1. In case an evaluator makes no choice, all panel counts are increased by 1/m. For notational convenience, we will make the assumption that all $c_i$ are integer counts. The results are immediately applicable to non-integer number of selections, however.}
@@ -564,7 +562,7 @@ B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b 
 The derivation is in Appendix~\ref{app:pvalue}.
 
 \dc{The visual $p$-value calculation} using \autoref{eqn:beta-binomial} is dependent on the \svp{value of} $\alpha$.
-We know from past studies \citep{loy2016variations,vanderplas:2017} \dc{XXX should you reference all the studies, because every one has had this phenomenon} \svp{XXX sure, go for it} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.
+We know from past studies \citep{hofmann2012graphical,roychowdhury:2012,zhaoMindReadingUsing2013,roychowdhury:2013,tengfei:2013,loyDiagnosticToolsHierarchical2013,majumderHumanFactorsInfluencing2014,loy:2015,loyAreYouNormal2015,loy2016variations,vanderplas:2017,loyModelChoiceDiagnostics2017} \dc{XXX should you reference all the studies, because every one has had this phenomenon} \svp{XXX sure, go for it} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.
 % \footnote{
 % \svp{In fact, it would make very little sense to use a Rorschach lineup under Scenario 1; with no shared information between different evaluations, there would be no reasonable way to aggregate the results.}}. \dc{XXX I don't think you need the footnote. And you could even drop the last part of the sentence, even if all nulls}
 Combining this observation with \autoref{fig:prior-predictive}, we would expect that $\alpha \ll 1$.
