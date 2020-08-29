@@ -84,8 +84,7 @@ source("code/functions.R")
 \section{Introduction}
 
 % ---- Gentle introduction/ power of graphics ----------------------------------
-Graphics provide the opportunity to understand statistical data at \dc{a (visual) sensory level. They are also important for data analysis because
- at a scatter plot can communicate more than what summary statistics can speak}~\citep{anscombe:1972,matejka:2017}.
+Graphics provide the opportunity to understand statistical data at \dc{a (visual) sensory level. They are also important for data analysis because a plot can communicate more than what summary statistics can} \svp{convey}~\citep{anscombe:1972,matejka:2017}.
 
 % ---- Graphics and hypothesis testing -----------------------------------------
 Statistical graphics allow us to leverage the bandwidth of the visual system for implicit data analysis. Because this analysis is implicit, we often assume these visual analyses are not decisive in the same way that a hypothesis test is decisive.
