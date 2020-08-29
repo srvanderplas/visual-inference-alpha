@@ -57,12 +57,11 @@
 
 \address[4]{\orgdiv{Department of Statistics}, \orgname{Iowa State University}, \orgaddress{\state{Iowa}, \country{United States}}}
 
-\corres{*Susan Vanderplas, This is sample corresponding address. \email{susan.vanderplas@unl.edu}}
+\corres{*Susan Vanderplas, \email{susan.vanderplas@unl.edu}}
 
 % \presentaddress{This is sample for present address text this is sample for present address text}
 
-\abstract[Summary]{\dc{Statistical inference provides the protocols for conducting rigorous science, but data plots provide the opportunity to discover the unexpected. These disparate endeavors are bridged by visual inference, where a lineup protocol can be employed for statistical testing. Human observers are needed to to read the lineups, typically using a crowd-sourcing service.  This paper describes a new approach for computing statistical significance associated with the results from applying a lineup protocol. It utilizes a Dirichlet distribution to recognize that some plots, even though they are null plots, will attract more attention from the visual evaluator than others. The procedures make statistical inference possible for a broader range of data problems.}
-}
+\abstract[Summary]{Statistical inference provides the protocols for conducting rigorous science, but data plots provide the opportunity to discover the unexpected. These disparate endeavors are bridged by visual inference, where a lineup protocol can be employed for statistical testing. Human observers are needed to to read the lineups, typically using a crowd-sourcing service.  This paper describes a new approach for computing statistical significance associated with the results from applying a lineup protocol. It utilizes a Dirichlet distribution to recognize that some plots, even though they are null plots, will attract more attention from the visual evaluator than others. The procedures make statistical inference possible for a broader range of data problems.}
 
 \keywords{data visualization, statistical graphics, hypothesis testing, data science}
 
@@ -86,21 +85,20 @@ source("code/functions.R")
 \section{Introduction}
 
 % ---- Gentle introduction/ power of graphics ----------------------------------
-Graphics provide the opportunity to understand statistical data at \dc{a (visual) sensory level. They are also important for data analysis because a plot can communicate more than what summary statistics can} \svp{convey}~\citep{anscombe:1972,matejka:2017}.
-
 % ---- Graphics and hypothesis testing -----------------------------------------
+Graphics provide the opportunity to understand statistical data at a (visual) sensory level. They are also important for data analysis because a plot can communicate more than summary statistics~\citep{anscombe:1972,matejka:2017}.
 Statistical graphics allow us to leverage the bandwidth of the visual system for implicit data analysis. Because this analysis is implicit, we often assume these visual analyses are not decisive in the same way that a hypothesis test is decisive.
 Graphics generally do not come with a significance threshold, and in many cases, we do not explicitly declare the hypothesis we might be testing before viewing the data plot.
 \citet{buja:2009} introduced a protocol for \emph{visual inference} that allows for formal hypothesis testing using graphical displays and visual evaluation.
 
 To test whether a chart shows a visually significant result, we can use the same machinery used by randomization tests: 
 (1) construct a method to generate data consistent with the null hypothesis, such as using randomization or drawing samples from a model consistent with the null hypothesis, (2) generate many copies of the test statistic (in this case, the plot), and (3) see where the observed statistic falls in the distribution of artificially generated quantities.
-The conceptual framework was described in \citet{buja:2009}, who introduced two protocols: \svp{a lineup, and a Rorschach (or null) lineup.}
+The conceptual framework was described in \citet{buja:2009}, who introduced two protocols: a lineup, and a Rorschach (or null) lineup.
 
-An assembly of several null plots with a target (or data) plot is called a \emph{lineup}, \hh{named} after the \hh{law-enforcement} procedure to line up a  suspect among a set of innocents  to check if a victim can identify the suspect as the perpetrator of the crime. 
-\hh{In its visual version, } lineups are typically composed of $m-1$ ``null" plots (generated under the null hypothesis) and one data plot containing the \dc{observed} data. 
+An assembly of several null plots with a target (or data) plot is called a \emph{lineup}, named after the law-enforcement procedure to line up a  suspect among a set of innocents  to check if a victim can identify the suspect as the perpetrator of the crime. 
+In its visual version, lineups are typically composed of $m-1$ ``null" plots (generated under the null hypothesis) and one data plot containing the observed data. 
 
-\svp{The Rorschach lineup is named after the ink-blot test\citep{exner2003rorschach} historically used in psychoanalysis; as in the inkblot test, the Rorschach lineup provides ambiguous visual signals which are open to interpretation.}
+The Rorschach lineup is named after the ink-blot test\citep{exner2003rorschach} historically used in psychoanalysis; as in the inkblot test, the Rorschach lineup provides ambiguous visual signals which are open to interpretation.
 Figure \ref{fig:typesoflineups} shows several examples of each type of lineup.
 In a Rorschach lineup, all plots are null plots; the purpose is to assess the extent of visual variation that occurs in data generated by the null mechanism.
 
