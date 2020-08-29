@@ -9,6 +9,8 @@
 \usepackage{hyperref}
 \usepackage{endfloat} % Figures to the end of the document
 
+\usepackage{cleveref}
+
 \usepackage{anyfontsize}% remove font warnings
 \usepackage{subcaption}  % an alternative package for sub figures
 %\renewcommand{\subfloat}[2][need a sub-caption]{\subcaptionbox{\normalsize #1}{#2}}
@@ -36,7 +38,7 @@
 % \tableofcontents
 \title{Statistical Significance Calculations for Scenarios in Visual Inference\protect\thanks{This is an example for title footnote.}}
 
-\author[1]{Susan VanderPlas*}
+\author[1]{Susan Vanderplas*}
 
 \author[2]{Christian R\"ottger}
 
@@ -44,7 +46,7 @@
 
 \author[4]{Heike Hofmann}
 
-\authormark{VanderPlas \textsc{et al}}
+\authormark{Vanderplas \textsc{et al}}
 
 
 \address[1]{\orgdiv{Department of Statistics}, \orgname{University of Nebraska-Lincoln}, \orgaddress{\state{Nebraska}, \country{United States}}}
@@ -55,11 +57,11 @@
 
 \address[4]{\orgdiv{Department of Statistics}, \orgname{Iowa State University}, \orgaddress{\state{Iowa}, \country{United States}}}
 
-\corres{*Susan VanderPlas, This is sample corresponding address. \email{authorone@gmail.com}}
+\corres{*Susan Vanderplas, This is sample corresponding address. \email{susan.vanderplas@unl.edu}}
 
-\presentaddress{This is sample for present address text this is sample for present address text}
+% \presentaddress{This is sample for present address text this is sample for present address text}
 
-\abstract[Summary]{\dc{Statistical inference provides the protocols for conducting rigorous science, but data plots provide the opportunity to discover the unexpected. These disparate endeavours are bridged by visual inference, where a lineup protocol can be employed for statistical testing. Human observers are needed to to read the lineups, typically using a crowd-sourcing service.  This paper describes a new approach for computing statistical significance associated with the results from applying a lineup protocol. It utilises a Dirichlet distribution to recognise that some plots, even though they are null plots, will attract more attention from the visual evaluator than others. The procedures make statistical inference possible for a broader range of data problems.}
+\abstract[Summary]{\dc{Statistical inference provides the protocols for conducting rigorous science, but data plots provide the opportunity to discover the unexpected. These disparate endeavors are bridged by visual inference, where a lineup protocol can be employed for statistical testing. Human observers are needed to to read the lineups, typically using a crowd-sourcing service.  This paper describes a new approach for computing statistical significance associated with the results from applying a lineup protocol. It utilizes a Dirichlet distribution to recognize that some plots, even though they are null plots, will attract more attention from the visual evaluator than others. The procedures make statistical inference possible for a broader range of data problems.}
 }
 
 \keywords{data visualization, statistical graphics, hypothesis testing, data science}
@@ -114,7 +116,7 @@ The fundamental premise of visual inference is that charts are visual statistics
 \dc{grammar of graphics initially laid out by \citet{wilkinson:1999}, and further developed in \citet{hadley:2009}, that provides a functional mapping from variables (abstractly defined) into graphical elements of a plot.
 This abstract plot definition} \svp{allows us to declare a hypothesis by specifying the relationship between the variables and the spatial elements of the plot.}
 % to come from under the rug (implicit), be explicitly declared.
-For example, the scatterplots shown in the one target lineups in Figure \ref{fig:typesoflineups}b \svp{map} variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables.
+For example, the scatter plots shown in the one target lineups in Figure \ref{fig:typesoflineups}b \svp{map} variable 1 to the $x$ axis and variable 2 to the $y$ axis, with the intent to study association between the two variables.
 
 % ---- Lineups as tests --------------------------------------------------------
 If charts are visual statistics, then it is only natural to consider using these visual statistics to conduct hypothesis tests.
@@ -188,7 +190,7 @@ Such a simplification might be used in a Rorschach lineup, where all of the $m$ 
 % Stolen from heike/lineup-scenarios
 When $\alpha = 1$, the symmetric Dirichlet distribution is uniform on the $m-1$ dimensional simplex.
 When $\alpha < 1$, the mass of the distribution is along the edges of the simplex, where most values of $\theta_i$ will be close to 0. When $\alpha>1$, the mass of the distribution is in the center of the simplex, with most of the $\theta_i$ having similar values.
-\autoref{fig:simplex} shows ternary plots~\citep{ggtern} of values simulated from a 3-dimensional Dirichlet distribution which illustrate the effect of $\alpha$ on the sampled $\bm\theta$.
+\Cref{fig:simplex} shows ternary plots~\citep{ggtern} of values simulated from a 3-dimensional Dirichlet distribution which illustrate the effect of $\alpha$ on the sampled $\bm\theta$.
 
 <<simplex, eval = F,echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap = "Dirichlet distributed samples on the 2-dimensional simplex.">>=
 simplex <- purrr::map_df(.x = c(1/3, 1, 3), ~data.frame(
@@ -208,7 +210,7 @@ ggtern::ggtern(aes(x = p1, y = p2, z = p3), data = simplex) +
 \caption{Dirichlet distributed samples on the 2-dimensional simplex. $\alpha = 1$ is a uniform distribution on the simplex, $\alpha < 1$ up-weighs the (hyper)faces of the simplex, $\alpha > 1$ puts more weight towards the center of the simplex.\label{fig:simplex}}
 \end{figure}
 
-%Marginal Beta($\alpha, 2\alpha$) densities corresponding to \\autoref{fig:simplex}.
+%Marginal Beta($\alpha, 2\alpha$) densities corresponding to \\Cref{fig:simplex}.
 <<betas, echo=FALSE, out.width='\\textwidth', fig.width=12, fig.height=4, fig.cap="Marginal Beta($\\alpha, 2\\alpha$) densities corresponding to the above Dirichlet densities.">>=
 p <- seq(0,1, by=0.005)
 alpha <- c(1/3,1,3)
@@ -232,7 +234,7 @@ ggplot(data=betas, aes(x=p, y=density)) +
 % \svp{Perceptually, the mixture model proposed in this paper mimics the tendency for us to focus in on a handful of the available panels of a lineup.
 % By allowing $\theta$ to vary, we are building into our model the acknowledgement that not all randomly generated plots are equally visually ``interesting"; the less interesting plots tend to not receive equal amounts of attention during the lineup evaluation process.}
 % \svp{XXX can we cite that eye tracking study here? Does it back up that claim? XXX} \hh{XXX we've seen that phenomenon over and over again. but, yes, the eye-tracker study shows it, too.} \svp{XXX I know we've seen it over and over, but I'm hoping to provide some sort of concrete evidence as far as a citation might go... just backing up an otherwise unsubstantiated claim.}
-While graphical illustrations of the $m$-dimensional dirichlet distribution are more difficult \svp{when $m>3$}, we can use simulation to assess the meaning of $\alpha$ as it relates to lineup panel selection probabilities $\theta_i$. \autoref{fig:prior-predictive} shows simulated selection probabilities $\theta_i$, sorted such that the panel with the highest selection probability is first,  for several values of $\alpha$ \svp{in a $m=20$ panel lineup}.
+While graphical illustrations of the $m$-dimensional Dirichlet distribution are more difficult \svp{when $m>3$}, we can use simulation to assess the meaning of $\alpha$ as it relates to lineup panel selection probabilities $\theta_i$. \Cref{fig:prior-predictive} shows simulated selection probabilities $\theta_i$, sorted such that the panel with the highest selection probability is first,  for several values of $\alpha$ \svp{in a $m=20$ panel lineup}.
 It is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
 
 <<prior-predictive, echo = F, fig.cap = "Simulation of the panel selection probabilities $\\theta_i$, sorted, for different values of $\\alpha$ (left). In the right column, panel selection probabilities estimated from lineups used in past visual inference experiments; these probabilities are calculated from lineups with finite evaluations, so the calculated probabilities are not continuous. For low values of $\\alpha$, plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. The included selection probabilities from previous studies show that not all panels in each lineup are selected, even when evaluated multiple times; it is also clear that the selection probabilities are more concentrated in the turk4 study, where in some lineups only one panel was selected; in the turk14 study, at least 4 panels were selected in every lineup.", fig.width = 8, fig.height = 6, out.width = "\\textwidth" >>=
@@ -311,13 +313,13 @@ gridExtra::grid.arrange(theoretical_distribution_plot, turk_studies_plot, widths
 %\citet{buja:2009} introduced two types of lineups: Rorschach lineups, which contain only null plots, and standard one-target lineups, which contain $m$ panels, $m-1$ of which are null plots, and one which shows the real data.
 %\citet{vanderplas:2017} introduced the two-target lineups\svp{, which can be used to test the visual salience of two competing effects.}
 % Types of lineup evaluations
-In addition to different types of lineups, there are different ways that an analyst can run a lineup experiment. Three possibilities are detailed below and also illustrated in \autoref{fig:scenarios}.
+In addition to different types of lineups, there are different ways that an analyst can run a lineup experiment. Three possibilities are detailed below and also illustrated in \Cref{fig:scenarios}.
 
 \begin{description}
 \item [Scenario 1] $K$ different lineups are shown to $K$ independent individuals.
 In this scenario, both the data and the null plots in each generated lineup are distinct from those in every other lineup.
-This scenario is only practical when using purely simulated data (for both the data and null plots) or data large enough to allow for subsampling to generate $K$ different data plots.
-Under \svp{Scenario 1}, we can consider the number of target plot selections $t$ out of $K$ total evaluations, where each lineup evaluation is a bernoulli trial; the total number of data plot evaluations can then be modeled as a Binomial distribution with selection probability $1/m$ (for a single target lineup) \citep{majumder2013validation}.
+This scenario is only practical when using purely simulated data (for both the data and null plots) or data large enough to allow for sub-sampling to generate $K$ different data plots.
+Under \svp{Scenario 1}, we can consider the number of target plot selections $t$ out of $K$ total evaluations, where each lineup evaluation is a Bernoulli trial; the total number of data plot evaluations can then be modeled as a Binomial distribution with selection probability $1/m$ (for a single target lineup) \citep{majumder2013validation}.
 
 \item [Scenario 2] $K$ different sets of null plots are shown to $K$ independent individuals; the same data plot is used in each lineup.
 Alternately, $L$ sets of lineups are shown to $K > L$ individuals.
@@ -417,9 +419,9 @@ f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^
 
 \noindent is a natural model for the counts $c_i$, where $K$ describes the number of evaluations and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probability that each panel $i=1, ..., m$ is selected.
 % add a  transition/ref back to the alpha section for clarity
-\svp{As discussed in \autoref{sec:alpha}}, the panel selection probabilities $\bm{\theta}$ can be modelled using a Dirichlet distribution with concentration hyperparameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
+\svp{As discussed in \Cref{sec:alpha}}, the panel selection probabilities $\bm{\theta}$ can be modeled using a Dirichlet distribution with concentration parameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
 % Simplifying the phrasing here a bit
-\svp{We do not know where a specific panel will be placed when the lineup is initially generated, so we use a} symmetric  Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration hyperparameter is constant. 
+\svp{We do not know where a specific panel will be placed when the lineup is initially generated, so we use a} symmetric  Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration parameter is constant. 
 
 The density function of the symmetric Dirichlet distribution is given as
 \begin{align}\label{eqn:dirichlet-pdf}
@@ -432,7 +434,7 @@ f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alp
 (Note that the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$ for integer values of $n$.)
 
 Thus, for the observed plot selections
-$(c_1, ..., c_m)$, and assumimg hyperparameter $\alpha > 0$, we specify the full model as:
+$(c_1, ..., c_m)$, and assuming parameter $\alpha > 0$, we specify the full model as:
 
 \begin{align}\begin{split}\label{eqn:full-model-specification}
 \bm{\theta} \mid \alpha &\sim Dirichlet(\bm\alpha)  \\
@@ -464,14 +466,14 @@ C_i \mid \theta_i & \sim Binomial(\theta_i, K),\\
 
 with the distribution of $\theta_i$ given $c_i$ and $\alpha$ as Beta$(c_i + \alpha, K - c_i + (m-1)\alpha)$. \svp{Here, $i$ is the index of the target plot, with null panel selections considered in aggregate.}
 
-Examining the parameters of either the full (Eq. \ref{eqn:full-model-specification}) or marginal model (Eq. \ref{eqn:marginal-model-specification}) specifications tells us that $\alpha$ provides the equivalent of pseudo-observations for each plot. That is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup.
+Examining the parameters of either the full (\Cref{eqn:full-model-specification}) or marginal model (\Cref{eqn:marginal-model-specification}) specifications tells us that $\alpha$ provides the equivalent of pseudo-observations for each plot. That is, the effect of $\alpha$ is equivalent to adding $\alpha$ identifications to each panel in the lineup.
 When $\alpha$ is small, these pseudo-observations have relatively little influence, but when $\alpha$ is large, the pseudo-observations can quickly dwarf any information provided by the data.
 This is particularly true for the marginal \dc{BB} model, where the equivalent of $(m-1)\alpha$ pseudo-observations are added. %\dc{XXX can we think of this as noise dominating signal?}
 A lineup might be evaluated between 10 and 30 times, and with a $m=20$ panel lineup, even $\alpha = 1$ can easily dominate any signal present in the the participant selection data.
 
 % In addition to the pseudo-observation interpretation,
 % A few more adjustments, since we already covered the dirichlet/panel selection thing in the introduction, we don't really have to get too specific here.
-\svp{As discussed in \autoref{sec:alpha}, the value of $\alpha$ also determines how many panels will have a relatively high selection probability $\theta_i$ (and how many panels will have $\theta_i\approx 0$). 
+\svp{As discussed in \Cref{sec:alpha}, the value of $\alpha$ also determines how many panels will have a relatively high selection probability $\theta_i$ (and how many panels will have $\theta_i\approx 0$). 
 This means that $\alpha$ also determines how many panels in a lineup are likely to attract participant interest.}
 % The parameter $\alpha$ \dc{can} \svp{also} \dc{be considered to be possessing the} information about the number of panels in a lineup {\it which are likely} to attract participant interest.
 %It is useful to detour slightly from the discussion of visual inference to 
@@ -501,9 +503,9 @@ Under Scenario 1, each participant sees an entirely different lineup: the data p
 Thus, while there may be differences in the visual interest of each panel in any one lineup, these differences do not carry over to the next lineup.
 While all panels in a single generated lineup may not be equally likely to be selected, we do not have any information or ability to \svp{estimate or} quantify these differences.
 In fact, in Scenario 1, it does not make sense to track any information beyond whether or not the data panel was selected: each evaluation is in effect a separate, independent Bernoulli trial.
-Our selection of $\alpha$ under this scenario goes beyond what might be considered a noninformative $\alpha=1$ (corresponding to uniformly distributed $\theta_i$ over the $m-1$ simplex).
+Our selection of $\alpha$ under this scenario goes beyond what might be considered a non-informative $\alpha=1$ (corresponding to uniformly distributed $\theta_i$ over the $m-1$ simplex).
 Instead, because we are averaging over all panels which could be generated by the data and null models (as both the data plot and the null plots are exchanged every time), we can claim that every plot is strictly equally likely to be selected under $H_0$. 
-As shown in \autoref{fig:vis-p-val-sensitivity-initial}, when $\alpha \rightarrow\infty$, the \dc{BB} model converges asymptotically to the Binomial model (with $\theta = 1/m$) proposed in \citet{majumder2013validation}.
+As shown in \Cref{fig:vis-p-val-sensitivity-initial}, when $\alpha \rightarrow\infty$, the \dc{BB} model converges asymptotically to the Binomial model (with $\theta = 1/m$) proposed in \citet{majumder2013validation}.
 
 <<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the marginal beta-binomial model. Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial $p$-values converge to the binomial model $p$-value. XXXCan take out the dot Binomial value... from the top of the plot - i find it distracting as though its an actual data point.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 alphas <- 10^(seq(-3, 2, by = .01))
@@ -549,7 +551,7 @@ ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
 Under Scenario 3, however, each participant sees the same lineup, with the same data plot(s) and null plots.
 In this scenario, we have enough information that we can model the $\theta_i$ across different lineup evaluations.
 Because the perceptual mechanisms which determine visual interest are shared across participants, and the same null plots and data plot(s) are used, we must allow $\theta_i$ to vary.
-The DM model (\autoref{eqn:full-model-specification}) provides this flexibility through the introduction of the hyperparameter $\alpha$.
+The DM model (\Cref{eqn:full-model-specification}) provides this flexibility through the introduction of the parameter $\alpha$.
 The general formula for calculating a visual $p$-value under \svp{the BB model appropriate for use in Scenario 3} is:
 \begin{align}\label{eqn:beta-binomial}
 p\text{-value} = P(C\geq c_i) = \sum_{x = c_i}^{K} \binom{K}{x} \frac{1}{B(\alpha, (m-1)\alpha)}\cdot B(x+\alpha, K-x+(m-1)\alpha)
@@ -560,25 +562,25 @@ B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b 
 \end{align*}
 The derivation is in Appendix~\ref{app:pvalue}.
 
-\dc{The visual $p$-value calculation} using \autoref{eqn:beta-binomial} is dependent on the \svp{value of} $\alpha$.
+\dc{The visual $p$-value calculation} using \Cref{eqn:beta-binomial} is dependent on the \svp{value of} $\alpha$.
 We know from past studies \citep{hofmann2012graphical,roychowdhury:2012,zhaoMindReadingUsing2013,roychowdhury:2013,tengfei:2013,loyDiagnosticToolsHierarchical2013,majumderHumanFactorsInfluencing2014,loy:2015,loyAreYouNormal2015,loy2016variations,vanderplas:2017,loyModelChoiceDiagnostics2017} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.
-Combining this observation with \autoref{fig:prior-predictive}, we would expect that $\alpha \ll 1$.
+Combining this observation with \Cref{fig:prior-predictive}, we would expect that $\alpha \ll 1$.
 
 The value of $\alpha$ would be expected to vary \dc{based on various factors}: the null generating model, type of plot, and other aesthetic choices,  all of which could affect the visual distinctiveness of the null and actual data.
-\svp{The right side of \autoref{fig:prior-predictive} shows three studies with different distributions of $\theta_i$ that have characteristics corresponding to different $\alpha$ values.}
+\svp{The right side of \Cref{fig:prior-predictive} shows three studies with different distributions of $\theta_i$ that have characteristics corresponding to different $\alpha$ values.}
 In order to calculate visual $p$-values for lineups evaluated under Scenario 3, we must match the underlying data generation method and visual evaluation processes with an appropriate value of $\alpha$.
 
 %
-% A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \autoref{fig:simplex})\citep{vinference}.
+% A similar method is found in the \texttt{vinference} package, which calculates visual p-values by simulating draws of $\theta$ from a uniform distribution (corresponding to the assumption that $\alpha=1$, as shown in \Cref{fig:simplex})\citep{vinference}.
 %
 % \subsection{Hyperparameter Selection}
-% \svp{In \autoref{sec:scenario-alpha}, we described the differences in visual p-value calculations for different lineup scenarios.}
-% In the theoretical Multinomial-Dirichlet model in \autoref{eqn:full-model-specification}, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \autoref{eqn:dirichlet-pdf} and \autoref{eqn:full-model-specification} (a derivation of this expectation is provided in Appendix \ref{app:expected}).
+% \svp{In \Cref{sec:scenario-alpha}, we described the differences in visual p-value calculations for different lineup scenarios.}
+% In the theoretical Multinomial-Dirichlet model in \Cref{eqn:full-model-specification}, the number of panels which could be expected to be visually different in a generalized lineup is a function of $\alpha$, the hyperparameter in \Cref{eqn:dirichlet-pdf} and \Cref{eqn:full-model-specification} (a derivation of this expectation is provided in Appendix \ref{app:expected}).
 As it is difficult to design a null plot generating method which will result in a specific $\alpha$ value, in practice, we will need to select an appropriate $\alpha$ for a predetermined null plot generating model.
-The selected $\alpha$ modulates the calculated visual $p$-value, as shown in \autoref{fig:vis-p-val-sensitivity-initial}: when $\alpha$ is low, it is likely that there are one or more visually distinctive null plots, making it difficult to attribute data panel selections to definitive visual differences betweeen the null and data plots.
+The selected $\alpha$ modulates the calculated visual $p$-value, as shown in \Cref{fig:vis-p-val-sensitivity-initial}: when $\alpha$ is low, it is likely that there are one or more visually distinctive null plots, making it difficult to attribute data panel selections to definitive visual differences between the null and data plots.
 When $\alpha$ is relatively high, however, there are likely to be more null plots which attract visual attention; in this situation, it is very easy to determine whether the data panel is visually distinct compared to the null panels.
 Clearly, the choice of $\alpha$ is critical.
-% The simulated distributions in \autoref{fig:prior-predictive} are illustrative, \svp{it can be difficult to translate the results from \autoref{fig:prior-predictive} into a useful estimate of $\alpha$.}
+% The simulated distributions in \Cref{fig:prior-predictive} are illustrative, \svp{it can be difficult to translate the results from \Cref{fig:prior-predictive} into a useful estimate of $\alpha$.}
 % in practice, we do not usually have a good instinct for what a reasonable value of $\alpha$ would be for a particular lineup generation method.
 
 \section{Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:est-alpha}
@@ -603,7 +605,7 @@ We define lineup panel $i$ to be $c$-interesting if $c$ or more participants sel
 The threshold $c$ does not have to be an integer value.
 
 \svp{Using this definition,} we \svp{also} define the random variable $Z_c$, the number of panels which \svp{are $c$-interesting} in $K$ evaluations of a $m$-panel lineup.
-The expected number of panels selected at least $c$ times, $E[Z_c]$, is provided in \autoref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \autoref{eqn:full-model-specification} is provided in \autoref{app:expected}.
+The expected number of panels selected at least $c$ times, $E[Z_c]$, is provided in \Cref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \Cref{eqn:full-model-specification} is provided in \Cref{app:expected}.
 
 \begin{equation}\label{eqn:ev-panel}
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=\lceil c \rceil}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
@@ -628,15 +630,15 @@ Visual estimates of correlation and linear regression are known to differ system
 Instead, estimates derived visually tend to discount the effect of outliers, producing a more robust estimate of the statistical quantity of interest.
 In this application, we expect that visual estimation of $\alpha$ based on the expected number of "interesting" panels will produce a more robust estimate of $\alpha$ than the numerically unstable maximum likelihood estimates.
 
-\autoref{fig:prior-predictive} \dc{illustrates} that $\alpha$ is directly related to the number of panels which are selected as interesting by participants.
+\Cref{fig:prior-predictive} \dc{illustrates} that $\alpha$ is directly related to the number of panels which are selected as interesting by participants.
 \hh{The estimation of $\alpha$ is based on the relationship between $\alpha$ and the number of expected $c$-interesting panels as developed in the previous section. }
-\hh{\autoref{fig:alpha-sim-curve} illustrates this relationship for the example of $K=30$ evaluations of 19 null panels: 
-the blue line corresponds to the expected number of 1-interesting null panels $Z_1$ as given in \autoref{eqn:ev-panel}.
+\hh{\Cref{fig:alpha-sim-curve} illustrates this relationship for the example of $K=30$ evaluations of 19 null panels: 
+the blue line corresponds to the expected number of 1-interesting null panels $Z_1$ as given in \Cref{eqn:ev-panel}.
 Each point in the figure is based on 10 simulations of a lineup of size $(K, m)$.
 }
 This provides some variability around how many times each panel was selected, but the number of panels which attract participant attention is fairly consistent across multiple simulations.
-\hh{Light grey bands corresponding to four levels of `interestingness' are shown in \autoref{fig:alpha-sim-curve}: we consider situations with }
- 2-3, 4-5, 6-7, and 8+  null panels that were selected at least once. \autoref{fig:alpha-sim-curve} then can be used for visually estimating $\alpha$ by executing a reverse lookup of the rate parameter based on the number of interesting null panels.
+\hh{Light grey bands corresponding to four levels of `interestingness' are shown in \Cref{fig:alpha-sim-curve}: we consider situations with }
+ 2-3, 4-5, 6-7, and 8+  null panels that were selected at least once. \Cref{fig:alpha-sim-curve} then can be used for visually estimating $\alpha$ by executing a reverse lookup of the rate parameter based on the number of interesting null panels.
 
 
 %We propose estimating $\alpha$ visually \dc{using} the number of \svp{$c$-interesting} null panels \svp{in an $m$-panel lineup evaluated $K$ times}. 
@@ -647,12 +649,12 @@ This provides some variability around how many times each panel was selected, bu
 
 \svp{A natural threshold for sufficient participant interest is $c = K/m$}; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
 Using null panel selections hinges on a property of the Dirichlet distribution: when one category is removed from consideration, the remaining categories still maintain a reduced-dimension Dirichlet distribution with the same parameter $\alpha$.
-A \svp{discussion} of this property \svp{and its application to visual inference} is provided in Appendix~\autoref{neutrality}.% - is it worth it? \dc{Can we cite something instead? it must be somewhere in the lit?}
+A \svp{discussion} of this property \svp{and its application to visual inference} is provided in Appendix~\Cref{neutrality}.% - is it worth it? \dc{Can we cite something instead? it must be somewhere in the lit?}
 
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
 
-<<alpha-sim-curve, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\autoref{eqn:ev-panel}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
+<<alpha-sim-curve, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\Cref{eqn:ev-panel}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
 set.seed(2501072)
 interest_threshold <- 2
 alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
@@ -763,29 +765,29 @@ ggplot() +
 \svp{The proposed}
 \dc{
 %An examination of this 
-visual estimation process is conducted using a} simulation from the DM model in \autoref{eqn:full-model-specification}.
+visual estimation process is conducted using a} simulation from the DM model in \Cref{eqn:full-model-specification}.
 \svp{Furthermore, we will assume for this demonstration} that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations.
-%The heuristic we propose for ad-hoc estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
+%The heuristic we propose for ad-hoc estimation of $\alpha$ utilizes the plot shown in \Cref{fig:alpha-sim-curve}.
 
 \begin{description}
-\item[\hh{Identify the number of $c$-interesting null panels in the lineup of interest.}] \hh{Consider \autoref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_o$,  and the corresponding number of null panel selections, $K_o$. }
+\item[\hh{Identify the number of $c$-interesting null panels in the lineup of interest.}] \hh{Consider \Cref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_o$,  and the corresponding number of null panel selections, $K_o$. }
 \hh{XXX should we provide an R function?}
-%\item [Divide \dc{null panel selection activity into four levels}] \dc{as shown in \autoref{fig:alpha-sim-curve}}, using a visual display with both simulated values and the expected value \svp{computed using \autoref{eqn:ev-panel}.} 
+%\item [Divide \dc{null panel selection activity into four levels}] \dc{as shown in \Cref{fig:alpha-sim-curve}}, using a visual display with both simulated values and the expected value \svp{computed using \Cref{eqn:ev-panel}.} 
 %Note that $Z_c=1$ should be treated as a separate level.} % \hh{I'm not sure why this needs to be treated separately?}
 %\svp{For a $20$ panel lineup with $K_0=30$ null panel selections,} these levels are 2-3, 4-5, 6-7, and 8+ panels.
 
-{\it Aside:} \hh{this should be discussed in full, but not here - maybe in the discussion? } If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \autoref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
+{\it Aside:} \hh{this should be discussed in full, but not here - maybe in the discussion? } If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \Cref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
 
 \item [\svp{Locate a $y$-axis range around the observed \hh{number of $c$-interesting null panels in the} data}] Using the simulated selected panel counts, \dc{on the vertical axis locate} \hh{a} band \hh{around}  the number of $c$-interesting null panels in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
 
 Using  a range instead of a single point estimate is intended to account for some of the variability resulting from the use of a single lineup with non-deterministic $K_0$ null panel evaluations.
 In a simulation, it is easy to increase \hh{the number for simulations} $N$ until  results no longer change substantially; this is expensive and much more time consuming when using human evaluations and setting $K$ instead of $K_0$ in the experimental design.
 
-\item [Select an $\hat\alpha$ value corresponding to the selected band and calculate the visual p-value.] \svp{Using the chosen $\hat\alpha$ value, calculate a visual p-value using \autoref{eqn:beta-binomial}. Assess the sensitivity of this p-value calculation to the choice of $\alpha$ values within the selected band.} A plot such as the one shown in \autoref{fig:vis-p-val-sensitivity-initial2} may be helpful when assessing the sensitivity of the visual $p$-value to different values of $\alpha$ in each band. \autoref{fig:vis-p-val-sensitivity-initial2} is a segmented version of \autoref{fig:vis-p-val-sensitivity-initial}; each panel corresponds to the bands of interesting panel counts selected in step 1. Locate the relevant panel of the plot, and, using the number of target panel selections, determine whether the visual $p$-value calculation is conclusive for every $\alpha$ in the panel. 
+\item [Select an $\hat\alpha$ value corresponding to the selected band and calculate the visual p-value.] \svp{Using the chosen $\hat\alpha$ value, calculate a visual p-value using \Cref{eqn:beta-binomial}. Assess the sensitivity of this p-value calculation to the choice of $\alpha$ values within the selected band.} A plot such as the one shown in \Cref{fig:vis-p-val-sensitivity-initial2} may be helpful when assessing the sensitivity of the visual $p$-value to different values of $\alpha$ in each band. \Cref{fig:vis-p-val-sensitivity-initial2} is a segmented version of \Cref{fig:vis-p-val-sensitivity-initial}; each panel corresponds to the bands of interesting panel counts selected in step 1. Locate the relevant panel of the plot, and, using the number of target panel selections, determine whether the visual $p$-value calculation is conclusive for every $\alpha$ in the panel. 
 
-%If it is, then it is safe to draw a strong conclusion; if not, it may be useful to use a secondary experiment to more precisely estimate $\hat\alpha$, as discussed in \autoref{sec:rorschach-est-alpha}.
+%If it is, then it is safe to draw a strong conclusion; if not, it may be useful to use a secondary experiment to more precisely estimate $\hat\alpha$, as discussed in \Cref{sec:rorschach-est-alpha}.
 
-For instance, if our selected lineup contained 3 interesting null panels, $\hat\alpha = 0.075$ approximately corresponds to $Z_c = 3$; we should compare to $\alpha = 0.01$ and $\alpha=0.09$ (the approximate outer range of $\alpha$ for our band) to get a sense of the sensitivity of our $p$-value to $\alpha$. \svp{Examinining the second panel of \autoref{fig:vis-p-val-sensitivity-initial2}, which corresponds to 3 interesting null panels, we see that p-values will significant at the 0.05 level when the number of data panel selections is at least 20; if there are fewer than 15 data panel selections, then p-values will not be significant at the 0.05 level. In our example, } we have 10 target selections ($K = 40, K_0 = 30$), \svp{corresponding} to a visual $p$-value that will not be significant for any range of $\alpha$ in our selected band.
+For instance, if our selected lineup contained 3 interesting null panels, $\hat\alpha = 0.075$ approximately corresponds to $Z_c = 3$; we should compare to $\alpha = 0.01$ and $\alpha=0.09$ (the approximate outer range of $\alpha$ for our band) to get a sense of the sensitivity of our $p$-value to $\alpha$. \svp{Examining the second panel of \Cref{fig:vis-p-val-sensitivity-initial2}, which corresponds to 3 interesting null panels, we see that p-values will significant at the 0.05 level when the number of data panel selections is at least 20; if there are fewer than 15 data panel selections, then p-values will not be significant at the 0.05 level. In our example, } we have 10 target selections ($K = 40, K_0 = 30$), \svp{corresponding} to a visual $p$-value that will not be significant for any range of $\alpha$ in our selected band.
 \end{description}
 
 <<vis-p-val-sensitivity-initial2, fig.cap = "Sensitivity of visual $p$-value to selection of $\\alpha$ under the beta-binomial model, for a $m=20$ panel lineup with $K=40$ evaluations. Data picks which result in ambiguous results under the discretized bands of $\\alpha$ values are highlighted in red. At any particular $\\alpha$ level, there are only a few values which result in an inconclusive results.", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
@@ -841,11 +843,11 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 @
 
 
-In \autoref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance at the $p=0.05$ level.
-Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for nonsignificance and significance.
+In \Cref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance at the $p=0.05$ level.
+Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for non-significance and significance.
 In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options.
 The inexpensive, conservative approach is to declare any inconclusive results to be \dc{non-significant}, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
-Alternately, the experimenter could use the method described in \autoref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
+Alternately, the experimenter could use the method described in \Cref{sec:Rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
 
 
 By estimating $\alpha$, we produce visual $p$-values which are calibrated based on the specific null plot generation method.
@@ -854,7 +856,7 @@ Occasionally, either because the signal in the data plot is too strong, or becau
 
 In the case where a tested lineup has selections which overwhelmingly favor the data plot, we have a\svp{n interesting dilemma}: the lineup is likely significant (based on the overwhelming evidence that the data plot attracts the most visual interest), but we cannot estimate $\alpha$ because there are insufficient null panel selections.
 In this case, estimation of $\alpha$ will depend on creation of a Rorschach lineup (that is, a lineup consisting entirely of plots generated under the null hypothesis).
-This process is described in more detail in \autoref{sec:rorschach-est-alpha}.
+This process is described in more detail in \Cref{sec:Rorschach-est-alpha}.
 % Having this Rorschach lineup evaluated separately will provide an estimate of $\alpha$ which is unaffected by the data plot; then, a p-value for the data lineup can be computed using the $\alpha$ estimated from the Rorschach lineup.
 % 
 As it is rare for the data plot to be the only panel to attract participant attention, we can usually recover information about $\alpha$ from the null panels in the same lineup.
@@ -866,22 +868,22 @@ This is a more efficient use of participant time \svp{and experimenter resources
 \subsection{Estimation using Rorschach lineups}\label{sec:rorschach-est-alpha}
 
 %If the visual method of $\alpha$ estimation is inconclusive, or there are insufficient null panel selections to estimate $\alpha$ visually,
-\autoref{eqn:ev-panel} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each.
+\Cref{eqn:ev-panel} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each.
 This estimation method would proceed as follows:
 \begin{description}
-\item [Experimentally evaluate $L$ $m$-panel Rorschach lineups $K$ times each.] To ensure validity of the estimated $\alpha$, the Rorschach lineups should use the same null data generating mechanism used in the standard lineup. It is also important that $K$ be the same for each lineup which is evaluated, as \autoref{eqn:ev-panel} depends on $K$.
+\item [Experimentally evaluate $L$ $m$-panel Rorschach lineups $K$ times each.] To ensure validity of the estimated $\alpha$, the Rorschach lineups should use the same null data generating mechanism used in the standard lineup. It is also important that $K$ be the same for each lineup which is evaluated, as \Cref{eqn:ev-panel} depends on $K$.
 
-\item [Calculate the mean number of $c$-interesting panels in the Rorschach lineups.] This empirical estimate of $E[Z_c]$ will be used in combination with \autoref{eqn:ev-panel} to estimate $\alpha$.
+\item [Calculate the mean number of $c$-interesting panels in the Rorschach lineups.] This empirical estimate of $E[Z_c]$ will be used in combination with \Cref{eqn:ev-panel} to estimate $\alpha$.
 
-\item [Numerically determine $\hat\alpha$ using $\overline Z_c$ and \autoref{eqn:ev-panel}.]The reference distribution is one with $m=m_0$ null panels, because of the use of Rorschach lineups, in contrast to the reference distribution in \autoref{sec:vis-estimation-alpha}. 
+\item [Numerically determine $\hat\alpha$ using $\overline Z_c$ and \Cref{eqn:ev-panel}.]The reference distribution is one with $m=m_0$ null panels, because of the use of Rorschach lineups, in contrast to the reference distribution in \Cref{sec:vis-estimation-alpha}. 
 \end{description}
 
 % Then, the average number of different panels selected by more than $c$ participants can be calculated from the secondary study data; numerical optimization can be used to obtain $\hat\alpha$ from this information.
-Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \autoref{eqn:ev-panel} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$; this is also apparent on the left side of \autoref{fig:alpha-sim-curve}. When the estimated $\hat\alpha$ is extremely small, this is a signal that there is a problem with the null plot generation method; this case is described in more detail in \autoref{sec:bad-null}.
+Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \Cref{eqn:ev-panel} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$; this is also apparent on the left side of \Cref{fig:alpha-sim-curve}. When the estimated $\hat\alpha$ is extremely small, this is a signal that there is a problem with the null plot generation method; this case is described in more detail in \Cref{sec:bad-null}.
 
-\svp{This approach could also be used in situations where a precise $\hat\alpha$ is necessary, as it has greater numerical precision than the visual estimation method proposed in \autoref{sec:vis-estimation-alpha}. An intermediate solution might be to include a few Rorschach lineups in the design of a lineup experiment, so that enough data is obtained from the Rorschach lineups to estimate $\alpha$, without requiring the overhead of an additional study or a large number of additional participant evaluations. In this compromise approach, both the visual method and the numerical method could be used: the first to obtain an approximate interval, and the second to justify a specific value of $\alpha$. }
+\svp{This approach could also be used in situations where a precise $\hat\alpha$ is necessary, as it has greater numerical precision than the visual estimation method proposed in \Cref{sec:vis-estimation-alpha}. An intermediate solution might be to include a few Rorschach lineups in the design of a lineup experiment, so that enough data is obtained from the Rorschach lineups to estimate $\alpha$, without requiring the overhead of an additional study or a large number of additional participant evaluations. In this compromise approach, both the visual method and the numerical method could be used: the first to obtain an approximate interval, and the second to justify a specific value of $\alpha$. }
 
-% Studies using visual inference may be relatively small (that is, with few participant lineup evaluations), which would make a formal secondary study to precisely determine $\hat\alpha$ cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \autoref{eqn:ev-panel}. \dc{XXX I don't think this  paragraph is necessary. The experimenter can decide whether they have the money or not.}
+% Studies using visual inference may be relatively small (that is, with few participant lineup evaluations), which would make a formal secondary study to precisely determine $\hat\alpha$ cost prohibitive, but there is no doubt that a full study of Rorschach lineups would produce a more precise estimate of $\alpha$ compared to the visual method using discrete bands determined from \Cref{eqn:ev-panel}. \dc{XXX I don't think this  paragraph is necessary. The experimenter can decide whether they have the money or not.}
 
 \subsection{Detecting inadequate null generation methods}\label{sec:bad-null}
 When only one null plot in a Rorschach lineup is visually interesting, we encounter two problems: \dc{(1) $\hat\alpha$ cannot be estimated with precision, because many different $\alpha$ values below $\alpha\approx 0.025$ could give rise to a situation where only one panel is visually interesting; (2) any one-target lineup may be confounded if the data plot replaces the interesting null plot.} %If there is only one interesting null panel in a Rorschach lineup, the equivalent one-target lineup would have between 1 and 2 interesting panels, so the number of interesting panels in the data plot would depend on whether the interesting null plot is the null replaced by a data plot.
@@ -893,7 +895,7 @@ The lineup hypothesis testing method is predicated on the ability to visually di
 \dc{An example is} described in \citet{vanderplas:2017}, \dc{where the generated null plots occasionally lacked important features critical to the study that made them inadvertently visually different.} %important visual signals (such as a cluster consisting of one or two points, and a corresponding missing bounding ellipse).
 Estimation of $\alpha$ provides us with a way to screen for bad null plot generation methods, in addition to providing more accurate estimates of visual $p$-values.
 
-We can see from \autoref{fig:vis-p-val-sensitivity-initial} that the proposed method will generate $p$-values which are more moderate than the simpler Binomial model that does not involve the extra step of estimating $\alpha$. 
+We can see from \Cref{fig:vis-p-val-sensitivity-initial} that the proposed method will generate $p$-values which are more moderate than the simpler Binomial model that does not involve the extra step of estimating $\alpha$. 
 In the next section, we explore the practical implications of this method by examining actual lineups which were tested experimentally and the visual $p$-values calculated using each method.
 % \svp{XXX If we've already said that the Binomial model is only for Scenario 1, then do we need to compare the two p-values? XXX}
 
@@ -930,7 +932,7 @@ new_vispval <- vis_p_value(exdf_targetcount, total_n, alpha = .174)
 new_vispval_low <- vis_p_value(exdf_targetcount, total_n, alpha = .115)
 new_vispval_high <- vis_p_value(exdf_targetcount, total_n, alpha = .251)
 @
-\dc{This is a reassessment of the $p$-value computed for a lineup (\autoref{fig:example-plot}) used in \citet{majumder2013validation}}. Using the \dc{DM} model, computed visual $p$-values \dc{are} more \dc{conservative} than the previously computed \dc{using the Binomial model proposed in that work}.
+\dc{This is a reassessment of the $p$-value computed for a lineup (\Cref{fig:example-plot}) used in \citet{majumder2013validation}}. Using the \dc{DM} model, computed visual $p$-values \dc{are} more \dc{conservative} than the previously computed \dc{using the Binomial model proposed in that work}.
 The responses from \dc{evaluators} were somewhat ambiguous: the data plot in panel 8 was selected most frequently by participants (14 times), but in total, null plots were selected more frequently than the target plot (22 times). In particular, the null plot in panel 4 attracted 10 selections.
 Using a Binomial model for the evaluation this plot  produces a visual $p$-value on the order of $10^{-9}$, %\Sexpr{old_vispval}
 which seems extremely small given that there were more null plot selections than data plot selections.
@@ -960,9 +962,9 @@ ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) +
 
 
 @
-Under the DM model in \autoref{eqn:full-model-specification}, the first step is to assess the expected number of null panels which  attract attention: \hh{six of 19 null plots were selected from the lineup at least once. The corresponding simulation in \autoref{fig:example-alpha-curve} suggests a value of $\alpha$ between 0.1 and 0.25.}
+Under the DM model in \Cref{eqn:full-model-specification}, the first step is to assess the expected number of null panels which  attract attention: \hh{six of 19 null plots were selected from the lineup at least once. The corresponding simulation in \Cref{fig:example-alpha-curve} suggests a value of $\alpha$ between 0.1 and 0.25.}
 
-<<example-alpha-curve, fig.cap = "Number of expected panels with at least one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}.", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
+<<example-alpha-curve, fig.cap = "Number of expected panels with at least one selection in the 22 null plot selections  for the lineup shown in \\Cref{fig:example-plot}.", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
 
 interest_threshold <- 1
 alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
@@ -1050,10 +1052,10 @@ ggplot() +
 @
 
 
-%We divide the range of the expectation into bands covering 2-3 panels: 2-4, 5-7, 7-9, and 10+ panels. Our lineups tend to have between 6 and 7 null plots selected, so a reasonable choice for $\alpha$ is $0.25$, which is in the middle of the 5-7 band in \autoref{fig:example-alpha-curve}.
-Under the BB mixture model the visual $p$-value for the data shown in lineup in \autoref{fig:example-plot} is \Sexpr{round(new_vispval,2)} based on $\hat{\alpha} = 0.174$ corresponding to six interesting null plots. For a range of 5-7 interesting null plots we have estimates for $\alpha$ between 0.1 and 0.25, corresponding to $p$-values between  $\Sexpr{round(new_vispval_high,2)}$ and  $\Sexpr{round(new_vispval_low,2)}$.
+%We divide the range of the expectation into bands covering 2-3 panels: 2-4, 5-7, 7-9, and 10+ panels. Our lineups tend to have between 6 and 7 null plots selected, so a reasonable choice for $\alpha$ is $0.25$, which is in the middle of the 5-7 band in \Cref{fig:example-alpha-curve}.
+Under the BB mixture model the visual $p$-value for the data shown in lineup in \Cref{fig:example-plot} is \Sexpr{round(new_vispval,2)} based on $\hat{\alpha} = 0.174$ corresponding to six interesting null plots. For a range of 5-7 interesting null plots we have estimates for $\alpha$ between 0.1 and 0.25, corresponding to $p$-values between  $\Sexpr{round(new_vispval_high,2)}$ and  $\Sexpr{round(new_vispval_low,2)}$.
 All of these values are still significant at the 0.05 level, however these values are \dc{larger} than the $p$-value computed under the Binomial model.
-When we consider the actual results of the experimental evaluation of \autoref{fig:example-plot}, the $p$-value computed using the mixture model is much more plausible: the data plot is the most favored of all of the panels in the lineup, but it is not overwhelmingly significant; at least one other panel is almost as popular, and overall, null panels were still selected more frequently than the data panel.
+When we consider the actual results of the experimental evaluation of \Cref{fig:example-plot}, the $p$-value computed using the mixture model is much more plausible: the data plot is the most favored of all of the panels in the lineup, but it is not overwhelmingly significant; at least one other panel is almost as popular, and overall, null panels were still selected more frequently than the data panel.
 This suggests that $p$-values generated using the \dc{BB} mixture model are better calibrated than those generated by the Binomial model.%: by accounting for the underlying perceptual processes, we can produce a more accurate method for conducting visual inference.
 
 
@@ -1093,7 +1095,7 @@ As a result, by describing the calculation of $p$-values for Scenario 3, this pa
 \section*{Author Biography}
 
 \begin{biography}{%\includegraphics[width=60pt,height=70pt,draft]{empty}
-}{\textbf{Susan VanderPlas} is an Assistant Professor in the Department of Statistics, at the University of Nebraska-Lincoln. She received her PhD from the Department of Statistics at Iowa State University in 2015.
+}{\textbf{Susan Vanderplas} is an Assistant Professor in the Department of Statistics, at the University of Nebraska-Lincoln. She received her PhD from the Department of Statistics at Iowa State University in 2015.
 \textbf{Christian R\"ottger} is an Assistant Teaching Professor in the Department of Mathematics, at the Iowa State University. He received his PhD in Mathematics from the University of East Anglia in 2000.
 \textbf{Dianne Cook} is Professor of Business Analytics in the Department of Econometrics and Business Statistics at Monash University. She received her PhD in Statistics from Rutgers University in 1993.
 \textbf{Heike Hofmann} is a Professor in the Department of Statistics at Iowa State University. She received her PhD from the University of Augsburg in 2000.}
@@ -1101,7 +1103,7 @@ As a result, by describing the calculation of $p$-values for Scenario 3, this pa
 
 \begin{appendix}
 \section{Visual $p$-value distribution}\label{app:pvalue}
-Assume, we have a lineup of size $m$ with $K$ evaluations resulting in $c_t$ target plot evaluations. We defined the \dc{BB} model in \autoref{eqn:marginal-model-specification} leading to densities given as:
+Assume, we have a lineup of size $m$ with $K$ evaluations resulting in $c_t$ target plot evaluations. We defined the \dc{BB} model in \Cref{eqn:marginal-model-specification} leading to densities given as:
 
 \begin{align*}
 f(\theta \mid \alpha) & = \svp{\frac{1}{B\left(\alpha, (m-1)\alpha\right)}}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\
@@ -1167,7 +1169,7 @@ The probabilities $P(C_i \ge c)$ are derived in the previous section as marginal
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=\lceil c \rceil}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
 \end{equation}
 
-\section{Subvectors of Dirichlet distributions}\label{neutrality}
+\section{Sub vectors of Dirichlet distributions}\label{neutrality}
 
 Let $\bm\theta = (\theta_1, ... \theta_m)$ with $\bm\theta \sim $Dir$(\alpha)$ for some real-valued $\alpha > 0$. 
 The Dirichlet distribution is neutral with respect to all possible partitions of the corresponding index set \citep{Connor:1969bt, doksum:74, Sakowicz:2014hi}.
