@@ -560,7 +560,7 @@ where $c_i$ is the number of times the data panel was picked in $K$  evaluations
 \begin{align*}
 B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b > 0.
 \end{align*}
-The derivation is in Appendix~\ref{app:pvalue}.
+The derivation is in \Cref{app:pvalue}.
 
 \dc{The visual $p$-value calculation} using \Cref{eqn:beta-binomial} is dependent on the \svp{value of} $\alpha$.
 We know from past studies \citep{hofmann2012graphical,roychowdhury:2012,zhaoMindReadingUsing2013,roychowdhury:2013,tengfei:2013,loyDiagnosticToolsHierarchical2013,majumderHumanFactorsInfluencing2014,loy:2015,loyAreYouNormal2015,loy2016variations,vanderplas:2017,loyModelChoiceDiagnostics2017} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.
@@ -649,7 +649,7 @@ This provides some variability around how many times each panel was selected, bu
 
 \svp{A natural threshold for sufficient participant interest is $c = K/m$}; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
 Using null panel selections hinges on a property of the Dirichlet distribution: when one category is removed from consideration, the remaining categories still maintain a reduced-dimension Dirichlet distribution with the same parameter $\alpha$.
-A \svp{discussion} of this property \svp{and its application to visual inference} is provided in Appendix~\Cref{neutrality}.% - is it worth it? \dc{Can we cite something instead? it must be somewhere in the lit?}
+A \svp{discussion} of this property \svp{and its application to visual inference} is provided in \Cref{neutrality}.% - is it worth it? \dc{Can we cite something instead? it must be somewhere in the lit?}
 
 % This method is based on the assumption that during the creation of a null plot generating model (and viewing of lineups assembled from that model), the experimenter generally has an estimate of roughly how many null plots in a lineup tend to be visually interesting.
 
