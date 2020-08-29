@@ -873,7 +873,7 @@ This is a more efficient use of participant time \svp{and experimenter resources
 \dc{XXX I feel like this section could be made a little more precise. There are a lot of ifs and maybes and what-ifs, which are interesting, but maybe more distracting than important for the reader to know.}
 
 %\subsection{Numerical Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:rorschach-est-alpha}
-\subsection{Estimation using additional Rorschachs}\label{sec:rorschach-est-alpha}
+\subsection{Estimation using Rorschach lineups}\label{sec:rorschach-est-alpha}
 
 %If the visual method of $\alpha$ estimation is inconclusive, or there are insufficient null panel selections to estimate $\alpha$ visually,
 \autoref{eqn:ev-panel} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each.
