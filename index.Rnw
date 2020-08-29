@@ -641,12 +641,19 @@ In this application, we expect that visual estimation of $\alpha$ based on the e
 \autoref{fig:prior-predictive} \dc{illustrates} that $\alpha$ is directly related to the number of panels which are selected as interesting by participants.
 \hh{The estimation of $\alpha$ is based on the relationship between $\alpha$ and the number of expected $c$-interesting panels as developed in the previous section. }
 \hh{\autoref{fig:alpha-sim-curve} illustrates this relationship for the example of $K=30$ evaluations of 19 null panels: 
-the blue line corresponds to the expected number of 1-interesting null panels $Z_1$ given in \autoref{eqn:ev-panel}.
+the blue line corresponds to the expected number of 1-interesting null panels $Z_1$ as given in \autoref{eqn:ev-panel}.
 Each point in the figure is based on 10 simulations of a lineup of size $(K, m)$.
 }
 This provides some variability around how many times each panel was selected, but the number of panels which attract participant attention is fairly consistent across multiple simulations.
+\hh{Light grey bands corresponding to four levels of `interestingness' are shown in \autoref{fig:alpha-sim-curve}: we consider situations with }
+ 2-3, 4-5, 6-7, and 8+  null panels that were selected at least once. \autoref{fig:alpha-sim-curve} then can be used for visually estimating $\alpha$ by executing a reverse lookup of the rate parameter based on the number of interesting null panels.
 
-We propose estimating $\alpha$ visually \dc{using} the number of \svp{$c$-interesting} null panels \svp{in an $m$-panel lineup evaluated $K$ times}. 
+
+%We propose estimating $\alpha$ visually \dc{using} the number of \svp{$c$-interesting} null panels \svp{in an $m$-panel lineup evaluated $K$ times}. 
+
+
+
+
 
 \svp{A natural threshold for sufficient participant interest is $c = K/m$}; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
 Using null panel selections hinges on a property of the Dirichlet distribution: when one category is removed from consideration, the remaining categories still maintain a reduced-dimension Dirichlet distribution with the same parameter $\alpha$.
@@ -768,18 +775,21 @@ ggplot() +
 %An examination of this 
 visual estimation process is conducted using a} simulation from the DM model in \autoref{eqn:full-model-specification}.
 \svp{Furthermore, we will assume for this demonstration} that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations.
-The heuristic we propose for ad-hoc estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
+%The heuristic we propose for ad-hoc estimation of $\alpha$ utilizes the plot shown in \autoref{fig:alpha-sim-curve}.
 
 \begin{description}
-\item [Divide \dc{null panel selection activity into four levels}] \dc{as shown in \autoref{fig:alpha-sim-curve}}, using a visual display with both simulated values and the expected value \svp{computed using \autoref{eqn:ev-panel}. Note that $Z_c=1$ should be treated as a separate level.} 
-\svp{For a $20$ panel lineup with $K_0=30$ null panel selections,} these levels are 2-3, 4-5, 6-7, and 8+ panels.
+\item[\hh{Identify the number $c$-interesting null panels in the lineup of interest.}] \hh{Consider \autoref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number  $m_o$ of null panels and their corresponding number $K_o$ of null panel selections. }
+\hh{XXX should we provide an R function?}
+%\item [Divide \dc{null panel selection activity into four levels}] \dc{as shown in \autoref{fig:alpha-sim-curve}}, using a visual display with both simulated values and the expected value \svp{computed using \autoref{eqn:ev-panel}.} 
+%Note that $Z_c=1$ should be treated as a separate level.} % \hh{I'm not sure why this needs to be treated separately?}
+%\svp{For a $20$ panel lineup with $K_0=30$ null panel selections,} these levels are 2-3, 4-5, 6-7, and 8+ panels.
 
-{\it Aside:} If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \autoref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
+{\it Aside:} \hh{this should be discussed in full, but not here - maybe in the discussion? } If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \autoref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
 
-\item [\svp{Locate the y-axis range corresponding to the observed data}] Using the simulated selected panel counts, \dc{on the vertical axis locate} the band which is most consistent with the number of null panels selected \dc{with} more than $c$ times in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
+\item [\svp{Locate a $y$-axis range around the observed \hh{number of $c$-interesting null panels in the} data}] Using the simulated selected panel counts, \dc{on the vertical axis locate} \hh{a} band \hh{around}  the number of $c$-interesting null panels in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
 
-Use of a range instead of the single point estimate is intended to account for some of the variability resulting from the use of a single lineup with non-deterministic $K_0$ null panel evaluations.
-In a simulation, it is easy to increase $N$ until the results no longer change; this is expensive and much more time consuming when using human evaluations and setting $K$ instead of $K_0$ in the experimental design.
+Using  a range instead of a single point estimate is intended to account for some of the variability resulting from the use of a single lineup with non-deterministic $K_0$ null panel evaluations.
+In a simulation, it is easy to increase \hh{the number for simulations} $N$ until  results no longer change substantially; this is expensive and much more time consuming when using human evaluations and setting $K$ instead of $K_0$ in the experimental design.
 
 \item [Select an $\hat\alpha$ value corresponding to the selected band and calculate the visual p-value.] \svp{Using the chosen $\hat\alpha$ value, calculate a visual p-value using \autoref{eqn:beta-binomial}. Assess the sensitivity of this p-value calculation to the choice of $\alpha$ values within the selected band.} A plot such as the one shown in \autoref{fig:vis-p-val-sensitivity-initial2} may be helpful when assessing the sensitivity of the visual $p$-value to different values of $\alpha$ in each band. \autoref{fig:vis-p-val-sensitivity-initial2} is a segmented version of \autoref{fig:vis-p-val-sensitivity-initial}; each panel corresponds to the bands of interesting panel counts selected in step 1. Locate the relevant panel of the plot, and, using the number of target panel selections, determine whether the visual $p$-value calculation is conclusive for every $\alpha$ in the panel. 
 
@@ -959,7 +969,7 @@ ggplot(exdat, aes(x = group, y = vals, fill = factor(group))) +
 @
 Under the DM model in \autoref{eqn:full-model-specification}, the first step is to assess the expected number of null panels which  attract attention: \hh{six of 19 null plots were selected from the lineup at least once. The corresponding simulation in \autoref{fig:example-alpha-curve} suggests a value of $\alpha$ between 0.1 and 0.25.}
 
-<<example-alpha-curve, fig.cap = "Number of expected panels with more than one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}.", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
+<<example-alpha-curve, fig.cap = "Number of expected panels with at least one selection in the 22 null plot selections  for the lineup shown in \\autoref{fig:example-plot}.", fig.width = 8, fig.height = 4, out.width = "\\textwidth">>=
 
 interest_threshold <- 1
 alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
@@ -1034,7 +1044,7 @@ ggplot() +
   geom_text(aes(x = x, y = y, label = label), data = band_labels, hjust = 0, color = "grey30", size = 3) +
   coord_cartesian(xlim = range(alphas)) +
   scale_y_continuous(name = paste0("Number of panels with at least ",
-                                   interest_threshold+1, " selection"),
+                                   interest_threshold, " selection"),
                      breaks = 1:100) +
   annotate("segment", x=0.000001, xend=selected_breakpoints$alpha,
                y=6, yend=6,
