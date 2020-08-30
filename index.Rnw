@@ -1008,10 +1008,10 @@ As a result, by describing the calculation of $p$-values for Scenario 3, this pa
 
 \appendix
 \section{Visual \texorpdfstring{$p$}{p}-value distribution}\label{app:pvalue}
-Assume, we have a lineup of size $m$ with $K$ evaluations resulting in $c_t$ target plot evaluations. We defined the \dc{BB} model in \Cref{eqn:marginal-model-specification} leading to densities given as:
+Assume, we have a lineup of size $m$ with $K$ evaluations resulting in $c_t$ target plot evaluations. We defined the BB model in \Cref{eqn:marginal-model-specification} leading to densities given as:
 
 \begin{align*}
-f(\theta \mid \alpha) & = \svp{\frac{1}{B\left(\alpha, (m-1)\alpha\right)}}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\[1em]
+f(\theta \mid \alpha) & = \frac{1}{B\left(\alpha, (m-1)\alpha\right)}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\[1em]
 P(C = c_t  \mid K, \theta) & =  \binom{K}{c_t}\theta^{c_t}(1-\theta)^{K-c_t}
 \end{align*}
 % By Bayes Theorem, if $A_1 = C + \alpha$ and $A_2 = K - C + (m-1)\alpha$,
@@ -1030,13 +1030,13 @@ P(C = c_t  \mid K, \theta) & =  \binom{K}{c_t}\theta^{c_t}(1-\theta)^{K-c_t}
 % & =  \frac{B\left(\alpha, (m-1)\alpha\right) \binom{K}{C} }{B\left(C+\alpha, K-C+(m-1)\alpha\right)} \\
 % \end{align*}
 
-\hh{We are interested in the probability of observing at least $c_t$ picks of the target plot assuming that the target plot is not inconsistent with the null plots generated from the null model, i.e. we are interested in the (unconditional) distribution of counts $C$. We get there by integrating over the rate parameter $\theta$.
-From the theorem of total probability we know that }
+We are interested in the probability of observing at least $c_t$ picks of the target plot assuming that the target plot is not inconsistent with the null plots generated from the null model, i.e. we are interested in the (unconditional) distribution of counts $C$. We get there by integrating over the rate parameter $\theta$.
+From the theorem of total probability we know that 
 \begin{eqnarray*}
 P(C = c) &=& \int_0^1 P(C = c \mid \theta) f(\theta) d\theta
 \end{eqnarray*}
 
-\hh{Now we use that $C \mid \theta \sim$ Binom$_{\theta, K}$ and $\theta \sim$ Beta$_{\alpha, (m-1)\alpha}$:}
+Now we use that $C \mid \theta \sim$ Binom$_{\theta, K}$ and $\theta \sim$ Beta$_{\alpha, (m-1)\alpha}$:
 
 \begin{eqnarray*}
 P(C = c) &=&  \int_0^1 {\binom{K}{c}} \theta^c (1-\theta)^{K - c} \cdot
