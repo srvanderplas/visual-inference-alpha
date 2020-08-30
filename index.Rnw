@@ -75,7 +75,7 @@
 library(tidyverse)
 library(mgcv)
 library(Cairo)
-knitr::opts_chunk$set(echo = F, message = F, warning = F, dev = "CairoPDF")
+knitr::opts_chunk$set(echo = F, message = F, warning = F, dev = c("cairo_pdf", "cairo_ps"), dev.args = list(fallback_resolution = 800), dpi = 800)
 theme_set(theme_bw())
 @
 
@@ -184,10 +184,11 @@ simplex <- purrr::map_df(.x = c(1/3, 1, 3), ~data.frame(
   rename(p1 = X1, p2 = X2, p3 = X3) %>%
   mutate(alphalabel = factor(alpha, levels = 1:3, labels = c("alpha: 1/3", "alpha: 1", "alpha: 3")))
 
-ggtern::ggtern(aes(x = p1, y = p2, z = p3), data = simplex) +
+p <- ggtern::ggtern(aes(x = p1, y = p2, z = p3), data = simplex) +
   geom_point(alpha = .075, shape = 16) +
   facet_wrap(~alphalabel, labeller = "label_parsed") +
   theme(panel.background = element_rect(colour = "black"))
+print(p)
 @
 
 \begin{figure}
