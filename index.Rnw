@@ -1070,7 +1070,7 @@ A similar derivation holds in the full Dirichlet-Multinomial model.
 
 Under Scenario 1 a lineup is shown to only one participant. Let $Z_i$ be the binary variable capturing whether lineup $i$ resulted in a data pick.
 Then $C$, the number of data picks in $K$ evaluations of $K$ lineups is given as the sum of $K$ independent evaluations $Z_i$, i.e.\ $C = Z_1 + ... + Z_k$ .
-Assuming (independent) Dirichlet samples for each lineup, assume $\theta_i$ is the probability (under the null hypothesis) to pick the data plot. \svp{That is, each evaluation is a Bernoulli trial with success probability $\theta_i$.}
+Assuming (independent) Dirichlet samples for each lineup, assume $\theta_i$ is the probability (under the null hypothesis) to pick the data plot. That is, each evaluation is a Bernoulli trial with success probability $\theta_i$.
 Then $C \mid \theta_1, ..., \theta_K \sim$  Poisson-Binomial distribution: 
 \[
 P(C = c \mid \theta_1, ..., \theta_K) = \sum_{A \in A_c} \prod_{i \in A} \theta_i \prod_{j \notin A} (1-\theta_j)
@@ -1104,7 +1104,7 @@ The probabilities $P(C_i \ge c)$ are derived in the previous section as marginal
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=\lceil c \rceil}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
 \end{equation}
 
-\section{Sub vectors of Dirichlet distributions}\label{neutrality}
+\section{Partitions of Dirichlet distributions}\label{neutrality}
 
 Let $\bm\theta = (\theta_1, ... \theta_m)$ with $\bm\theta \sim $Dir$(\alpha)$ for some real-valued $\alpha > 0$. 
 The Dirichlet distribution is neutral with respect to all possible partitions of the corresponding index set \citep{Connor:1969bt, doksum:74, Sakowicz:2014hi}.
