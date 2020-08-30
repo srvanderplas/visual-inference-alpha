@@ -62,7 +62,7 @@
 
 % \presentaddress{This is sample for present address text this is sample for present address text}
 
-\abstract[Summary]{Statistical inference provides the protocols for conducting rigorous science, but data plots provide the opportunity to discover the unexpected. These disparate endeavors are bridged by visual inference, where a lineup protocol can be employed for statistical testing. Human observers are needed  to assess the lineups, typically using a crowd-sourcing service.  This paper describes a new approach for computing statistical significance associated with the results from applying a lineup protocol. In this approach we utilize a Dirichlet distribution to recognize that some plots, even though they are null plots, will attract more attention from the visual evaluator than others. The suggested procedures make statistical inference possible for a broader range of data problems.}
+\abstract[Summary]{Statistical inference provides the protocols for conducting rigorous science, but data plots provide the opportunity to discover the unexpected. These disparate endeavors are bridged by visual inference, where a lineup protocol can be employed for statistical testing. Human observers are needed  to assess the lineups, typically using a crowd-sourcing service.  This paper describes a new approach for computing statistical significance associated with the results from applying a lineup protocol. It utilizes a Dirichlet distribution to accommodate different levels of visual interest in individual null panels. The suggested procedures facilitate statistical inference for a broader range of data problems.}
 
 \keywords{data visualization, statistical graphics, hypothesis testing, data science}
 
