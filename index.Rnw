@@ -208,7 +208,7 @@ betas$alphalabel <- factor(betas$alpha)
 levels(betas$alphalabel) <- expression("alpha: 1/3", "alpha: 1", "alpha: 3")
 ggplot(data=betas, aes(x=p, y=density)) +
   geom_polygon(fill=I("grey50"), alpha=I(.8), colour=I("grey20")) +
-  ylab("density") + facet_wrap(~alphalabel, labeller="label_parsed") +
+  ylab("Density") + facet_wrap(~alphalabel, labeller="label_parsed") +
   ggplot2::theme_bw()
 @
 
