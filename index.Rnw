@@ -1066,6 +1066,24 @@ P(C \geq c_t) & =  \frac{1}{B(\alpha, (m-1)\alpha) } \sum_{x=c_t}^K \binom{K}{x}
 \end{align}
 A similar derivation holds in the full Dirichlet-Multinomial model.
 
+\section{Scenario 1 is Binomial}\label{app:binomial}
+
+Under Scenario 1 a lineup is shown to only one participant. Let $Z_i$ be the binary variable capturing whether lineup $i$ resulted in a data pick.
+Then $C$, the number of data picks in $K$ evaluations of $K$ lineups is given as the sum of $K$ independent evaluations $Z_i$, i.e.\ $C = Z_1 + ... + Z_k$ .
+Assuming (independent) Dirichlet samples for each lineup, assume $\theta_i$ is the probability (under the null hypothesis) to pick the data plot. 
+Then $C \mid \theta_1, ..., \theta_K \sim$  Poisson-Binomial distribution: 
+\[
+P(C = c \mid \theta_1, ..., \theta_K) = \sum_{A \in A_c} \prod_{i \in A} \theta_i \prod_{j \notin A} (1-\theta_j)
+\]
+where $A_c$ is the set of all subsets of $c$ integers that can be selected from $\{1,2,3,...,K\}$.
+
+For the distribution of $C$ therefore holds:
+\begin{eqnarray*}
+P(C = c) &=&  \sum_{A \in A_c} \prod_{i \in A}  \underbrace{\int_{0}^1 \theta_i f(\theta_i) d\theta_i}_{E[\theta_i]} \cdot \prod_{j \notin A} \underbrace{\int_{0}^1 (1-\theta_j) f(\theta_j) d\theta_j}_{1- E[\theta_j]} = \\
+  &=& \sum_{A \in A_c} \prod_{i \in A} \frac{1}{m} \cdot \prod_{j \notin A} (1 - \frac{1}{m}) = \\
+  &=& {K \choose c} \left(\frac{1}{m}\right)^c \left(1-\frac{1}{m}\right)^{K-c} 
+\end{eqnarray*}
+This shows that under Scenario 1 the null distribution of the number of data picks simplifies to a Binomial distribution $B_{\frac{1}{m}, K}$.
 \section{Expected number of panels picked}\label{app:expected}
 Define $C = (C_1, ..., C_m) \sim \text{Mult}_{\theta, K}$ to be a (simulated) lineup that is evaluated $K$ times, and $\theta = (\theta_1, ..., \theta_m) \sim \text{Dir}_\alpha = (\alpha, ..., \alpha)$ with $\sum_i \theta_i = 1$.
 
