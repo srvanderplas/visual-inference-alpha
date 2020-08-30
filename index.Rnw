@@ -808,7 +808,7 @@ When only one null plot in a Rorschach lineup is visually interesting, we encoun
 If the interesting null is replaced by the data plot, we would expect that the count values would look similar to those produced when evaluating the Rorschach lineup, but even if it is not, the distribution of counts might not differ enough to show statistical significance when $\hat\alpha$ is small.
 The lineup hypothesis testing method is predicated on the ability to visually distinguish a Rorschach lineup from a lineup with a data target, so a method that sporadically generates overwhelmingly interesting null plots provides insufficient grounds for rejection of the null hypothesis.
 
-Another interpretation of an extremely low $\hat\alpha$ value is to cast  suspicion on the null generating process. Null generating methods shouldn't inadvertently generate highly variable numbers of interesting nulls; rather one expects them to be uniformly dull.
+Another interpretation of an extremely low $\hat\alpha$ value is to cast  suspicion on the null generating process. Null generating methods should not inadvertently generate highly variable numbers of interesting nulls; rather one expects them to be uniformly dull.
 An example is described in \citet{vanderplas:2017}, where the generated null plots occasionally lacked important features critical to the study that made them inadvertently visually different.
 Estimation of $\alpha$ provides us with a way to screen for bad null plot generation methods, in addition to providing more accurate estimates of visual $p$-values.
 
@@ -981,7 +981,7 @@ The proposed Dirichlet-Multinomial (DM) model must be calibrated using a paramet
 Using expected quantities that are easily observable, we describe two methods for estimation of $\alpha$: a visual method for use on lineups that contain data panels, and a numerical method for use on Rorschach lineups.
 The $p$-values derived from the proposed DM model are more conservative than those produced by Majumder's Binomial model. Even though the latter is appropriate for Scenario 1, with the new model the use of $\hat\alpha$, estimated from the null plot generation method, provides an additional benefit: we calibrate the $p$-value to the lineups by accounting for the \emph{difficulty of the lineup evaluation under the null hypothesis}.
 
-Visual inference leverages the strength of the perceptual system to test hypotheses, for a broad range of problems that can't be addressed with traditional tests. This comes with a cost: we cannot easily describe the null distribution or determine its parameters from the experimental design.
+Visual inference leverages the strength of the perceptual system to test hypotheses, for a broad range of problems that cannot be addressed with traditional tests. This comes with a cost: we cannot easily describe the null distribution or determine its parameters from the experimental design.
 An exciting contribution of the visual and quantitative estimation methods proposed in this paper is that they allow us to determine the appropriate null distribution for a specific lineup experiment, with minimal cost to experimenters or participants.
 By controlling for the perceptual difficulty of a task using quantitative parameters, we can produce visual $p$-values that account for the demands of the task  while still providing an assessment of the significance of the test statistic. 
 
