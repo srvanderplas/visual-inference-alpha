@@ -170,6 +170,16 @@ We model the probability of selecting panel $i$ as $\theta_i, i = 1, ..., m$, wh
 The $m$-dimensional Dirichlet distribution generates $\bm\theta$ distributed on the $m-1$ simplex, that is, $\sum \theta_i = 1$. 
 When $\alpha_1 = \alpha_2 = ... = \alpha_m$, the distribution is a symmetric Dirichlet distribution.  As all null plots are generated using the same process, we model the picking probability $\bm\theta$ for a set of null plots using a symmetric Dirichlet distribution.
 
+The density function of the symmetric Dirichlet distribution is given as
+\begin{align}\label{eqn:dirichlet-pdf}
+f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
+\end{align}
+where $\Gamma(.)$ is the Gamma function defined as 
+\begin{align*}
+\Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
+\end{align*}
+(Note that the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$ for integer values of $n$.)
+
 % Stolen from heike/lineup-scenarios
 When $\alpha = 1$, the symmetric Dirichlet distribution is uniform on the ($m-1$)-dimensional simplex.
 When $\alpha < 1$, the mass of the distribution is along the edges of the simplex, where most values of $\theta_i$ will be close to 0. When $\alpha>1$, the mass of the distribution is in the center of the simplex, with most of the $\theta_i$ having similar values.
@@ -373,7 +383,7 @@ A model for Scenario 2 would need to account for specific dependencies between t
 
 In scenario 3 the distribution for selecting any plot from a lineup assuming the null hypothesis is true is given as
 $\bm \theta \sim$ Dir$(\bm\alpha)$ for constant values of $\alpha_i = \alpha > 0$ for all panels $i = 1, ..., m$. 
-Consider a lineup \svp{experiment} under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
+Consider a lineup experiment under scenario 3, i.e.\  the same lineup containing $m$ panels, independently evaluated $K$ times.
 Define $c = (c_1, ..., c_m)$ to be the counts corresponding to the set of $K$ evaluations, where $c_i$ is the number of times a participant selected panel $i$, where
 $0 \le c_i \le K$ for all $1 \le i \le m$ and $\sum_i c_i = K$. 
 The assumption is that each evaluator has to make a selection. In practice, evaluators get to make several selections -- these choices are incorporated into counts as fractions adding to 1. In case an evaluator makes no choice, all panel counts are increased by 1/m. For notational convenience, we will assume that all $c_i$ are integer counts. The results are immediately applicable to a non-integer number of selections, however.
@@ -386,17 +396,11 @@ f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^
 
 \noindent is a natural model for the counts $c_i$, where $K$ describes the number of evaluations and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probability that each panel $i=1, ..., m$ is selected.
 As discussed in \Cref{sec:alpha}, the panel selection probabilities $\bm{\theta}$ can be modeled using a Dirichlet distribution with concentration parameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
-We do not know where a specific panel will be placed when the lineup is initially generated, so we use a symmetric  Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$, that is, the concentration parameter is constant. 
 
-The density function of the symmetric Dirichlet distribution is given as
-\begin{align}\label{eqn:dirichlet-pdf}
-f(\bm{\theta} \mid \alpha) & = \frac{\left(\Gamma(\alpha)\right)^m}{\Gamma(m\alpha)} \prod_{i=1}^m \theta_i^{\alpha - 1},
-\end{align}
-where $\Gamma(.)$ is the Gamma function defined as 
-\begin{align*}
-\Gamma(z) = \int_0^\infty x^{z-1}e^{-x}dx.
-\end{align*}
-(Note that the Gamma function is equal to the factorial function $\Gamma(n) = (n-1)!$ for integer values of $n$.)
+\hh{Under the null hypthesis, the data panel is not distribuishable from the null plots. We can therefore model the picking probabilities $\bm\theta$ for the panels of a lineup }
+%We do not know where a specific panel will be placed when the lineup is initially generated, so we  % HH: \hh{XXXXXXXXXXXXXXXXXX the assumption of a symmetric dirichlet for a lineup is only correct under the null hypothesis.
+%It does not have anything to do with random placement. Please don't delete again.}
+using a symmetric  Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$.  
 
 Thus, for the observed plot selections
 $(c_1, ..., c_m)$, and assuming parameter $\alpha > 0$, we specify the full model as:
