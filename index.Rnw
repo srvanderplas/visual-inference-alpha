@@ -250,10 +250,8 @@ prior_sim <- tibble(alpha = alphas,
   mutate(label = sprintf("alpha == %f", alpha) %>% factor(levels = sprintf("alpha == %f", alphas), ordered = T))
 
 # Calculate thetas for different turk studies
-studies_sum <- readr::read_csv("data/all-turk-studies-summary.csv")
+studies_sum <- readr::read_csv("data/turk-studies-summary.csv")
 studies_sorted <- studies_sum %>%
-  mutate(study = factor(study, levels = paste0("turk", c(4:7, 10:11, 13:14)))) %>%
-  filter(study %in% paste0("turk", c(4, 10, 14))) %>%
   group_by(study, pic_id, pic_name) %>%
   arrange(desc(n)) %>%
   filter(obs_plot_location != response_no) %>%

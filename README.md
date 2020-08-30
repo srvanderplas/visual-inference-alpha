@@ -7,8 +7,8 @@ Statistical inference provides the protocols for conducting rigorous science, bu
 - index.Rnw contains the code necessary to generate the paper, figures, and quantitative results
 - code/functions.R contains some auxiliary functions used in the paper calculations.
 - data/
-    - all-turk-studies-summary.csv contains summarized results from many different lineup studies; each line describes aggregated results for a single lineup panel.
-        - study: a string indicating the study the lineup panel was used in
+    - turk-studies-summary.csv contains summarized results from many different lineup studies; each line describes aggregated results for a single lineup panel.
+        - study: a string indicating the study the lineup panel was used in; turk4 is Hofmann et al (2012), turk10 is Loy et al. (2016), turk14 is Loy et al. (2017)
         - param: a string indicating the parameter settings (study specific) used to generate the lineup
         - test_param: a string indicating a (usually human readable) description of the lineup
         - pic_id: a numeric ID specific to the lineup
