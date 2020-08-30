@@ -984,7 +984,7 @@ With methods for calculating $p$-values for visual inference studies conducted u
 Scenario 2 is an intermediate option between the two extremes of no dependence between successive lineup evaluations and complete dependence between successive lineup evaluations. 
 As a result, by describing the calculation of $p$-values for Scenario 3, this paper lays a foundation for a comprehensive assessment of the visual $p$-values of different lineups under intermediate scenarios, too. 
 
-
+\subsection*{Supporting Information} The code and data necessary to reproduce this article is available at \url{https://github.com/srvanderplas/visual-inference-alpha}.
 
 
 % \nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
