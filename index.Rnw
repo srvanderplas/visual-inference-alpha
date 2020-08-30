@@ -1086,4 +1086,19 @@ This means that  $\theta_m$ is independent of the (normalized) random variable $
 Further, this implies that the conditional distribution $\bm\theta^{-m} \mid \theta_m \sim $ Dir$(\alpha)$.
 
 In the context of lineups this means that given the same null model generation we can assume for the probabilities to select a panel from a Rorschach lineup and the probabilities to select a panel corresponding to a null plot from a lineup Dirichlet distributions with the same parameter $\alpha > 0$. 
+
+<<rename-figures, include = F>>=
+# This only works if all figures are generated in code chunks...
+chunks <- readLines("index.Rnw")
+
+chunks <- chunks[str_detect(chunks, "<<.*?>>=")] %>% str_extract("<<[\\w-]{1,},") %>% str_remove_all("<<|,") %>% factor(., levels = ., ordered = T)
+fig_table <- right_join(
+  tibble(factor = chunks, name = paste0(as.character(chunks), "-1")),
+  tibble(file = list.files("figure/", full.names = T), name = basename(file) %>% str_remove("\\..*$"))
+) %>%
+  arrange(factor) %>%
+  mutate(fig = factor(name, levels = unique(name), ordered = T), fignum = as.numeric(fig), ext = str_remove(basename(file), name) %>% str_remove("^\\."))
+
+file.copy(fig_table$file, paste0("figure/vanderplas-figure", fig_table$fignum, ".", fig_table$ext))
+@
 \end{document}
