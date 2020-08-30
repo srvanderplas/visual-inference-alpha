@@ -772,7 +772,7 @@ ggplot(pv, aes(x = alpha, y = p, group = factor(C))) +
 In \Cref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the visual selection method for each band of $\alpha$ values in terms of the number of target plot selections necessary to achieve statistical significance at the $p=0.05$ level.
 Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for non-significance and significance.
 In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options.
-The inexpensive, conservative approach is to declare any inconclusive results to be \dc{non-significant}, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
+The inexpensive, conservative approach is to declare any inconclusive results to be non-significant, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
 Alternately, the experimenter could use the method of using additional Rorschach lineups as described in \Cref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
 
 
@@ -792,7 +792,7 @@ This is a more efficient use of participant time and experimenter resources, as 
 \Cref{eqn:ev-panel} can be used to generate a more precise estimate of $\alpha$ with a secondary study consisting of one or more Rorschach lineups evaluated $K$ times each.
 This estimation method requires the following steps:
 \begin{description}
-\item [Experimentally evaluate $L$ $m$-panel Rorschach lineups $K$ times each.] To ensure validity of the estimated $\alpha$, the Rorschach lineups should use the same null data generating mechanism used in the standard lineup. It is also important that $K$ be the same for each lineup which is evaluated, as \Cref{eqn:ev-panel} depends on $K$.
+\item [Experimentally evaluate some $m$-panel Rorschach lineups $K$ times each.] To ensure validity of the estimated $\alpha$, the Rorschach lineups should use the same null data generating mechanism used in the standard lineup. It is also important that $K$ be the same for each lineup which is evaluated, as \Cref{eqn:ev-panel} depends on $K$.
 
 \item [Calculate the mean number of $c$-interesting panels in the Rorschach lineups.] This empirical estimate of $E[Z_c]$ will be used in combination with \Cref{eqn:ev-panel} to estimate $\alpha$.
 
@@ -801,7 +801,7 @@ This estimation method requires the following steps:
 
 The \texttt{alpha\_from\_null\_lineup()} function in the \texttt{vinference} package (available at https://github.com/heike/vinference) can be used to estimate $\hat\alpha$ given values of $\overline Z_c$, $c$, $m_0$, and $K_0$.
 
-Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \Cref{eqn:ev-panel} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$; this is also apparent on the left side of \Cref{fig:alpha-sim-curve}. When the estimated $\hat\alpha$ is extremely small, this is a signal that there is a problem with the null plot generation method; this case is described in more detail in \Cref{sec:bad-null}.
+Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \Cref{eqn:ev-panel} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$; this is also apparent on the left side of \Cref{fig:alpha-sim-curve}. However, very small estimated values of  $\hat\alpha$  signal that there is a problem with the null plot generation method; this case is described in more detail in \Cref{sec:bad-null}.
 
 This approach could also be used in situations where a precise $\hat\alpha$ is necessary, as it has greater numerical precision than the visual estimation method proposed in \Cref{sec:vis-estimation-alpha}. An intermediate solution might be to include a few Rorschach lineups in the design of a lineup experiment, so that enough data is obtained from the Rorschach lineups to estimate $\alpha$, without requiring the overhead of an additional study or a large number of additional participant evaluations. In this compromise approach, both the visual method and the numerical method could be used: the first to obtain an approximate interval, and the second to justify a specific value of $\alpha$. 
 
@@ -988,7 +988,7 @@ An exciting contribution of the visual and quantitative estimation methods propo
 By controlling for the perceptual difficulty of a task using quantitative parameters, we can produce visual $p$-values that account for the demands of the task  while still providing an assessment of the significance of the test statistic. 
 
 
-Visual estimation of $\alpha$ also allows us to screen out lineup generation methods that are problematic: if a null plot generation method produces \dc{one} interesting plot out of a size $m=20$ Rorschach lineup, it is functionally impossible to distinguish a data plot which has a large signal from a null plot which also has a large signal. 
+Visual estimation of $\alpha$ also allows us to screen out lineup generation methods that are problematic: if a null plot generation method produces one interesting plot out of a size $m=20$ Rorschach lineup, it is functionally impossible to distinguish a data plot which has a large signal from a null plot which also has a large signal. 
 Extremely small $\alpha$ values serve as a signal that the null plot generation method is not visually appropriate because it sporadically (not consistently) generates visual features that are likely to catch the attention of participants (possibly for the wrong reasons).
 We can guard against these anomalies by assessing $\alpha$ using a Rorschach pilot study, identifying any problems with the null plot generation method before the full study is conducted.
 
@@ -1013,10 +1013,10 @@ As a result, by describing the calculation of $p$-values for Scenario 3, this pa
 % }{\textbf{Christian R\"ottger} is an Assistant Teaching Professor in the Department of Mathematics, at the Iowa State University. He received his PhD in Mathematics from the University of East Anglia in 2000.}\end{biography}
 % 
 % \begin{biography}{\includegraphics[width=60pt,height=70pt,draft]{example-image-a}
-% }{\textbf{Dianne Cook} is Professor of Business Analytics in the Department of Econometrics and Business Statistics at Monash University. She received her PhD in Statistics from Rutgers University in 1993.}\end{biography}
+% }{\textbf{Dianne Cook} is Professor of Business Analytics in the Department of Econometrics and Business Statistics at Monash University. She received her PhD in Statistics from Rutgers University in 1993. She is a Fellow of the ASA.}\end{biography}
 % 
 % \begin{biography}{\includegraphics[width=60pt,height=70pt,draft]{example-image-a}
-% }{\textbf{Heike Hofmann} is a Professor in the Department of Statistics at Iowa State University. She received her PhD from the University of Augsburg in 2000.}
+% }{\textbf{Heike Hofmann} is a Professor in the Department of Statistics  and Interim Professor in Charge of the Data Science Program at Iowa State University. She received her PhD from the University of Augsburg in 2000. She is a Fellow of the ASA.}
 % \end{biography}
 
 \appendix
