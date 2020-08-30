@@ -578,8 +578,10 @@ the blue line corresponds to the expected number of 1-interesting null panels $Z
 Each point in the figure is based on 10 simulations of a lineup of size $(K, m)$.
 
 This provides some variability around how many times each panel was selected, but the number of panels which attract participant attention is fairly consistent across multiple simulations.
-Light grey bands corresponding to four levels of `interestingness' are shown in \Cref{fig:alpha-sim-curve}: we consider situations with 2-3, 4-5, 6-7, and 8+  null panels that were selected at least once. \Cref{fig:alpha-sim-curve} then can be used for visually estimating $\alpha$ by executing a reverse lookup of the rate parameter based on the number of interesting null panels.
+The light grey horizontal bands in  \Cref{fig:alpha-sim-curve} mark different levels of $c$-interesting null panels. We consider situations with 2-3, 4-5, 6-7, and 8+  null panels that were selected at least once. The corresponding values for $\alpha$ are shown in the connected vertical bands.
+If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  A discussion of this case is deferred to \Cref{sec:bad-null}.
 
+We use \Cref{fig:alpha-sim-curve}  for visually estimating $\alpha$ by executing a reverse lookup of the rate parameter based on the number of interesting null panels.
 
 
 A natural threshold for sufficient participant interest is $c = K/m$; that is, setting the threshold $c$ to be equal to the expected number of selections under the specified BB model. %HH: Beta-binomial has expected value K/m
@@ -702,7 +704,7 @@ Furthermore, we will assume for this demonstration that the lineup experiment we
 \item[Identify the number of $c$-interesting null panels in the lineup of interest.] Consider \Cref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_0$,  and the corresponding number of null panel selections, $K_0$. The \texttt{alpha\_from\_data\_lineup()} function in the \texttt{vinference} package (available at https://github.com/heike/vinference) can be used to create this plot given values of $c$, $m_0$, and $K_0$.
 % \hh{XXX should we provide an R function?}
 
-{\it Aside:} \hh{this should be discussed in full, but not here - maybe in the discussion? } If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \Cref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
+%{\it Aside:} \hh{this should be discussed in full, but not here - maybe in the discussion? } If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \Cref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
 
 \item [Locate a $y$-axis range around the observednumber of $c$-interesting null panels in the data] Using the simulated selected panel counts, on the vertical axis locate a band around the number of $c$-interesting null panels in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
 
@@ -771,7 +773,7 @@ In \Cref{fig:vis-p-val-sensitivity-initial2}, we show the implications of the vi
 Due to the discretization of the expected number of panels with more than $c$ selections, each range of $\alpha$ values is ambiguous for one or more potential data panel selection counts; these values are shown in red, with labeled thresholds for non-significance and significance.
 In the unfortunate situation where the estimated $\hat\alpha$ produces an inconclusive result, the experimenter has two options.
 The inexpensive, conservative approach is to declare any inconclusive results to be \dc{non-significant}, in effect using the smallest $\alpha$ value corresponding to the approximate number of panels selected.
-Alternately, the experimenter could use the method described in \Cref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
+Alternately, the experimenter could use the method of using additional Rorschach lineups as described in \Cref{sec:rorschach-est-alpha} to produce a more precise $\hat\alpha$ which would provide definitive results, at the cost of conducting a secondary study.
 
 
 By estimating $\alpha$, we produce visual $p$-values calibrated based on the specific null plot generation method.
