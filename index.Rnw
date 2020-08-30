@@ -228,7 +228,7 @@ It is evident that for $\alpha<0.05$ only one panel of the lineup receives signi
 The right side of \Cref{fig:prior-predictive} shows probabilities of null plot selections from three previous studies. \hh{Each line corresponds to one lineup. The vertical striping and the relatively large variability is due to the limited number of evaluations of each lineup (usually a lineup is not evaluation more often than 30 times). Clearly, each experiment is associated with a} different distribution of $\theta$ that have characteristics corresponding to different $\alpha$ values. \hh{However, all three studies suggest $\alpha$ values of less than 1 when comparing with the simulated distributions.}
 
 
-<<prior-predictive, echo = F, fig.cap = "Simulation of the panel selection probabilities $\\theta_i$, sorted, for different values of $\\alpha$ (left). In the right column, panel selection probabilities estimated from lineups used in past visual inference experiments; these probabilities are calculated from lineups with finite evaluations, so the calculated probabilities are not continuous. For low values of $\\alpha$, plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. The included selection probabilities from previous studies show that not all panels in each lineup are selected, even when evaluated multiple times; it is also clear that the selection probabilities are more concentrated in the first study, where in some lineups only one panel was selected; in the third study, at least 4 panels were selected in every lineup.", fig.width = 8, fig.height = 6, out.width = "\\textwidth" >>=
+<<prior-predictive, echo = F, fig.cap = "Simulation of the panel selection probabilities $\\theta_i$, sorted, for different values of $\\alpha$ (left). In the right column, panel selection probabilities estimated from lineups used in past visual inference experiments; these probabilities are calculated from lineups with finite evaluations, so the calculated probabilities are not continuous. For low values of $\\alpha$, plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. The included selection probabilities from previous studies\\citep{vanderplas_hofmann_cook_2020} show that not all panels in each lineup are selected, even when evaluated multiple times; it is also clear that the selection probabilities are more concentrated in the first study, where in some lineups only one panel was selected; in the third study, at least 4 panels were selected in every lineup.", fig.width = 8, fig.height = 6, out.width = "\\textwidth" >>=
 # set.seed(5019230943) # HH: too large for my machine
 set.seed(519223094)
 
@@ -996,7 +996,9 @@ With methods for calculating $p$-values for visual inference studies conducted u
 Scenario 2 is an intermediate option between the two extremes of no dependence between successive lineup evaluations and complete dependence between successive lineup evaluations. 
 As a result, by describing the calculation of $p$-values for Scenario 3, this paper lays a foundation for a comprehensive assessment of the visual $p$-values of different lineups under intermediate scenarios, too. 
 
-\subsection*{Supporting Information} The code and data necessary to reproduce this article is available at \url{https://github.com/srvanderplas/visual-inference-alpha}.
+\subsection*{Supporting Information} The code and data necessary to reproduce this article are available at \url{https://github.com/srvanderplas/visual-inference-alpha}.
+
+The data that support the findings of this study are also openly available in figshare at \url{https://doi.org/10.6084/m9.figshare.12894932}, reference number 12894932.
 
 
 % \nocite{*}% Show all bib entries - both cited and uncited; comment this line to view only cited bib entries;
