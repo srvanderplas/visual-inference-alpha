@@ -526,18 +526,18 @@ We  expect the value of $\alpha$ to depend on several factors: the null generati
 To calculate visual $p$-values for lineups evaluated under Scenario 3, we must match the underlying data generation method and visual evaluation processes with an appropriate value of $\alpha$.
 
 As it is difficult to design a null plot generating method which will result in a specific $\alpha$ value, in practice, we will need to select an appropriate $\alpha$ for a predetermined null plot generating model.
-The selected $\alpha$ modulates the calculated visual $p$-value, as shown in \Cref{fig:vis-p-val-sensitivity-initial}: when $\alpha$ is low, there are likely one or more visually distinctive null plots, making it difficult to attribute data panel selections to definitive visual differences between the null and data plots.
+The selected $\alpha$ modulates the calculated visual $p$-value, as shown in \Cref{fig:vis-p-val-sensitivity-initial}: when $\alpha$ is low, there are likely a few visually quite  distinctive null plots drawing the attention away from the data. This makes it difficult to attribute data panel selections to definitive visual differences between the null and data plots.
 When $\alpha$ is relatively high, however, there are likely to be more null plots that attract visual attention; in this situation, it is very easy to determine whether the data panel is visually distinct compared to the null panels.
 Clearly, the choice of $\alpha$ is critical.
 
 \section{Estimation of \texorpdfstring{$\alpha$}{alpha}}\label{sec:est-alpha}
 
 While it is generally possible to use maximum likelihood to estimate $\alpha$ \citep{sirt, minka} directly based on proportions observed from panel selections in a lineup, these approaches fail because of the large number of observed zeroes. 
-When participants select only a small subset of interesting null panels, there are naturally many panels that have no selections.
+When participants select only a  subset of interesting null panels, there are naturally many panels that have no selections.
 The many zeroes are even more pronounced when $\alpha$ values are small and only one or two null panels attract participant interest.
 The consequence is that these methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where lineup experiments typically operate.
 
-Instead, in this section, we propose a method for \emph{visual} estimation of $\alpha$ which accommodates zero-count values and a numerical method for estimating $\alpha$ based on the results of Rorschach lineup based testing. %\dc{These are described here.}
+Instead, we propose a method for \emph{visual} estimation of $\alpha$ which accommodates zero-count values and a numerical method for estimating $\alpha$ based on the results of Rorschach lineup based testing. %\dc{These are described here.}
 Both the visual and numeric methods for estimating $\alpha$ leverage the expected number of "interesting" panels in a lineup.
 
 \begin{definition}{$c$-interesting}\label{interesting}\newline
@@ -546,20 +546,20 @@ We define lineup panel $i$ to be $c$-interesting if $c$ or more participants sel
 This definition gives us an objective way to let evaluators determine what is interesting.
 The threshold $c$ does not have to be an integer value.
 
-Using this definition, we \svp{also} define the random variable $Z_c$, the number of panels which \svp{are $c$-interesting} in $K$ evaluations of an $m$-panel lineup.
-The expected number of panels selected at least $c$ times, $E[Z_c]$, is provided in \Cref{eqn:ev-panel}. The derivation of $E[Z_c]$ from \Cref{eqn:full-model-specification} is provided in \Cref{app:expected}.
+Using this definition, we also define random variable $Z_c$, the number of panels which are $c$-interesting in $K$ evaluations of an $m$-panel lineup.
+The expected number of panels selected at least $c$ times, $E[Z_c]$, is calculated as:
 
 \begin{equation}\label{eqn:ev-panel}
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=\lceil c \rceil}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
 \end{equation}
-
-Note that $c$-interestingness and $Z_c$ both depend on the experimental conditions - the number of times a lineup is evaluated, and the number of panels in the lineup. 
+A derivation of $E[Z_c]$ from \Cref{eqn:full-model-specification} is provided in \Cref{app:expected}.
+Note that $c$-interestingness and $Z_c$ both depend on the experimental conditions -- the number of times a lineup is evaluated, and the number of panels in the lineup. 
 While it would be reasonable to normalize the definition of $c$-interesting by $K$ or $m$, this would imply that we can compare across different scenarios.
-Unfortunately, because we are usually dealing with relatively small values of $K$ and $m$, even when we normalize counts, we still have a set of discrete quantities.
+Unfortunately, because we are usually dealing with relatively small values of $K$ and $m$, even when we normalize counts, we still deal with a set of discrete quantities.
 
 
 In a lineup experiment, we typically compare the selections of the data panel relative to the \emph{aggregate} selections of null panels, using the marginal BB model.
-While this makes the calculations much simpler, because there is no need to keep track of the locations and selections of individual null plots, it does throw away some information; namely, the distribution of participant interest in the null panels.
+While this makes the calculations much simpler, because there is no need to keep track of the locations and selections of individual null plots, it does disregard some information; namely, the distribution of participant interest in the null panels.
 The proposed estimation methods are predicated on utilizing that discarded information to estimate $\alpha$. % This paragraph actually applies to both methods.
 
 We will first discuss the visual and numerical methods for estimation of $\alpha$ from lineup evaluations, and then discuss one consequence of these methods for improved lineup diagnostics.
@@ -582,7 +582,7 @@ Light grey bands corresponding to four levels of `interestingness' are shown in 
 
 
 
-A natural threshold for sufficient participant interest is $c = K/m$; that is, setting the threshold $c$ to be greater than the expected number of selections under the Binomial model assumption that all panels have selection probability $1/m$. 
+A natural threshold for sufficient participant interest is $c = K/m$; that is, setting the threshold $c$ to be equal to the expected number of selections under the specified BB model. %HH: Beta-binomial has expected value K/m
 Using null panel selections hinges on a property of the Dirichlet distribution: when one category is removed from consideration, the remaining categories still maintain a reduced-dimension Dirichlet distribution with the same parameter $\alpha$.
 A discussion of this property and its application to visual inference is provided in \Cref{neutrality}.
 
@@ -696,7 +696,7 @@ ggplot() +
 @
 
 The proposed visual estimation process is conducted using a simulation from the DM model in \Cref{eqn:full-model-specification}.
-Furthermore, we will assume for this demonstration that the lineup experiment we are planning to conduct has a standard ($m = 20$ panel, $m_0 = 19$ null plot) lineup with $K_0=30$ null panel selections out of $K=40$ evaluations.
+Furthermore, we will assume for this demonstration that the lineup experiment we are planning to conduct has a standard size lineup ($m = 20$ panel, $m_0 = 19$ null plot)  with $K_0=30$ null panel selections out of $K=40$ evaluations.
 
 \begin{description}
 \item[Identify the number of $c$-interesting null panels in the lineup of interest.] Consider \Cref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_0$,  and the corresponding number of null panel selections, $K_0$. The \texttt{alpha\_from\_data\_lineup()} function in the \texttt{vinference} package (available at https://github.com/heike/vinference) can be used to create this plot given values of $c$, $m_0$, and $K_0$.
