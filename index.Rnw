@@ -212,8 +212,11 @@ ggplot(data=betas, aes(x=p, y=density)) +
 
 % End stolen from heike/lineup-scenarios
 
-While graphical illustrations of the $m$-dimensional Dirichlet distribution are more difficult when $m>3$, we can use simulation to assess the meaning of $\alpha$ as it relates to lineup panel selection probabilities $\theta_i$. \Cref{fig:prior-predictive} shows simulated selection probabilities $\theta_i$, sorted such that the panel with the highest selection probability is first,  for several values of $\alpha$ in a $m=20$ panel lineup.
-It is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup.
+While graphical illustrations of the $m$-dimensional Dirichlet distribution are more difficult when $m>3$, we can use simulation to assess the meaning of $\alpha$ as it relates to lineup panel selection probabilities $\theta_i$. \Cref{fig:prior-predictive}(left) shows simulated selection probabilities $\theta_i$, sorted such that the panel with the highest selection probability is first,  for several values of $\alpha$ in a $m=20$ panel lineup.
+It is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup. 
+
+The right side of \Cref{fig:prior-predictive} shows probabilities of null plot selections from three previous studies. \hh{Each line corresponds to one lineup. The vertical striping is due to the limited number of evaluations of each lineup (usually a lineup is not evaluation more often than 30 times). Clearly, each experiment is associated with a} different distribution of $\theta$ that have characteristics corresponding to different $\alpha$ values. \hh{However, all three studies suggest $\alpha$ values of less than 1 when comparing with the simulated distributions.}
+
 
 <<prior-predictive, echo = F, fig.cap = "Simulation of the panel selection probabilities $\\theta_i$, sorted, for different values of $\\alpha$ (left). In the right column, panel selection probabilities estimated from lineups used in past visual inference experiments; these probabilities are calculated from lineups with finite evaluations, so the calculated probabilities are not continuous. For low values of $\\alpha$, plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. The included selection probabilities from previous studies show that not all panels in each lineup are selected, even when evaluated multiple times; it is also clear that the selection probabilities are more concentrated in the first study, where in some lineups only one panel was selected; in the third study, at least 4 panels were selected in every lineup.", fig.width = 8, fig.height = 6, out.width = "\\textwidth" >>=
 # set.seed(5019230943) # HH: too large for my machine
@@ -516,7 +519,6 @@ We know from past studies \citep{hofmann2012graphical,roychowdhury:2012,zhaoMind
 Combining this observation with \Cref{fig:prior-predictive}, we would expect that $\alpha \ll 1$.
 
 The value of $\alpha$ would be expected to vary based on various factors: the null generating model, type of plot, and other aesthetic choices,  all of which could affect the visual distinctiveness of the null and actual data.
-The right side of \Cref{fig:prior-predictive} shows three studies with different distributions of $\theta_i$ that have characteristics corresponding to different $\alpha$ values.
 To calculate visual $p$-values for lineups evaluated under Scenario 3, we must match the underlying data generation method and visual evaluation processes with an appropriate value of $\alpha$.
 
 As it is difficult to design a null plot generating method which will result in a specific $\alpha$ value, in practice, we will need to select an appropriate $\alpha$ for a predetermined null plot generating model.
