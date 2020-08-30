@@ -397,7 +397,7 @@ f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^
 \noindent is a natural model for the counts $c_i$, where $K$ describes the number of evaluations and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probability that each panel $i=1, ..., m$ is selected.
 As discussed in \Cref{sec:alpha}, the panel selection probabilities $\bm{\theta}$ can be modeled using a Dirichlet distribution with concentration parameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
 
-\hh{Under the null hypthesis, the data panel is not distribuishable from the null plots. We can therefore model the picking probabilities $\bm\theta$ for the panels of a lineup }
+\hh{Under the null hypthesis, the data panel is not distinguishable from the null plots. We can therefore model the picking probabilities $\bm\theta$ for the panels of a lineup }
 %We do not know where a specific panel will be placed when the lineup is initially generated, so we  % HH: \hh{XXXXXXXXXXXXXXXXXX the assumption of a symmetric dirichlet for a lineup is only correct under the null hypothesis.
 %It does not have anything to do with random placement. Please don't delete again.}
 using a symmetric  Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$.  
