@@ -772,7 +772,7 @@ By estimating $\alpha$, we produce visual $p$-values calibrated based on the spe
 In most cases, we get the improved calibration for free, because we can obtain this information from the null panels in one or two target lineups.
 Occasionally, either because the signal in the data plot is too strong, or because the visual estimation method for $\alpha$ produces a range of $p$-values that are inconclusive given the number of target plot selections, we may need to invest additional effort to generate a precise $\hat\alpha$ estimate numerically.
 
-In the case where a tested lineup has selections which overwhelmingly favor the data plot, we have a n interesting dilemma: the lineup is likely significant (based on the overwhelming evidence that the data plot attracts the most visual interest), but we cannot estimate $\alpha$ because there are insufficient null panel selections.
+In the case where a tested lineup has selections which overwhelmingly favor the data plot, we have an interesting dilemma: the lineup is likely significant (based on the overwhelming evidence that the data plot attracts the most visual interest), but we cannot estimate $\alpha$ because there are insufficient null panel selections.
 In this case, estimation of $\alpha$ will depend on the creation of a Rorschach lineup (that is, a lineup consisting entirely of plots generated under the null hypothesis).
 This process is described in more detail in \Cref{sec:rorschach-est-alpha}.
 
