@@ -1021,7 +1021,7 @@ The data that support the findings of this study are also openly available in fi
 
 \appendix
 \section{Visual \texorpdfstring{$p$}{p}-value distribution}\label{app:pvalue}
-Assume, we have a lineup of size $m$ with $K$ evaluations resulting in $c_t$ target plot evaluations. We defined the BB model in \Cref{eqn:marginal-model-specification} leading to densities given as:
+Assume we have a lineup of size $m$ with $K$ evaluations resulting in $c_t$ target plot evaluations. We defined the BB model in \Cref{eqn:marginal-model-specification} leading to densities given as:
 
 \begin{align*}
 f(\theta \mid \alpha) & = \frac{1}{B\left(\alpha, (m-1)\alpha\right)}\cdot \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha - 1}\\[1em]
@@ -1053,9 +1053,9 @@ Now we use that $C \mid \theta \sim$ Binom$_{\theta, K}$ and $\theta \sim$ Beta$
 
 \begin{eqnarray*}
 P(C = c) &=&  \int_0^1 {\binom{K}{c}} \theta^c (1-\theta)^{K - c} \cdot
-\frac{1}{B(\alpha, (m-1)\alpha)} \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha-1} d\theta = \\
+\frac{1}{B(\alpha, (m-1)\alpha)} \theta^{\alpha - 1}(1-\theta)^{(m-1)\alpha-1} d\theta  \\
 &=& {\binom{K}{c}} \frac{1}{B(\alpha, (m-1)\alpha)} \underbrace{\int_0^1
- \theta^{c + \alpha - 1}(1-\theta)^{K-c + (m-1)\alpha-1} d\theta}_{\text{Beta function}} =\\
+ \theta^{c + \alpha - 1}(1-\theta)^{K-c + (m-1)\alpha-1} d\theta}_{\text{Beta function}} \\
  &=& {\binom{K}{c}} \frac{B(c+\alpha, K-c + (m-1)\alpha)}{B(\alpha, (m-1)\alpha)}.
 \end{eqnarray*}
 
