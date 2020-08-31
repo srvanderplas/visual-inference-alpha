@@ -89,7 +89,7 @@ source("code/functions.R")
 % ---- Gentle introduction/ power of graphics ----------------------------------
 % ---- Graphics and hypothesis testing -----------------------------------------
 Graphics provide the opportunity to understand statistical data at a (visual) sensory level. They are also important for data analysis because a plot can communicate more than summary statistics~\citep{anscombe:1972,matejka:2017}.
-Statistical graphics allow us to leverage the full bandwidth of the \hh{human} visual system for implicit data analysis. Because this analysis is implicit, we often assume these visual analyses are not decisive in the same way that a hypothesis test is decisive.
+Statistical graphics allow us to leverage the full bandwidth of the human visual system for implicit data analysis. Because this analysis is implicit, we often assume these visual analyses are not decisive in the same way that a hypothesis test is decisive.
 Graphics generally do not come with a significance threshold, and in many cases, we do not explicitly declare the hypothesis we might be testing before viewing the data plot.
 \citet{buja:2009} introduced a protocol for \emph{visual inference} that allows for formal hypothesis testing using graphical displays and visual evaluation.
 
@@ -113,7 +113,7 @@ This abstract plot definition allows us to declare a hypothesis by specifying th
 For example, the scatter plots shown in the one target lineups in Figure \ref{fig:typesoflineups}b map variable 1 to the $x$-axis and variable 2 to the $y$-axis, with the intent to study the association between the two variables.
 
 % ---- Lineups as tests --------------------------------------------------------
-\hh{The natural next step} is to consider using these visual statistics to conduct hypothesis tests.
+The natural next step is to consider using these visual statistics to conduct hypothesis tests.
 In the scatterplot example above, the null hypothesis is that there is no association between the two variables and the corresponding alternative hypothesis is that there is an association.
 Conducting a test using the observed data plot requires that we compare the data plot to a reference distribution.
 Any null generating mechanism, such as randomization or sampling from a known distribution, may be used to generate the data for the null panels in the lineup.
@@ -225,7 +225,7 @@ ggplot(data=betas, aes(x=p, y=density)) +
 While graphical illustrations of the $m$-dimensional Dirichlet distribution are more difficult when $m>3$, we can use simulation to assess the meaning of $\alpha$ as it relates to lineup panel selection probabilities $\theta_i$. \Cref{fig:prior-predictive}(left) shows simulated selection probabilities $\theta_i$, sorted such that the panel with the highest selection probability is first,  for several values of $\alpha$ in a $m=20$ panel lineup.
 It is evident that for $\alpha<0.05$ only one panel of the lineup receives significant attention, while for $\alpha> .25$, participant attention is divided among several interesting panels of the lineup. 
 
-The right side of \Cref{fig:prior-predictive} shows probabilities of null plot selections from three previous studies. \hh{Each line corresponds to one lineup. The vertical striping and the relatively large variability is due to the limited number of evaluations of each lineup (usually a lineup is not evaluation more often than 30 times). Clearly, each experiment is associated with a} different distribution of $\theta$ that have characteristics corresponding to different $\alpha$ values. \hh{However, all three studies suggest $\alpha$ values of less than 1 when comparing with the simulated distributions.}
+The right side of \Cref{fig:prior-predictive} shows probabilities of null plot selections from three previous studies. Each line corresponds to one lineup. The vertical striping and the relatively large variability is due to the limited number of evaluations of each lineup (usually a lineup is not evaluation more often than 30 times). Clearly, each experiment is associated with a different distribution of $\theta$ that have characteristics corresponding to different $\alpha$ values. However, all three studies suggest $\alpha$ values of less than 1 when comparing with the simulated distributions.
 
 
 <<prior-predictive, echo = F, fig.cap = "Simulation of the panel selection probabilities $\\theta_i$, sorted, for different values of $\\alpha$ (left). In the right column, panel selection probabilities estimated from lineups used in past visual inference experiments; these probabilities are calculated from lineups with finite evaluations, so the calculated probabilities are not continuous. For low values of $\\alpha$, plot selections are concentrated on only a few plots, while higher values of $\\alpha$ show a wider spread of selections among more plots. The included selection probabilities from previous studies\\citep{vanderplas_hofmann_cook_2020} show that not all panels in each lineup are selected, even when evaluated multiple times; it is also clear that the selection probabilities are more concentrated in the first study, where in some lineups only one panel was selected; in the third study, at least 4 panels were selected in every lineup.", fig.width = 8, fig.height = 6, out.width = "\\textwidth" >>=
@@ -395,7 +395,7 @@ f(\bm{c}|K, \bm{\theta}) & = \frac{K!}{c_1! \cdots c_m!} \prod_{i=1}^m \theta_i^
 \noindent is a natural model for the counts $c_i$, where $K$ describes the number of evaluations and $\bm{\theta} = \theta_1, ..., \theta_m$ describes the probability that each panel $i=1, ..., m$ is selected.
 As discussed in \Cref{sec:alpha}, the panel selection probabilities $\bm{\theta}$ can be modeled using a Dirichlet distribution with concentration parameter $\bm{\alpha} = (\alpha_1, ..., \alpha_m)$.
 
-\hh{Under the null hypthesis, the data panel is not distinguishable from the null plots. We can therefore model the picking probabilities $\bm\theta$ for the panels of a lineup }
+Under the null hypthesis, the data panel is not distinguishable from the null plots. We can therefore model the picking probabilities $\bm\theta$ for the panels of a lineup 
 %We do not know where a specific panel will be placed when the lineup is initially generated, so we  % HH: \hh{XXXXXXXXXXXXXXXXXX the assumption of a symmetric dirichlet for a lineup is only correct under the null hypothesis.
 %It does not have anything to do with random placement. Please don't delete again.}
 using a symmetric  Dirichlet distribution, with $\alpha_i = \alpha, i = 1, ..., m$.  
@@ -535,7 +535,7 @@ When participants select only a  subset of interesting null panels, there are na
 The many zeroes are even more pronounced when $\alpha$ values are small and only one or two null panels attract participant interest.
 The consequence is that these methods for estimation of $\alpha$ are most likely to fail in precisely the region of the parameter space where lineup experiments typically operate.
 
-Instead, we propose a method for \emph{visual} estimation of $\alpha$ which accommodates zero-count values and a numerical method for estimating $\alpha$ based on the results of Rorschach lineup based testing. %\dc{These are described here.}
+Instead, we propose a method for \emph{visual} estimation of $\alpha$ which accommodates zero-count values and a numerical method for estimating $\alpha$ based on the results of Rorschach lineup based testing. %
 Both the visual and numeric methods for estimating $\alpha$ leverage the expected number of "interesting" panels in a lineup.
 
 \begin{definition}{$c$-interesting}\label{interesting}\newline
@@ -700,9 +700,6 @@ Furthermore, we will assume for this demonstration that the lineup experiment we
 
 \begin{description}
 \item[Identify the number of $c$-interesting null panels in the lineup of interest.] Consider \Cref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_0$,  and the corresponding number of null panel selections, $K_0$. The \texttt{alpha\_from\_data\_lineup()} function in the \texttt{vinference} package (available at https://github.com/heike/vinference) can be used to create this plot given values of $c$, $m_0$, and $K_0$.
-% \hh{XXX should we provide an R function?}
-
-%{\it Aside:} \hh{this should be discussed in full, but not here - maybe in the discussion? } If only one null panel is selected more than $c$ times, and there are a reasonable number of null panel selections overall, this may be a sign that the null plot generation method is unsuitable.  The case where only one null panel is selected is handled separately; discussion of this case is deferred to \Cref{sec:bad-null}. For now, it is sufficient to know that this is why we have created a separate band for the case where only one null plot attracts significant participant interest.
 
 \item [Locate a $y$-axis range around the observednumber of $c$-interesting null panels in the data] Using the simulated selected panel counts, on the vertical axis locate a band around the number of $c$-interesting null panels in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
 
@@ -1070,7 +1067,7 @@ A similar derivation holds in the full Dirichlet-Multinomial model.
 
 Under Scenario 1 a lineup is shown to only one participant. Let $Z_i$ be the binary variable capturing whether lineup $i$ resulted in a data pick.
 Then $C$, the number of data picks in $K$ evaluations of $K$ lineups is given as the sum of $K$ independent evaluations $Z_i$, i.e.\ $C = Z_1 + ... + Z_k$ .
-Assuming (independent) Dirichlet samples for each lineup, assume $\theta_i$ is the probability (under the null hypothesis) to pick the data plot. \svp{That is, each evaluation is a Bernoulli trial with success probability $\theta_i$.}
+Assuming (independent) Dirichlet samples for each lineup, assume $\theta_i$ is the probability (under the null hypothesis) to pick the data plot. That is, each evaluation is a Bernoulli trial with success probability $\theta_i$.
 Then $C \mid \theta_1, ..., \theta_K \sim$  Poisson-Binomial distribution: 
 \[
 P(C = c \mid \theta_1, ..., \theta_K) = \sum_{A \in A_c} \prod_{i \in A} \theta_i \prod_{j \notin A} (1-\theta_j)
@@ -1121,7 +1118,8 @@ chunks <- readLines("index.Rnw")
 chunks <- chunks[str_detect(chunks, "<<.*?>>=")] %>% str_extract("<<[\\w-]{1,},") %>% str_remove_all("<<|,") %>% factor(., levels = ., ordered = T)
 fig_table <- right_join(
   tibble(factor = chunks, name = paste0(as.character(chunks), "-1")),
-  tibble(file = list.files("figure/", full.names = T), name = basename(file) %>% str_remove("\\..*$"))
+  tibble(file = list.files("figure/", full.names = T), name = basename(file) %>% str_remove("\\..*$")) %>%
+    filter(!str_detect(name, "vanderplas"))
 ) %>%
   arrange(factor) %>%
   mutate(fig = factor(name, levels = unique(name), ordered = T), fignum = as.numeric(fig), ext = str_remove(basename(file), name) %>% str_remove("^\\."))
