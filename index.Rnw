@@ -1101,7 +1101,7 @@ The probabilities $P(C_i \ge c)$ are derived in the previous section as marginal
 E[Z_c(\alpha)] = \frac{m}{ B(\alpha, (m-1)\alpha)} \cdot \sum_{x=\lceil c \rceil}^K \binom{K}{x} B(x+\alpha, K-x+(m-1)\alpha).
 \end{equation}
 
-\section{Sub vectors of Dirichlet distributions}\label{neutrality}
+\section{Partitions of Dirichlet distributions}\label{neutrality}
 
 Let $\bm\theta = (\theta_1, ... \theta_m)$ with $\bm\theta \sim $Dir$(\alpha)$ for some real-valued $\alpha > 0$. 
 The Dirichlet distribution is neutral with respect to all possible partitions of the corresponding index set \citep{Connor:1969bt, doksum:74, Sakowicz:2014hi}.
