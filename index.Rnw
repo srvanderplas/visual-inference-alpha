@@ -1062,6 +1062,27 @@ P(C \geq c_t) & =  \frac{1}{B(\alpha, (m-1)\alpha) } \sum_{x=c_t}^K \binom{K}{x}
 \end{align}
 A similar derivation holds in the full Dirichlet-Multinomial model.
 
+\hh{
+Note that for large values of $\alpha$ the densities converge in distribution to the Binomial with parameters $K$ and probability of success $p = 1/m$: 
+the $\Gamma$ function can be written as a telescopic product, i.e.\ $\Gamma(x + \alpha) = \prod_{i=0}^{x-1}(x + \alpha) \Gamma(\alpha)$ for any non-negative integer $x \ge 0$. 
+Therefore the probability for  $x$ target detections becomes
+\begin{eqnarray*}
+P(C = x) &=& {K \choose x} \frac{\Gamma(m\alpha)}{\Gamma(K+m\alpha)} \cdot  \frac{\Gamma((m-1)\alpha + K-x)}{\Gamma((m-1)\alpha)} \cdot \frac{\Gamma(\alpha+x)}{\Gamma(\alpha)}  \\
+&=& {K \choose x} \frac{\prod_{i=0}^{K-x-1} ((m-1)\alpha + i) \prod_{i=0}^{x-1} (\alpha + i)}{\prod_{i=0}^{K-1} (i + m\alpha)} \\
+%&=& {K \choose x} \frac{\prod_{i=0}^{x-1} (\alpha + i)}{\prod_{i=0}^{x-1} (i + m\alpha)} \cdot
+%\frac{\prod_{i=0}^{K-x-1} ((m-1)\alpha + i) }{\prod_{i=x}^{K-1} (i + m\alpha)} \\
+&=&  {K \choose x} \prod_{i=0}^{x-1} \frac{\alpha + i}{m\alpha + i} \cdot
+\prod_{i=0}^{K-x-1} \frac{(m-1)\alpha + i}{ m\alpha + i+x }
+\end{eqnarray*}
+In the situation that the concentration parameter goes to infinity, the limiting distribution is therefore Binomial:
+\begin{eqnarray}\nonumber
+\lim_{\alpha \to \infty} P(X_m = x) &=& \lim_{\alpha \to \infty} {K \choose x} \prod_{i=0}^{x-1} \underbrace{\frac{\alpha + i}{m\alpha + i}}_{\to \frac{1}{m} \text{ for } \alpha \to \infty } \cdot
+\prod_{i=0}^{K-x-1} \underbrace{\frac{(m-1)\alpha + i}{ m\alpha + i+x }}_{\to \frac{m-1}{m} \text{ for } \alpha \to \infty } \\\label{eq:binolimit}
+&=& {K \choose x} \left(\frac{1}{m}\right)^x \left(1 - \frac{1}{m}\right)^{K-x}
+\end{eqnarray}
+}
+
+
 \section{Scenario 1 is Binomial}\label{app:binomial}
 
 Under Scenario 1 a lineup is shown to only one participant. Let $Z_i$ be the binary variable capturing whether lineup $i$ resulted in a data pick.
