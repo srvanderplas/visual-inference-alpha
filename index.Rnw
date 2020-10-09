@@ -462,7 +462,7 @@ As seen in \Cref{fig:vis-p-val-sensitivity-initial} the Beta Binomial model conv
 <<vis-p-val-sensitivity-initial, fig.cap = "Sensitivity of visual p-value to selection of $\\alpha$ under the marginal beta-binomial model.  Corresponding values for the binomial model are shown on the right side of the plot; as $\\alpha \\rightarrow\\infty$, the beta-binomial $p$-values converge to the binomial model $p$-value. \\hh{For different values of $\\alpha$ different number of data panel identifications are needed to achieve significance: 5 or more identifications are needed for significance at a level of 0.05 under the Binomial model. For $\\alpha = 1$ at least 6 data identifications are needed, at $\\alpha = 0.1$ significance at 0.05 is achieved, if at least 11 participants selected the data panel.}", fig.width = 8, fig.height = 5, out.width = "\\textwidth">>=
 
 alphas <- 10^(seq(-3, 2, by = .01))
-data_breaks <- c(1:5, 6, 8, 10, 15, 20)
+data_breaks <- c(1:5, 6, 8, 10, 11, 15)
 #data_breaks <- c(1, 2, 4, 5, 7, 10, 15, 20, 25, 30)
 K <- 30
 
@@ -481,15 +481,17 @@ pv2 <- tidyr::crossing(C = data_breaks, K = K) %>%
   mutate(p = purrr::map2_dbl(C - 1, K, pbinom, prob = 1/20, lower.tail = F))
 
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
-  annotate("segment", x =150, xend = 150, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
-  annotate("text", x = 150, y = .8,
-           label = "Binom (K,1/m)", vjust = 0, hjust = .75) +
-  annotate("segment", x = 1, xend = 1, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
-  annotate("text", x = 1, y = 0.8,
-           label = expression(paste("θ ~ Uniform on m-1 simplex")), vjust = 0, hjust = .5) +
+  geom_vline(xintercept = 1, colour = "grey40", alpha = 0.5) +
+  geom_vline(xintercept = 150, colour = "grey40", alpha = 0.5) +
+  annotate("label", x = 150, y = 1,
+           label = "Binom (K,1/m)", vjust = .5, hjust = .75, 
+           fill="white", label.size=0, alpha = 0.75) +
+  annotate("label", x = 1, y = 1,
+           label = expression(paste("θ ~ Uniform on m-1 simplex")), 
+           vjust = .5, hjust = .5, alpha = 0.75, fill="white", label.size=0) +
   geom_line(size = 0.75) +
   geom_point(aes(x = 150, y = p, color = factor(C), shape = "Binomial\np-value"), data = pv2) +
-  scale_y_continuous(expression(paste("Visual p-value: P(C ≥ ",c[t],")"))) +
+  scale_y_sqrt(expression(paste("Visual p-value: P(C ≥ ",c[t],")")), breaks=c(0.0, 0.01, 0.05, 0.1, 0.2, 0.4, 0.6, 0.8), labels=c(0.0, 0.01, 0.05, 0.1, 0.2, 0.4, 0.6, 0.8)) +
   scale_x_log10(expression(alpha), breaks = breaks, labels = labels, minor_breaks = minor.breaks) +
   scale_color_manual(expression(paste("# Data Panel\nIdentifications ",c[t])), values = color_pal) +
   scale_shape_discrete("") +
