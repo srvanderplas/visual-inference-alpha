@@ -483,7 +483,7 @@ pv2 <- tidyr::crossing(C = data_breaks, K = K) %>%
 ggplot(pv, aes(x = alpha, y = p, color = factor(C), group = factor(C))) +
   annotate("segment", x =150, xend = 150, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
   annotate("text", x = 150, y = .8,
-           label = "Binomial", vjust = 0, hjust = .75) +
+           label = "Binom (K,1/m)", vjust = 0, hjust = .75) +
   annotate("segment", x = 1, xend = 1, y = -Inf, yend = .8, color = "grey40", alpha = .5) +
   annotate("text", x = 1, y = 0.8,
            label = expression(paste("θ ~ Uniform on m-1 simplex")), vjust = 0, hjust = .5) +
