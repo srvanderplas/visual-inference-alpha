@@ -1065,7 +1065,7 @@ A similar derivation holds in the full Dirichlet-Multinomial model.
 
 \hh{
 Note that for large values of $\alpha$ the densities converge in distribution to the Binomial with parameters $K$ and probability of success $p = 1/m$: 
-the $\Gamma$ function can be written as a telescopic product, i.e.\ $\Gamma(x + \alpha) = \prod_{i=0}^{x-1}(x + \alpha) \Gamma(\alpha)$ for any non-negative integer $x \ge 0$. 
+the $\Gamma$ function can be written as a telescopic product, i.e.\ $\Gamma(x + \alpha) = \prod_{i=0}^{x-1}(i + \alpha) \Gamma(\alpha)$ for any non-negative integer $x \ge 0$. 
 Therefore the probability for  $x$ target detections becomes
 \begin{eqnarray*}
 P(C = x) &=& {K \choose x} \frac{\Gamma(m\alpha)}{\Gamma(K+m\alpha)} \cdot  \frac{\Gamma((m-1)\alpha + K-x)}{\Gamma((m-1)\alpha)} \cdot \frac{\Gamma(\alpha+x)}{\Gamma(\alpha)}  \\
