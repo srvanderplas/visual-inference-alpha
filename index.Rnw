@@ -605,8 +605,8 @@ sim_interesting_panels <- function(c = m/K, N_points = 5, m = 19, K = 30, point_
   # Each point (of N_points) is an average of point_avg_sims separate lineups
   # First, generate all of the lineups and count the number of interesting panels
   df <- tibble(alpha = alphas,
-               plot_sels = purrr::map(alpha, sim_lineup_model,
-                                      N = N_points*point_avg_sims, K = K),
+               plot_sels = purrr::map(alpha, pVis,
+                                      N = N_points*point_avg_sims, K = K, m = m),
                interesting_panels = purrr::map(
                  plot_sels,
                  ~tibble(n_interesting = colSums(.x >= c),
@@ -701,9 +701,9 @@ The proposed visual estimation process is conducted using a simulation from the 
 Furthermore, we will assume for this demonstration that the lineup experiment we are planning to conduct has a standard size lineup ($m = 20$ panel, $m_0 = 19$ null plots)  with $K_0=30$ null panel selections out of $K=40$ evaluations.
 
 \begin{description}
-\item[Identify the number of $c$-interesting null panels in the lineup of interest.] Consider \Cref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_0$,  and the corresponding number of null panel selections, $K_0$. The \texttt{alpha\_from\_data\_lineup()} function in the \texttt{vinference} package (available at https://github.com/heike/vinference) can be used to create this plot given values of $c$, $m_0$, and $K_0$.
+\item[Identify the number of $c$-interesting null panels in the lineup of interest.] Consider \Cref{fig:alpha-sim-curve}. Generally, this figure needs to be adjusted to match the number of null panels,   $m_0$,  and the corresponding number of null panel selections, $K_0$. The \texttt{estimate\_alpha\_visual()} function in the \texttt{vinference} package can be used to create this plot given values of $c$, $m_0$, and $K_0$ \citep{vinference,R}.
 
-\item [Locate a $y$-axis range around the observednumber of $c$-interesting null panels in the data] Using the simulated selected panel counts, on the vertical axis locate a band around the number of $c$-interesting null panels in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
+\item [Locate a $y$-axis range around the observed number of $c$-interesting null panels in the data] Using the simulated selected panel counts, on the vertical axis locate a band around the number of $c$-interesting null panels in the lineup. For instance, if there were three null panels with more than $c$ selections, we would use a range of 2-3 panels.
 
 Using  a range instead of a single point estimate is intended to account for some of the variability resulting from the use of a single lineup with non-deterministic $K_0$ null panel evaluations.
 In a simulation, it is easy to increase the number for simulations $N$ until  results no longer change substantially; this is expensive and much more time consuming when using human evaluations and setting $K$ instead of $K_0$ in the experimental design.
@@ -796,7 +796,7 @@ This estimation method requires the following steps:
 \item [Numerically determine $\hat\alpha$ using $\overline Z_c$ and \Cref{eqn:ev-panel}.]The reference distribution is one with $m=m_0$ null panels, because of the use of Rorschach lineups, in contrast to the reference distribution in \Cref{sec:vis-estimation-alpha}. 
 \end{description}
 
-The \texttt{alpha\_from\_null\_lineup()} function in the \texttt{vinference} package (available at https://github.com/heike/vinference) can be used to estimate $\hat\alpha$ given values of $\overline Z_c$, $c$, $m_0$, and $K_0$.
+The \texttt{estimate\_alpha\_numeric()} function \citep{vinference} can be used to estimate $\hat\alpha$ given values of $\overline Z_c$, $c$, $m_0$, and $K_0$.
 
 Note that if on average only one null panel is selected, the estimated $\hat\alpha$ is not reliable: \Cref{eqn:ev-panel} does not have the sensitivity to differentiate the results of a lineup with $\hat\alpha = 0.001$ from the results of a lineup with $\hat\alpha = 0.01$; this is also apparent on the left side of \Cref{fig:alpha-sim-curve}. However, very small estimated values of  $\hat\alpha$  signal that there is a problem with the null plot generation method; this case is described in more detail in \Cref{sec:bad-null}.
 
