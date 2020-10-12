@@ -76,6 +76,7 @@
 <<setup, echo = F, include = F>>=
 library(tidyverse)
 library(mgcv)
+library(ggplot2)
 library(Cairo)
 knitr::opts_chunk$set(echo = F, message = F, warning = F, dev = c("cairo_pdf", "cairo_ps"), dev.args = list(fallback_resolution = 800), dpi = 800)
 theme_set(theme_bw())
