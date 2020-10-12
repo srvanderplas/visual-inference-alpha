@@ -7,6 +7,7 @@
 \usepackage{bm}
 \usepackage{multirow}
 \usepackage{hyperref}
+\usepackage{graphicx}
 \usepackage{endfloat} % Figures to the end of the document
 
 \usepackage{cleveref}
@@ -196,7 +197,7 @@ p <- ggtern::ggtern(aes(x = p1, y = p2, z = p3), data = simplex) +
   geom_point(alpha = .075, shape = 16) +
   facet_wrap(~alphalabel, labeller = "label_parsed") +
   theme(panel.background = element_rect(colour = "black"))
-print(p)
+p
 @
 
 \begin{figure}
@@ -519,7 +520,7 @@ B(a, b) = \int_0^1 t^{a-1} \cdot (1-t)^{b-1} dt \vspace{1in} \text{ where } a,b 
 The derivation is in \Cref{app:pvalue}.
 
 The visual $p$-value calculation using \Cref{eqn:beta-binomial} is dependent on the value of $\alpha$.
-We know from past studies \citep{hofmann2012graphical,roychowdhury:2012,zhaoMindReadingUsing2013,roychowdhury:2013,tengfei:2013,loyDiagnosticToolsHierarchical2013,majumderHumanFactorsInfluencing2014,loy:2015,loyAreYouNormal2015,loy2016variations,vanderplas:2017,loyModelChoiceDiagnostics2017} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.
+We know from past studies \citep{hofmann2012graphical,zhaoMindReadingUsing2013,roychowdhury:2013,tengfei:2013,loyDiagnosticToolsHierarchical2013,majumderHumanFactorsInfluencing2014,loy:2015,loyAreYouNormal2015,loy2016variations,vanderplas:2017,loyModelChoiceDiagnostics2017} that only a few lineup panels attract attention, even if all of the panels in a lineup are null plots.
 Combining this observation with \Cref{fig:prior-predictive}, we would expect that $\alpha \ll 1$.
 
 We  expect the value of $\alpha$ to depend on several factors: the null generating model and the type of plot, and other aesthetic choices,  all of which  affect the visual distinctiveness of the null and actual data.
@@ -590,6 +591,8 @@ A discussion of this property and its application to visual inference is provide
 
 
 <<alpha-sim-curve, cache = F, fig.width = 8, fig.height = 4, out.width = "\\textwidth", fig.cap = "Average number of panels selected more than once for a range of $\\alpha$ values. Each point represents 10 simulations of lineups with $K=30$ evaluations. The line in blue shows the expected number of panels selected more than once as given in \\Cref{eqn:ev-panel}. Bands are shown in alternating grey and white corresponding to a discretized heuristic for selection of $\\alpha$ when $K=30$.">>=
+# devtools::install_github("heike/vinference")
+library(vinference)
 set.seed(2501072)
 interest_threshold <- 2
 alphas <- 10^(seq(-3.5, 2, by = .01)) # seq(0.001, 0.5, by = .001)
