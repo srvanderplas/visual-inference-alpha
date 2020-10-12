@@ -608,7 +608,7 @@ sim_interesting_panels <- function(c = m/K, N_points = 5, m = 19, K = 30, point_
   # Each point (of N_points) is an average of point_avg_sims separate lineups
   # First, generate all of the lineups and count the number of interesting panels
   df <- tibble(alpha = alphas,
-               plot_sels = purrr::map(alpha, pVis,
+               plot_sels = purrr::map(alpha, rVis,
                                       N = N_points*point_avg_sims, K = K, m = m),
                interesting_panels = purrr::map(
                  plot_sels,
@@ -638,7 +638,7 @@ lag_polys <- function(data) {
     x = c(x[1], x[2], x[2], x[1], x[1]),
     y = c(-Inf, -Inf, y[2], y[1], -Inf),
     type = "v"
-  ))
+  )) 
 }
 
 # Get theoretical function
